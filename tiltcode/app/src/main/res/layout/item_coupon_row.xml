@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:id="@+id/layout_coupon_detail"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="40dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:id="@+id/img_coupon_row"
+            android:scaleType="centerCrop"
+            android:background="#aeaeae"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:background="#000000"
+            android:textColor="#efefef"
+            android:textSize="20dp"
+            android:text="RoadCycle"
+            android:id="@+id/tv_coupon_row" />
+
+    </LinearLayout>
+
+</LinearLayout>
