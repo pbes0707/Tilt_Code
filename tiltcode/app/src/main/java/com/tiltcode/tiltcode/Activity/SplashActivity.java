@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.tiltcode.tiltcode.R;
+import com.tiltcode.tiltcode.Service.ServiceMonitor;
 
 import android.os.Handler;
 import android.os.Message;
@@ -30,6 +31,13 @@ public class SplashActivity extends Activity {
                 startActivity(intent);
             }
         };
+
+        ServiceMonitor serviceMonitor = ServiceMonitor.getInstance();
+        if (serviceMonitor.isMonitoring() == false)
+        {
+            serviceMonitor.startMonitoring(getApplicationContext());
+        }
+
 
         handler.sendEmptyMessageDelayed(0,1500);
 

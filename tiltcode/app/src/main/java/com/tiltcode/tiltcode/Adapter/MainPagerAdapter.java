@@ -8,8 +8,6 @@ import android.support.v4.app.FragmentTransaction;
 
 import com.tiltcode.tiltcode.Fragment.CouponListFragment;
 import com.tiltcode.tiltcode.Fragment.SettingFragment;
-import com.tiltcode.tiltcode.Fragment.TestFragment;
-import com.tiltcode.tiltcode.Fragment.TiltCodeFragment;
 
 /**
  * Created by JSpiner on 2015. 6. 15..
@@ -28,7 +26,7 @@ public class MainPagerAdapter extends FragmentStatePagerAdapter {
         this.context = context;
         FRAGMENTS = new Fragment[3];
         FRAGMENTS[0] = new CouponListFragment();
-        FRAGMENTS[1] = new TestFragment();
+        FRAGMENTS[1] = new CouponListFragment();
         FRAGMENTS[2] = new SettingFragment();
     }
 
