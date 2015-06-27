@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.tiltcode.tiltcodemanager.Model.GCMRegister;
 import com.tiltcode.tiltcodemanager.Model.LoginResult;
 import com.tiltcode.tiltcodemanager.Model.LoginToken;
 import com.tiltcode.tiltcodemanager.R;
@@ -105,6 +107,8 @@ public class LoginActivity extends Activity {
                             Log.d(TAG,"access success / code : "+loginResult.code);
                             if (loginResult.code.equals("1")) { //성공
 
+                                GCMRegister reg = new GCMRegister(LoginActivity.this.getApplicationContext(), LoginActivity.this);
+                                reg.execute();
 
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
@@ -159,6 +163,10 @@ public class LoginActivity extends Activity {
                             .setIsSkipedUser(false)
                             .setLoginType(LoginToken.LoginType.TiltCode);
                     Util.getAccessToken().saveToken();
+
+                    GCMRegister reg = new GCMRegister(LoginActivity.this.getApplicationContext(), LoginActivity.this);
+                    reg.execute();
+
 
                 } else if (loginResult.code.equals("-1")) { //누락된게있음
                     Toast.makeText(getBaseContext(),getResources().getText(R.string.message_not_enough_data),Toast.LENGTH_LONG).show();

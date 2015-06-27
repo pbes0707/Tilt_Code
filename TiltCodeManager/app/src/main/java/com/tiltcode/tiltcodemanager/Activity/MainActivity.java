@@ -1,19 +1,38 @@
 package com.tiltcode.tiltcodemanager.Activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.tiltcode.tiltcodemanager.Model.GCMRegister;
+import com.tiltcode.tiltcodemanager.Model.LoginResult;
 import com.tiltcode.tiltcodemanager.R;
 import com.tiltcode.tiltcodemanager.Util;
+
+import java.io.IOException;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * Created by JSpiner on 2015. 6. 21..
  */
 public class MainActivity extends Activity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +40,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         init();
+
     }
 
     void init(){
@@ -58,7 +78,6 @@ public class MainActivity extends Activity {
         });
 
     }
-
 
 
 }

@@ -19,6 +19,7 @@ import com.tiltcode.tiltcodemanager.Exception.DisMatchException;
 import com.tiltcode.tiltcodemanager.Exception.NoDataException;
 import com.tiltcode.tiltcodemanager.Fragment.PolicyFragment;
 import com.tiltcode.tiltcodemanager.Fragment.SignupFragment;
+import com.tiltcode.tiltcodemanager.Model.GCMRegister;
 import com.tiltcode.tiltcodemanager.Model.LoginResult;
 import com.tiltcode.tiltcodemanager.R;
 import com.tiltcode.tiltcodemanager.Util;
@@ -164,8 +165,12 @@ public class SignupActivity extends FragmentActivity {
                     startActivity(intent);
                     finish();
 
-                    Util.getAccessToken().setToken(loginResult.info.session);
+                    Util.getAccessToken()
+                            .setToken(loginResult.info.session)
+                            .setUserId(loginResult.info.id);
 
+                    GCMRegister reg = new GCMRegister(SignupActivity.this.getApplicationContext(), SignupActivity.this);
+                    reg.execute();
 
                 } else if (loginResult.code.equals("-1")) { //비번 길이 짧음
                     Toast.makeText(getBaseContext(), getResources().getText(R.string.message_passwd_short), Toast.LENGTH_LONG).show();

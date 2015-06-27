@@ -52,6 +52,11 @@ public interface HttpService {
                    Callback<CouponResult> ret);
 
 
+    @FormUrlEncoded
+    @POST("/register")
+    void register(@Field("regId") String regId,
+                  @Field("id") String id,
+                  Callback<LoginResult> ret);
 
 
 

@@ -12,7 +12,7 @@ public class LoginToken {
     LoginType loginType; //페이스북로그인인지 일반로그인인지
     boolean isSkipedUser; //로그인정보 없이 스킵한 유저
     String token; //엑세스토큰, 페이스북 일반로그인 둘다 이 변수로 등록
-    String userId; //페이스북 로그인시 생기는 유저 고유값
+    String userId; //페이스북 로그인시 생기는 유저 고유값, 일반이면 그냥 아이디
     String name; //이름
     String sex; //성별
     String birthday; //생년월일
