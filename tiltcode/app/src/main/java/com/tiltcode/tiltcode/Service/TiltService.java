@@ -183,10 +183,10 @@ public class TiltService extends Service implements SensorEventListener {
                     }
                     now = v;
                 }
-                 Log.d("sensor","Accel X : " + Math.round(v.x*100d) / 100d +
+                /* Log.d("sensor","Accel X : " + Math.round(v.x*100d) / 100d +
                         " Y : " + Math.round(v.y*100d) / 100d +
                         " Z : " + Math.round(v.z*100d) / 100d);
-                /*list.addFirst(v);
+                list.addFirst(v);
                 if(list.size() > 30)
                     list.removeLast();*/
                 break;
