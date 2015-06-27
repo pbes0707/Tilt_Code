@@ -48,7 +48,7 @@ public class TiltService extends Service implements SensorEventListener {
             {0f, 0f, 9.8f},
             {0f, -6.8f, 6.8f},
             //{0f, -9.8f, 0f}, // 12
-            {0f, -6.8f, -6.8f}, // 13
+            {0f, -6.8f, -6.8f}, // Fixed 12  original 13
             {0f, 0f, -9.8f},
             {0f, 6.8f, -6.8f}
     };
@@ -62,7 +62,8 @@ public class TiltService extends Service implements SensorEventListener {
     private boolean serviceRunning = false;
 
     @Override
-    public void onCreate() {
+    public void onCreate()
+    {
         super.onCreate();
 
         mActivityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
@@ -105,6 +106,7 @@ public class TiltService extends Service implements SensorEventListener {
                                         (Arr_Accel[i][2] - SEARCH_VALUE < now.z && Arr_Accel[i][2] + SEARCH_VALUE > now.z ) )
                                 {
                                     Log.d("sensor", "Tilt : " + String.valueOf(i + 1));
+                                    ///// 코딩하셈 씨발련아
                                 }
                             }
                             dt = 0;
@@ -183,9 +185,9 @@ public class TiltService extends Service implements SensorEventListener {
                     }
                     now = v;
                 }
-                 Log.d("sensor","Accel X : " + Math.round(v.x*100d) / 100d +
+                /* Log.d("sensor","Accel X : " + Math.round(v.x*100d) / 100d +
                         " Y : " + Math.round(v.y*100d) / 100d +
-                        " Z : " + Math.round(v.z*100d) / 100d);
+                        " Z : " + Math.round(v.z*100d) / 100d);*/
                 /*list.addFirst(v);
                 if(list.size() > 30)
                     list.removeLast();*/
