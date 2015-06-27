@@ -1,0 +1,116 @@
+package com.tiltcode.tiltcodemanager.Activity;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.tiltcode.tiltcodemanager.Model.LoginResult;
+import com.tiltcode.tiltcodemanager.R;
+import com.tiltcode.tiltcodemanager.Util;
+
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+
+/**
+ * Created by JSpiner on 2015. 6. 17..
+ * Contact : jspiner@naver.com
+ */
+public class LoginActivity extends Activity {
+
+    //로그에 쓰일 tag
+    public static final String TAG = LoginActivity.class.getSimpleName();
+
+    EditText edt_login_id;
+    EditText edt_login_pw;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+
+        setContentView(R.layout.activity_login);
+        super.onCreate(savedInstanceState);
+
+
+        init();
+
+
+    }
+
+    void init(){
+
+
+        ((Button)findViewById(R.id.btn_login_proc)).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                if(edt_login_id.getText().toString().length()<1){
+                    Toast.makeText(getBaseContext(),getResources().getText(R.string.message_no_id),Toast.LENGTH_LONG).show();
+                    return;
+                }
+                else if(edt_login_pw.getText().toString().length()<8){
+                    Toast.makeText(getBaseContext(),getResources().getText(R.string.message_passwd_short),Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                procLogin(edt_login_id.getText().toString(),edt_login_pw.getText().toString());
+
+            }
+        });
+
+        ((Button)findViewById(R.id.btn_login_signup)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+
+        edt_login_id = (EditText)findViewById(R.id.edt_login_id);
+        edt_login_pw = (EditText)findViewById(R.id.edt_login_pw);
+
+    }
+
+    void procLogin(String id, String pw){
+
+        Util.getEndPoint().setPort("40001");
+        Util.getHttpSerivce().login(id, pw
+                , new Callback<LoginResult>() {
+            @Override
+            public void success(LoginResult loginResult, Response response) {
+                Log.d(TAG,"login success / code : "+loginResult.code);
+                Log.d(TAG,"token : "+loginResult.session);
+                if (loginResult.code.equals("1")) { //성공
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+
+                    Util.getAccessToken().setToken(loginResult.session);
+
+                } else if (loginResult.code.equals("-1")) { //누락된게있음
+                    Toast.makeText(getBaseContext(),getResources().getText(R.string.message_not_enough_data),Toast.LENGTH_LONG).show();
+                } else if (loginResult.code.equals("-2")) { //아이디비번일치하지않음
+                    Toast.makeText(getBaseContext(),getResources().getText(R.string.message_not_match_account),Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.e(TAG,"login failure : "+error.getMessage());
+                Toast.makeText(getBaseContext(),getResources().getText(R.string.message_network_error),Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+}
