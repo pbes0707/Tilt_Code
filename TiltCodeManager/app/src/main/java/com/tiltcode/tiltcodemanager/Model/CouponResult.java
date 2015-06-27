@@ -2,10 +2,12 @@ package com.tiltcode.tiltcodemanager.Model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 /**
  * Created by JSpiner on 2015. 6. 18..
  */
-public class LoginResult {
+public class CouponResult {
 
     @SerializedName("code")
     public String code;
@@ -13,7 +15,10 @@ public class LoginResult {
     @SerializedName("message")
     public String message;
 
-    @SerializedName("info")
-    public Session info;
+    @SerializedName("session")
+    public String session;
+
+    @SerializedName("coupon")
+    public List<Coupon> coupon;
 
 }

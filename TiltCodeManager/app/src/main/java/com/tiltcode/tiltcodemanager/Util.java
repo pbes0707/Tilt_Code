@@ -7,20 +7,24 @@ import android.util.Log;
 import com.tiltcode.tiltcodemanager.Model.HttpService;
 import com.tiltcode.tiltcodemanager.Model.LoginToken;
 
-import java.security.InvalidKeyException;
-import java.security.Key;
+
 import java.security.NoSuchAlgorithmException;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import retrofit.Endpoint;
+import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
+
+import java.security.*;
 
 /**
  * Created by JSpiner on 2015. 6. 18..
@@ -42,43 +46,48 @@ public class Util {
     public static FooEndPoint endPoint;
 
     public static String getString(String key,String defValue){
-        if(sharedPreferences!=null){
-            return sharedPreferences.getString(key,defValue);
-        }
-        else{
-            sharedPreferences = context.getSharedPreferences("tiltmanager",Context.MODE_PRIVATE);
-            return getString(key,defValue);
-        }
+        return getSharedPreferences().getString(key, defValue);
     }
 
     public static void putString(String key, String value){
-        if(editor!=null){
-            editor.putString(key,value);
-        }
-        else{
-            editor = sharedPreferences.edit();
-            putString(key,value);
-        }
+        getEditor().putString(key, value);
+        getEditor().commit();
     }
 
     public static boolean getBoolean(String key, boolean defValue){
-        if(sharedPreferences!=null){
-            return sharedPreferences.getBoolean(key,defValue);
-        }
-        else{
-            sharedPreferences = context.getSharedPreferences("tiltmanager",Context.MODE_PRIVATE);
-            return getBoolean(key,defValue);
-        }
+        return getSharedPreferences().getBoolean(key,defValue);
     }
 
     public static void putBoolean(String key, boolean value){
-        if(editor!=null){
-            editor.putBoolean(key,value);
+        getEditor().putBoolean(key, value);
+        getEditor().commit();
+    }
+
+    public static int getInt(String key, int defValue){
+        return getSharedPreferences().getInt(key,defValue);
+    }
+
+    public static void putInt(String key, int value){
+        getEditor().putInt(key,value);
+        getEditor().commit();
+    }
+
+    public static void destroyToken(){
+        getEditor().clear().commit();
+    }
+
+    private static SharedPreferences getSharedPreferences(){
+        if(sharedPreferences==null){
+            sharedPreferences = context.getSharedPreferences("tiltcode",Context.MODE_PRIVATE);
         }
-        else{
-            editor = sharedPreferences.edit();
-            putBoolean(key,value);
+        return sharedPreferences;
+    }
+
+    private static SharedPreferences.Editor getEditor(){
+        if(editor==null){
+            editor = getSharedPreferences().edit();
         }
+        return editor;
     }
 
     public static LoginToken getAccessToken(){
@@ -168,11 +177,4 @@ public class Util {
         return null;
     }
 
-    class NoDataException extends Exception{
-
-        public NoDataException(){}
-
-        public NoDataException(String message){super(message);}
-
-    }
 }

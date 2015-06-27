@@ -8,12 +8,17 @@ import android.support.v4.app.FragmentTransaction;
 
 import com.tiltcode.tiltcode.Fragment.CouponListFragment;
 import com.tiltcode.tiltcode.Fragment.SettingFragment;
+import com.tiltcode.tiltcode.Fragment.TiltCodeFragment;
 
 /**
  * Created by JSpiner on 2015. 6. 15..
  * Contact : jspiner@naver.com
  */
 public class MainPagerAdapter extends FragmentStatePagerAdapter {
+
+    //로그에 쓰일 tag
+    public static final String TAG = MainPagerAdapter.class.getSimpleName();
+
 
     public Fragment[] FRAGMENTS;
     FragmentManager fm;
@@ -26,7 +31,7 @@ public class MainPagerAdapter extends FragmentStatePagerAdapter {
         this.context = context;
         FRAGMENTS = new Fragment[3];
         FRAGMENTS[0] = new CouponListFragment();
-        FRAGMENTS[1] = new CouponListFragment();
+        FRAGMENTS[1] = new TiltCodeFragment();
         FRAGMENTS[2] = new SettingFragment();
     }
 

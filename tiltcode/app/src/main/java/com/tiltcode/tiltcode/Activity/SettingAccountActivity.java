@@ -19,6 +19,7 @@ import com.tiltcode.tiltcode.Adapter.SettingListAdapter;
 import com.tiltcode.tiltcode.Model.LoginResult;
 import com.tiltcode.tiltcode.R;
 import com.tiltcode.tiltcode.Util;
+import com.tiltcode.tiltcode.View.ActionActivity;
 
 import java.util.ArrayList;
 
@@ -29,7 +30,7 @@ import retrofit.client.Response;
 /**
  * Created by JSpiner on 2015. 6. 20..
  */
-public class SettingAccountActivity extends Activity {
+public class SettingAccountActivity extends ActionActivity {
 
     //로그에 쓰일 tag
     public static final String TAG = SettingAccountActivity.class.getSimpleName();
@@ -49,6 +50,8 @@ public class SettingAccountActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting_account);
 
+        super.initActionBar();
+        setEnableBack(true);
 
         init();
     }

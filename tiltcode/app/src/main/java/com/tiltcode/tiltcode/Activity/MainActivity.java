@@ -19,12 +19,13 @@ import android.widget.Toast;
 import com.tiltcode.tiltcode.Adapter.MainPagerAdapter;
 import com.tiltcode.tiltcode.R;
 import com.tiltcode.tiltcode.Service.ServiceMonitor;
+import com.tiltcode.tiltcode.View.ActionFragmentActivity;
 
 /**
  * Created by JSpiner on 2015. 6. 15..
  * Contact : jspiner@naver.com
  */
-public class MainActivity extends FragmentActivity{
+public class MainActivity extends ActionFragmentActivity{
 
 //    private ServiceMonitor serviceMonitor = ServiceMonitor.getInstance();
     //로그에 쓰일 tag
@@ -42,6 +43,9 @@ public class MainActivity extends FragmentActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        super.initActionBar();
+        setEnableBack(false);
 
         this.context = getBaseContext();
 

@@ -15,6 +15,10 @@ import android.os.Message;
  * Contact : jspiner@naver.com
  */
 public class SplashActivity extends Activity {
+
+    //로그에 쓰일 tag
+    public static final String TAG = SplashActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

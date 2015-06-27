@@ -55,6 +55,18 @@ public interface HttpService {
     void couponGet(@Query("session") String session,
                          Callback<CouponResult> ret);
 
+    @FormUrlEncoded
+    @POST("/changeName")
+    void changeName(@Field("session") String session,
+                    @Field("name") String name,
+                    Callback<LoginResult> ret);
+
+    @FormUrlEncoded
+    @POST("/changePasswd")
+    void changePasswd(@Field("session") String session,
+                      @Field("currP") String currP,
+                      @Field("changeP") String changeP,
+                    Callback<LoginResult> ret);
 
 
 

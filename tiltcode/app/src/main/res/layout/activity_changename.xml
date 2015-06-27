@@ -60,7 +60,7 @@
                     android:inputType="textPersonName"
                     android:hint="Name"
                     android:ems="10"
-                    android:id="@+id/editText" />
+                    android:id="@+id/edt_setting_account_name" />
 
                 <EditText
                     android:layout_width="match_parent"
@@ -68,13 +68,24 @@
                     android:inputType="textPersonName"
                     android:hint="Retype"
                     android:ems="10"
-                    android:id="@+id/editText2" />
+                    android:id="@+id/edt_setting_account_name_retype" />
+
+                <TextView
+                    android:visibility="invisible"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:textSize="16dp"
+                    android:id="@+id/tv_setting_account_name_same"
+                    android:layout_height="wrap_content"
+                    android:text="@string/message_same_name"
+                    android:textColor="#b3ffff"
+                    />
 
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="New Button"
-                    android:id="@+id/button"
+                    android:id="@+id/btn_setting_account_name_proc"
                     android:layout_gravity="center_horizontal" />
 
             </LinearLayout>

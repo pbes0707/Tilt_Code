@@ -1,31 +1,31 @@
-package com.tiltcode.tiltcode.Adapter;
+package com.tiltcode.tiltcodemanager.Adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.TextView;
 
-import com.tiltcode.tiltcode.R;
+import com.tiltcode.tiltcodemanager.Model.Coupon;
+import com.tiltcode.tiltcodemanager.R;
 
 import java.util.ArrayList;
 
 /**
- * Created by JSpiner on 2015. 6. 18..
+ * Created by JSpiner on 2015. 6. 27..
  */
-public class SettingListAdapter extends BaseAdapter {
+public class CouponListAdapter extends BaseAdapter {
 
     //로그에 쓰일 tag
-    public static final String TAG = SettingListAdapter.class.getSimpleName();
+    public static final String TAG = CouponListAdapter.class.getSimpleName();
 
 
-    ArrayList<String> arrayList;
+    ArrayList<Coupon> arrayList;
     Context context;
 
     LayoutInflater inflater;
 
-    public SettingListAdapter(Context context, ArrayList<String> arrayList){
+    public CouponListAdapter(Context context, ArrayList<Coupon> arrayList){
         this.arrayList = arrayList;
         this.context = context;
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -50,8 +50,7 @@ public class SettingListAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
 
         if(view==null) {
-            view = inflater.inflate(R.layout.item_setting_row, null);
-            ((TextView)view.findViewById(R.id.tv_setting_row)).setText(arrayList.get(i));
+            view = inflater.inflate(R.layout.item_coupon_row, null);
         }
         return view;
     }

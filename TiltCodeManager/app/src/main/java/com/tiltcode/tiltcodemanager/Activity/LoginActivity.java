@@ -1,6 +1,7 @@
 package com.tiltcode.tiltcodemanager.Activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -13,9 +14,16 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.tiltcode.tiltcodemanager.Model.LoginResult;
+import com.tiltcode.tiltcodemanager.Model.LoginToken;
 import com.tiltcode.tiltcodemanager.R;
 import com.tiltcode.tiltcodemanager.Util;
 
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Arrays;
+import java.util.List;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -30,8 +38,11 @@ public class LoginActivity extends Activity {
     //로그에 쓰일 tag
     public static final String TAG = LoginActivity.class.getSimpleName();
 
+
     EditText edt_login_id;
     EditText edt_login_pw;
+
+    ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,14 +50,12 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.activity_login);
         super.onCreate(savedInstanceState);
 
-
         init();
 
 
     }
 
     void init(){
-
 
         ((Button)findViewById(R.id.btn_login_proc)).setOnClickListener(new View.OnClickListener() {
 
@@ -76,41 +85,98 @@ public class LoginActivity extends Activity {
             }
         });
 
-
         edt_login_id = (EditText)findViewById(R.id.edt_login_id);
         edt_login_pw = (EditText)findViewById(R.id.edt_login_pw);
+
+
+        if(Util.getAccessToken().loadToken()){
+
+            dialog = new ProgressDialog(LoginActivity.this);
+            dialog.setTitle("로드중");
+            dialog.setMessage("데이터를 불러오는중입니다..");
+            dialog.show();
+
+
+            Util.getEndPoint().setPort("40001");
+            Util.getHttpSerivce().validateSession(Util.getAccessToken().getToken(),
+                    new Callback<com.tiltcode.tiltcodemanager.Model.LoginResult>() {
+                        @Override
+                        public void success(com.tiltcode.tiltcodemanager.Model.LoginResult loginResult, Response response) {
+                            Log.d(TAG,"access success / code : "+loginResult.code);
+                            if (loginResult.code.equals("1")) { //성공
+
+
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else if (loginResult.code.equals("-1")) { //누락된게있음
+                                Toast.makeText(getBaseContext(),getResources().getText(R.string.message_not_enough_data),Toast.LENGTH_LONG).show();
+                            } else if (loginResult.code.equals("-2")) { //세션이 유효하지않음
+                                Toast.makeText(getBaseContext(),getResources().getText(R.string.message_session_invalid),Toast.LENGTH_LONG).show();
+                            }
+
+                            dialog.dismiss();
+                        }
+
+                        @Override
+                        public void failure(RetrofitError error) {
+                            Log.e(TAG,"login failure : "+error.getMessage());
+                            Toast.makeText(getBaseContext(),getResources().getText(R.string.message_network_error),Toast.LENGTH_LONG).show();
+
+                            dialog.dismiss();
+                        }
+                    });
+        }
 
     }
 
     void procLogin(String id, String pw){
 
+        dialog = new ProgressDialog(LoginActivity.this);
+        dialog.setTitle("로드중");
+        dialog.setMessage("데이터를 불러오는중입니다..");
+        dialog.show();
+
         Util.getEndPoint().setPort("40001");
         Util.getHttpSerivce().login(id, pw
-                , new Callback<LoginResult>() {
+                , new Callback<com.tiltcode.tiltcodemanager.Model.LoginResult>() {
             @Override
-            public void success(LoginResult loginResult, Response response) {
+            public void success(com.tiltcode.tiltcodemanager.Model.LoginResult loginResult, Response response) {
                 Log.d(TAG,"login success / code : "+loginResult.code);
-                Log.d(TAG,"token : "+loginResult.session);
                 if (loginResult.code.equals("1")) { //성공
+                    Log.d(TAG,"token : "+loginResult.info.session);
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();
 
-                    Util.getAccessToken().setToken(loginResult.session);
+                    Util.getAccessToken()
+                            .setName(loginResult.info.name)
+                            .setToken(loginResult.info.session)
+                            .setUserId(loginResult.info.id)
+                            .setPhone(loginResult.info.phone)
+                            .setSex(loginResult.info.sex)
+                            .setBirthday(loginResult.info.birth)
+                            .setIsSkipedUser(false)
+                            .setLoginType(LoginToken.LoginType.TiltCode);
+                    Util.getAccessToken().saveToken();
 
                 } else if (loginResult.code.equals("-1")) { //누락된게있음
                     Toast.makeText(getBaseContext(),getResources().getText(R.string.message_not_enough_data),Toast.LENGTH_LONG).show();
                 } else if (loginResult.code.equals("-2")) { //아이디비번일치하지않음
                     Toast.makeText(getBaseContext(),getResources().getText(R.string.message_not_match_account),Toast.LENGTH_LONG).show();
                 }
+                dialog.dismiss();
             }
 
             @Override
             public void failure(RetrofitError error) {
                 Log.e(TAG,"login failure : "+error.getMessage());
                 Toast.makeText(getBaseContext(),getResources().getText(R.string.message_network_error),Toast.LENGTH_LONG).show();
+
+                dialog.dismiss();
             }
         });
 
     }
+
 }
