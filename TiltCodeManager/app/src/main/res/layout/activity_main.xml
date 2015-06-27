@@ -3,123 +3,98 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="match_parent"
         android:background="@drawable/bg_main"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_horizontal">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <include layout="@layout/toolbar"/>
+
+
+        <LinearLayout
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:textSize="18dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_main_point"
+                android:text="등록"
+                android:textColor="#b3ffff"
+                />
+
+
+            <TextView
+                android:gravity="right"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:textSize="18dp"
+                android:id="@+id/tv_main_name"
+                android:layout_height="wrap_content"
+                android:text="정성민님"
+                android:textColor="#b3ffff"
+                />
+
+        </LinearLayout>
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginBottom="80dp"
+            android:layout_marginTop="60dp"
+            android:weightSum="2"
             android:layout_height="match_parent">
 
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
             <LinearLayout
-                android:layout_marginTop="15dp"
-                android:orientation="vertical"
+                android:layout_weight="1"
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
                 android:layout_height="match_parent">
-
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-
-                    <TextView
-                        android:layout_marginTop="10dp"
-                        android:layout_width="wrap_content"
-                        android:textSize="18dp"
-                        android:layout_height="wrap_content"
-                        android:text="쿠폰 등록"
-                        android:textColor="#b3ffff"
-                        />
-
-
-                    <TextView
-                        android:gravity="right|center_vertical"
-                        android:layout_marginTop="10dp"
-                        android:layout_width="match_parent"
-                        android:textSize="18dp"
-                        android:layout_height="wrap_content"
-                        android:text="정성민님"
-                        android:textColor="#b3ffff"
-                        />
-
-                </LinearLayout>
-
-                <TextView
-                    android:layout_marginTop="10dp"
-                    android:layout_width="wrap_content"
-                    android:textSize="18dp"
-                    android:layout_height="wrap_content"
-                    android:text="쿠폰 등록"
-                    android:textColor="#b3ffff"
-                    />
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    android:hint="PW"
-                    android:ems="10"
-                    android:id="@+id/edt_setting_account_passwd_current" />
-
-                <TextView
-                    android:layout_marginTop="10dp"
-                    android:layout_width="wrap_content"
-                    android:textSize="18dp"
-                    android:layout_height="wrap_content"
-                    android:text="새로운 비밀번호"
-                    android:textColor="#b3ffff"
-                    />
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    android:hint="PW"
-                    android:ems="10"
-                    android:id="@+id/edt_setting_account_passwd" />
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    android:hint="Retype"
-                    android:ems="10"
-                    android:id="@+id/edt_setting_account_passwd_retype" />
-
-                <TextView
-                    android:layout_marginTop="10dp"
-                    android:layout_width="wrap_content"
-                    android:textSize="18dp"
-                    android:layout_height="wrap_content"
-                    android:text="비밀번호가 일치합니다."
-                    android:id="@+id/tv_setting_account_pw_correct"
-                    android:textColor="#b3ffff"
-                    />
 
                 <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="New Button"
-                    android:id="@+id/btn_setting_account_passwd_proc"
-                    android:layout_gravity="center_horizontal" />
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="등록"
+                    android:id="@+id/btn_main_register"/>
+
+                <Button
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="목록"
+                    android:id="@+id/btn_main_list"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="결제"
+                    android:id="@+id/btn_main_purchase"/>
+
+                <Button
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="설정"
+                    android:id="@+id/btn_main_setting"/>
 
             </LinearLayout>
-            </ScrollView>
         </LinearLayout>
+
     </LinearLayout>
+
 </LinearLayout>

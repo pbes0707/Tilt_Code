@@ -9,6 +9,8 @@ import android.os.Bundle;
 public class PurchaseActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
     }
 }
