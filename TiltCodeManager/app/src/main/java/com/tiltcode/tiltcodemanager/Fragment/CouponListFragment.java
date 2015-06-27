@@ -76,7 +76,7 @@ public class CouponListFragment extends Fragment {
         dialog.setMessage("데이터를 불러오는중입니다..");
         dialog.show();
 
-        couponList = new ArrayList<>();
+        couponList = new ArrayList<Coupon>();
 
         adapter = new CouponListAdapter(context, new ArrayList<Coupon>());
 

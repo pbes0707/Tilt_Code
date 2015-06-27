@@ -31,8 +31,8 @@ public class TiltService extends Service implements SensorEventListener {
 
     public static Thread mThread;
     private LinkedList<AccelData> list;
-    private static int dt = 0;
-    private static AccelData prev = null, now = null;
+    private static int dt = 0, count = 0;
+    private static AccelData prev = null, now = null, avg = null;
     private float TOLERANCE_VALUE = 2.f;
     private float SEARCH_VALUE = 2.f;
     private int RECOGNIZE = 3000;
@@ -102,16 +102,24 @@ public class TiltService extends Service implements SensorEventListener {
                         {
                             for(int i = 0 ; i<Arr_Accel.length ; i++)
                             {
-                                if( (Arr_Accel[i][0] - SEARCH_VALUE < now.x && Arr_Accel[i][0] + SEARCH_VALUE > now.x ) &&
-                                        (Arr_Accel[i][1] - SEARCH_VALUE < now.y && Arr_Accel[i][1] + SEARCH_VALUE > now.y ) &&
-                                        (Arr_Accel[i][2] - SEARCH_VALUE < now.z && Arr_Accel[i][2] + SEARCH_VALUE > now.z ) )
+                                if( (Arr_Accel[i][0] - SEARCH_VALUE < avg.x && Arr_Accel[i][0] + SEARCH_VALUE > avg.x ) &&
+                                        (Arr_Accel[i][1] - SEARCH_VALUE < avg.y && Arr_Accel[i][1] + SEARCH_VALUE > avg.y ) &&
+                                        (Arr_Accel[i][2] - SEARCH_VALUE < avg.z && Arr_Accel[i][2] + SEARCH_VALUE > avg.z ) )
                                 {
                                     Log.d("sensor", "Tilt : " + String.valueOf(i + 1));
-                                   ///// 코딩하셈 씨발련아
+                                    dt = 0;
+                                    //////////////정밀 검사 부분/////////
+                                }
+                                else if( (Arr_Accel[i][0] - SEARCH_VALUE < avg.x && Arr_Accel[i][0] + SEARCH_VALUE > avg.x ) &&
+                                        (Arr_Accel[i][1] - SEARCH_VALUE < avg.y && Arr_Accel[i][1] + SEARCH_VALUE > avg.y ) &&
+                                        (Arr_Accel[i][2] - SEARCH_VALUE < avg.z && Arr_Accel[i][2] + SEARCH_VALUE > avg.z ) )
+                                {
+                                    Log.d("sensor", "Tilt : " + String.valueOf(i + 1));
+                                    dt = 0;
+                                   /////////////////일반 검사 부분 //////////////
 
                                 }
                             }
-                            dt = 0;
                         }
                        /* boolean flag = false;
 
@@ -175,15 +183,29 @@ public class TiltService extends Service implements SensorEventListener {
                         Math.round(values[2] * 100d) / 100d);
 
                 if(prev == null)
-                    prev = now = v;
+                {
+                    avg = prev = now = v;
+                    count = 1;
+                }
                 else
                 {
-                    if( !((prev.x - TOLERANCE_VALUE < v.x && prev.x + TOLERANCE_VALUE > v.x)
-                            && (prev.y - TOLERANCE_VALUE < v.y && prev.y + TOLERANCE_VALUE > v.y)
-                            && (prev.z - TOLERANCE_VALUE < v.z && prev.z + TOLERANCE_VALUE > v.z)))
+                    if( !((avg.x - TOLERANCE_VALUE < v.x && avg.x + TOLERANCE_VALUE > v.x)
+                            && (avg.y - TOLERANCE_VALUE < v.y && avg.y + TOLERANCE_VALUE > v.y)
+                            && (avg.z - TOLERANCE_VALUE < v.z && avg.z + TOLERANCE_VALUE > v.z)))
                     {
                         dt = 0;
-                        prev = v;
+                        avg = prev = v;
+                        count = 1;
+                    }
+                    else
+                    {
+                        count++;
+                        prev.x += v.x;
+                        prev.y += v.y;
+                        prev.z += v.z;
+                        avg.x = prev.x/count;
+                        avg.y = prev.y/count;
+                        avg.z = prev.z/count;
                     }
                     now = v;
                 }
