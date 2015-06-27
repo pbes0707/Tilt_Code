@@ -3,9 +3,11 @@ package com.tiltcode.tiltcodemanager.Model;
 import retrofit.Callback;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
+import retrofit.http.GET;
 import retrofit.http.Multipart;
 import retrofit.http.POST;
 import retrofit.http.Part;
+import retrofit.http.Query;
 import retrofit.mime.TypedFile;
 
 /**
@@ -24,6 +26,11 @@ public interface HttpService {
                 @Field("company") String company,
                 Callback<LoginResult> ret);
 
+
+    @GET("/validateSession")
+    void validateSession(@Query("session") String session,
+                         Callback<LoginResult> ret);
+
     @FormUrlEncoded
     @POST("/login")
     void login(@Field("id") String id,
@@ -39,6 +46,10 @@ public interface HttpService {
     @POST("/logOut")
     void logOut(@Field("session") String session,
                 Callback<LoginResult> ret);
+
+    @GET("/couponGet")
+    void couponGet(@Query("session") String session,
+                   Callback<CouponResult> ret);
 
 
 

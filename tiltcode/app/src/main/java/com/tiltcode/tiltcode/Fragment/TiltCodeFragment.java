@@ -19,7 +19,7 @@ import com.tiltcode.tiltcode.R;
 public class TiltCodeFragment extends Fragment {
 
     //로그에 쓰일 tag
-    public static final String TAG = SettingFragment.class.getSimpleName();
+    public static final String TAG = TiltCodeFragment.class.getSimpleName();
 
     int layoutid;
     Context context;

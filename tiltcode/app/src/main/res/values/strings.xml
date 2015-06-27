@@ -14,4 +14,11 @@
     <string name="message_session_invalid">세션이 유효하지 않습니다.</string>
     <string name="message_not_allow_permission">허가되지 않은 접근입니다.</string>
     <string name="message_success_logout">로그아웃되었습니다.</string>
+    <string name="message_same_name">이름이 일치합니다.</string>
+    <string name="message_same_passwd">비밀번호가 일치합니다.</string>
+    <string name="message_diff_name">이름이 일치하지 않습니다.</string>
+    <string name="message_diff_passwd">비밀번호가 일치하지 않습니다.</string>
+    <string name="message_success_change_name">이름 변경을 성공하였습니다.</string>
+    <string name="message_success_change_passwd">비밀번호 변경을 성공하였습니다.</string>
+    <string name="message_diff_current_passwd">현재 비밀번호가 올바르지 않습니다.</string>
 </resources>

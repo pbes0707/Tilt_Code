@@ -164,7 +164,7 @@ public class SignupActivity extends FragmentActivity {
                     startActivity(intent);
                     finish();
 
-                    Util.getAccessToken().setToken(loginResult.session);
+                    Util.getAccessToken().setToken(loginResult.info.session);
 
 
                 } else if (loginResult.code.equals("-1")) { //비번 길이 짧음

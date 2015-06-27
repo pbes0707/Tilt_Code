@@ -1,6 +1,5 @@
 package com.tiltcode.tiltcodemanager.Model;
 
-
 import com.tiltcode.tiltcodemanager.Util;
 
 /**
@@ -20,6 +19,7 @@ public class LoginToken {
     String phone; //전화번호
     String uuid; //기기 고유값
     String model; // 기기 모델명
+    int point; // 관리자 포인트(관리자용 앱에만 있음)
 
 
     public LoginType getLoginType() {
@@ -112,8 +112,15 @@ public class LoginToken {
         return this;
     }
 
+    public int getPoint() { return point; }
+
+    public LoginToken setPoint(int point){
+        this.point = point;
+        return this;
+    }
+
     public void saveToken(){
-        Util.putBoolean("isSkipedUser", isSkipedUser);
+        Util.putBoolean("isSkipedUser",isSkipedUser);
         Util.putString("token",token);
         Util.putString("userId",userId);
         Util.putString("name",name);
@@ -122,6 +129,7 @@ public class LoginToken {
         Util.putString("phone",phone);
         Util.putString("uuid",uuid);
         Util.putString("model",model);
+        Util.putInt("point",point);
     }
 
     public boolean loadToken(){
@@ -135,7 +143,12 @@ public class LoginToken {
         phone = Util.getString("phone","");
         uuid = Util.getString("uuid","");
         model = Util.getString("model","");
+        point = Util.getInt("point",0);
 
         return token.length()>1?true:false;
+    }
+
+    public void destroyToken(){
+        Util.destroyToken();
     }
 }

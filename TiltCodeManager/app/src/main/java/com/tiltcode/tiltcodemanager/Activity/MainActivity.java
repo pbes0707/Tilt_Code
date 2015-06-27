@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.tiltcode.tiltcodemanager.R;
+import com.tiltcode.tiltcodemanager.Util;
 
 /**
  * Created by JSpiner on 2015. 6. 21..
@@ -23,12 +25,14 @@ public class MainActivity extends Activity {
 
     void init(){
 
+        ((TextView)findViewById(R.id.tv_main_name)).setText(Util.getAccessToken().getName()+"님");
+        ((TextView)findViewById(R.id.tv_main_point)).setText("현재 잔금 : "+Util.getAccessToken().getPoint()+"P");
+
         ((Button)findViewById(R.id.btn_main_register)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
         ((Button)findViewById(R.id.btn_main_list)).setOnClickListener(new View.OnClickListener() {
@@ -36,7 +40,6 @@ public class MainActivity extends Activity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, CouponListActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
         ((Button)findViewById(R.id.btn_main_purchase)).setOnClickListener(new View.OnClickListener() {
@@ -44,7 +47,6 @@ public class MainActivity extends Activity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, PurchaseActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
         ((Button)findViewById(R.id.btn_main_setting)).setOnClickListener(new View.OnClickListener() {
@@ -52,7 +54,6 @@ public class MainActivity extends Activity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
 

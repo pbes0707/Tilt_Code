@@ -40,35 +40,42 @@
                     android:layout_width="wrap_content"
                     android:textSize="18dp"
                     android:layout_height="wrap_content"
-                    android:text="정성민"
-                    android:id="@+id/tv_setting_account_name"
+                    android:text="현재 비밀번호"
                     android:textColor="#b3ffff"
                     />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    android:hint="PW"
+                    android:ems="10"
+                    android:id="@+id/edt_setting_account_passwd_current" />
 
                 <TextView
                     android:layout_marginTop="10dp"
                     android:layout_width="wrap_content"
                     android:textSize="18dp"
                     android:layout_height="wrap_content"
-                    android:text="새로 비밀번호"
+                    android:text="새로운 비밀번호"
                     android:textColor="#b3ffff"
                     />
 
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
+                    android:inputType="textPassword"
                     android:hint="PW"
                     android:ems="10"
-                    android:id="@+id/editText" />
+                    android:id="@+id/edt_setting_account_passwd" />
 
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
+                    android:inputType="textPassword"
                     android:hint="Retype"
                     android:ems="10"
-                    android:id="@+id/editText2" />
+                    android:id="@+id/edt_setting_account_passwd_retype" />
 
                 <TextView
                     android:layout_marginTop="10dp"
@@ -84,7 +91,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="New Button"
-                    android:id="@+id/button"
+                    android:id="@+id/btn_setting_account_passwd_proc"
                     android:layout_gravity="center_horizontal" />
 
             </LinearLayout>

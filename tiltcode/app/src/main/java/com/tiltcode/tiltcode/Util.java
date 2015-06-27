@@ -47,45 +47,39 @@ public class Util {
     public static FooEndPoint endPoint;
 
     public static String getString(String key,String defValue){
-        if(sharedPreferences!=null){
-            return sharedPreferences.getString(key,defValue);
-        }
-        else{
-            sharedPreferences = context.getSharedPreferences("tiltcode",Context.MODE_PRIVATE);
-            return getString(key,defValue);
-        }
+        return getSharedPreferences().getString(key, defValue);
     }
 
     public static void putString(String key, String value){
-        if(editor!=null){
-            editor.putString(key,value);
-            editor.commit();
-        }
-        else{
-            editor = sharedPreferences.edit();
-            putString(key,value);
-        }
+        getEditor().putString(key, value);
+        getEditor().commit();
     }
 
     public static boolean getBoolean(String key, boolean defValue){
-        if(sharedPreferences!=null){
-            return sharedPreferences.getBoolean(key,defValue);
-        }
-        else{
-            sharedPreferences = context.getSharedPreferences("tiltcode",Context.MODE_PRIVATE);
-            return getBoolean(key,defValue);
-        }
+        return getSharedPreferences().getBoolean(key,defValue);
     }
 
     public static void putBoolean(String key, boolean value){
-        if(editor!=null){
-            editor.putBoolean(key,value);
-            editor.commit();
+        getEditor().putBoolean(key, value);
+        getEditor().commit();
+    }
+
+    public static void destroyToken(){
+        getEditor().clear().commit();
+    }
+
+    private static SharedPreferences getSharedPreferences(){
+        if(sharedPreferences==null){
+            sharedPreferences = context.getSharedPreferences("tiltcode",Context.MODE_PRIVATE);
         }
-        else{
-            editor = sharedPreferences.edit();
-            putBoolean(key,value);
+        return sharedPreferences;
+    }
+
+    private static SharedPreferences.Editor getEditor(){
+        if(editor==null){
+            editor = getSharedPreferences().edit();
         }
+        return editor;
     }
 
     public static LoginToken getAccessToken(){
@@ -93,10 +87,6 @@ public class Util {
             accessToken = new LoginToken();
         }
         return accessToken;
-    }
-
-    public static void destroyToken(){
-        editor.clear().commit();
     }
 
     public static class FooEndPoint implements Endpoint {

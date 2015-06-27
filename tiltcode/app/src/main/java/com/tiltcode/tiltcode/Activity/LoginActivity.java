@@ -209,6 +209,8 @@ public class LoginActivity extends Activity {
                         public void success(com.tiltcode.tiltcode.Model.LoginResult loginResult, Response response) {
                             Log.d(TAG,"access success / code : "+loginResult.code);
                             if (loginResult.code.equals("1")) { //성공
+
+
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
                                 finish();
@@ -292,6 +294,7 @@ public class LoginActivity extends Activity {
                     finish();
 
                     Util.getAccessToken()
+                            .setName(loginResult.info.name)
                             .setToken(loginResult.info.session)
                             .setUserId(loginResult.info.id)
                             .setPhone(loginResult.info.phone)
