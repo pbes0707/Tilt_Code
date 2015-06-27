@@ -3,10 +3,171 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:background="@drawable/bg_main"
-        android:layout_gravity="center_horizontal"></LinearLayout>
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal">
+
+        <include layout="@layout/toolbar"/>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_marginTop="15dp"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginBottom="30dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_height="match_parent">
+
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_marginTop="10dp"
+                            android:layout_width="wrap_content"
+                            android:textSize="18dp"
+                            android:layout_height="wrap_content"
+                            android:text="등록"
+                            android:textColor="#b3ffff"
+                            />
+
+
+                        <TextView
+                            android:gravity="right"
+                            android:layout_marginTop="10dp"
+                            android:layout_width="match_parent"
+                            android:textSize="18dp"
+                            android:layout_height="wrap_content"
+                            android:text="정성민님"
+                            android:textColor="#b3ffff"
+                            />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_marginTop="10dp"
+                        android:layout_width="wrap_content"
+                        android:textSize="18dp"
+                        android:layout_height="wrap_content"
+                        android:text="쿠폰표시타입"
+                        android:textColor="#b3ffff"
+                        />
+
+                    <Spinner
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/spinner"
+                        android:entries="@array/colors"
+                        android:layout_gravity="center_horizontal" />
+
+                    <TextView
+                        android:layout_marginTop="10dp"
+                        android:layout_width="wrap_content"
+                        android:textSize="18dp"
+                        android:layout_height="wrap_content"
+                        android:text="GPS좌표 / 시간"
+                        android:textColor="#b3ffff"
+                        />
+
+                    <Spinner
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:entries="@array/colors"
+                        android:id="@+id/spinner2"
+                        android:layout_gravity="center_horizontal" />
+
+                    <TextView
+                        android:layout_marginTop="10dp"
+                        android:layout_width="wrap_content"
+                        android:textSize="18dp"
+
+                        android:layout_height="wrap_content"
+                        android:text="파일선택"
+                        android:textColor="#b3ffff"
+                        />
+
+
+                    <ImageButton
+                        android:src="@drawable/back"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imv_register_file" />
+
+
+
+                    <TextView
+                        android:layout_marginTop="10dp"
+                        android:layout_width="wrap_content"
+                        android:textSize="18dp"
+                        android:layout_height="wrap_content"
+                        android:text="이미지선택"
+                        android:textColor="#b3ffff"
+                        />
+
+                    <ImageButton
+                        android:src="@drawable/back"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imv_register_image" />
+
+
+                    <TextView
+                        android:layout_marginTop="10dp"
+                        android:layout_width="wrap_content"
+                        android:textSize="18dp"
+                        android:layout_height="wrap_content"
+                        android:text="설명"
+                        android:textColor="#b3ffff"
+                        />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="description"
+                        android:minLines="3"
+                        android:id="@+id/edt_setting_account_passwd_current" />
+
+                    <TextView
+                        android:layout_marginTop="10dp"
+                        android:layout_width="wrap_content"
+                        android:textSize="18dp"
+                        android:layout_height="wrap_content"
+                        android:text="각도"
+                        android:textColor="#b3ffff"
+                        />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="New Button"
+                        android:id="@+id/btn_register_tilt" />
+
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="등록"
+                        android:id="@+id/btn_register_proc"
+                        android:layout_gravity="center_horizontal" />
+
+                </LinearLayout>
+            </ScrollView>
+
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

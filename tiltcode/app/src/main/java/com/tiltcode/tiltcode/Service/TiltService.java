@@ -35,6 +35,7 @@ public class TiltService extends Service implements SensorEventListener {
     private static AccelData prev = null, now = null;
     private float TOLERANCE_VALUE = 2.f;
     private float SEARCH_VALUE = 2.f;
+    private int RECOGNIZE = 3000;
     private static float[][] Arr_Accel = {
             {0f, 9.8f, 0f},
             {6.9f, 6.8f, 0f},
@@ -96,7 +97,7 @@ public class TiltService extends Service implements SensorEventListener {
                     while (serviceRunning) {
                         SystemClock.sleep(30);
                         dt += 30;
-                        if(dt > 3000)
+                        if(dt > RECOGNIZE)
                         {
                             for(int i = 0 ; i<Arr_Accel.length ; i++)
                             {
@@ -105,6 +106,7 @@ public class TiltService extends Service implements SensorEventListener {
                                         (Arr_Accel[i][2] - SEARCH_VALUE < now.z && Arr_Accel[i][2] + SEARCH_VALUE > now.z ) )
                                 {
                                     Log.d("sensor", "Tilt : " + String.valueOf(i + 1));
+                                    /////여기에 코딩
                                 }
                             }
                             dt = 0;
