@@ -48,11 +48,6 @@ public class MainActivity extends ActionFragmentActivity{
         setEnableBack(false);
 
         this.context = getBaseContext();
-/*
-        if (serviceMonitor.isMonitoring() == false)
-        {
-//            serviceMonitor.startMonitoring(getApplicationContext());
-        }*/
 
         init();
     }
