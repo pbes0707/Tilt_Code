@@ -38,7 +38,7 @@ public class CouponListActivity extends ActionFragmentActivity{
 
 
     //로그에 쓰일 tag
-    public static final String TAG = SignupActivity.class.getSimpleName();
+    public static final String TAG = CouponListActivity.class.getSimpleName();
 
     Fragment fragment1; //policy fragment
     Fragment fragment2; //signup fragment
