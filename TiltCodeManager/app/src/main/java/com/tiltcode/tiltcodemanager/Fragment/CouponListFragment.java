@@ -42,7 +42,7 @@ public class CouponListFragment extends Fragment {
 
     ProgressDialog dialog;
 
-    public List<Coupon> couponList;
+    public ArrayList<Coupon> couponList;
 
     ListView listView;
     CouponListAdapter adapter ;
@@ -69,6 +69,7 @@ public class CouponListFragment extends Fragment {
 
     void init() {
 
+        Log.d(TAG,"couponlistfragment");
 
 
         dialog = new ProgressDialog(context);
@@ -78,7 +79,6 @@ public class CouponListFragment extends Fragment {
 
         couponList = new ArrayList<Coupon>();
 
-        adapter = new CouponListAdapter(context, new ArrayList<Coupon>());
 
 
         Util.getEndPoint().setPort("40002");
@@ -88,7 +88,12 @@ public class CouponListFragment extends Fragment {
                     public void success(com.tiltcode.tiltcodemanager.Model.CouponResult couponResult, Response response) {
                         Log.d(TAG, "access success / code : " + couponResult.code);
                         if (couponResult.code.equals("1")) { //성공
-                            couponList = couponResult.coupon;
+                            couponList = (ArrayList)couponResult.coupon;
+                            Log.d(TAG,"count : "+couponResult.coupon.size());
+                            adapter = new CouponListAdapter(context, couponList);
+//                            adapter.arrayList = couponList;
+//                            adapter.notifyDataSetChanged();
+                            listView.setAdapter(adapter);
                         } else if (couponResult.code.equals("-1")) { //누락된게있음
                             Toast.makeText(context, getResources().getText(R.string.message_not_enough_data), Toast.LENGTH_LONG).show();
                         } else if (couponResult.code.equals("-2")) { //세션이 유효하지않음

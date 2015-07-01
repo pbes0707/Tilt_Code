@@ -60,6 +60,7 @@ public interface HttpService {
     @Multipart
     @POST("/couponRegisterGPS")
     void couponRegisterGPS(@Part("session") String session,
+                           @Part("create") String create,
                            @Part("type") String type,
                            @Part("title") String title,
                            @Part("desc") String desc,
@@ -74,6 +75,7 @@ public interface HttpService {
     @Multipart
     @POST("/couponRegisterTime")
     void couponRegisterTime(@Part("session") String session,
+                            @Part("create") String create,
                            @Part("type") String type,
                            @Part("title") String title,
                            @Part("desc") String desc,

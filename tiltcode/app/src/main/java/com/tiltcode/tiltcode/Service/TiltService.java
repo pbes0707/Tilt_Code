@@ -34,7 +34,8 @@ public class TiltService extends Service implements SensorEventListener {
     private static int dt = 0, count = 0;
     private static AccelData prev = null, now = null, avg = null;
     private float TOLERANCE_VALUE = 2.f;
-    private float SEARCH_VALUE = 2.f;
+    private float SEARCH_VALUE = 2.5f;
+    private float SENSITIVE_SEARCH_VALUE = 1.3f;
     private int RECOGNIZE = 3000;
     private static float[][] Arr_Accel = {
             {0f, 9.8f, 0f},
@@ -102,11 +103,11 @@ public class TiltService extends Service implements SensorEventListener {
                         {
                             for(int i = 0 ; i<Arr_Accel.length ; i++)
                             {
-                                if( (Arr_Accel[i][0] - SEARCH_VALUE < avg.x && Arr_Accel[i][0] + SEARCH_VALUE > avg.x ) &&
-                                        (Arr_Accel[i][1] - SEARCH_VALUE < avg.y && Arr_Accel[i][1] + SEARCH_VALUE > avg.y ) &&
-                                        (Arr_Accel[i][2] - SEARCH_VALUE < avg.z && Arr_Accel[i][2] + SEARCH_VALUE > avg.z ) )
+                                if( (Arr_Accel[i][0] - SENSITIVE_SEARCH_VALUE < avg.x && Arr_Accel[i][0] + SENSITIVE_SEARCH_VALUE > avg.x ) &&
+                                        (Arr_Accel[i][1] - SENSITIVE_SEARCH_VALUE < avg.y && Arr_Accel[i][1] + SENSITIVE_SEARCH_VALUE > avg.y ) &&
+                                        (Arr_Accel[i][2] - SENSITIVE_SEARCH_VALUE < avg.z && Arr_Accel[i][2] + SENSITIVE_SEARCH_VALUE > avg.z ) )
                                 {
-                                    Log.d("sensor", "Tilt : " + String.valueOf(i + 1));
+                                    Log.d("sensitive sensor", "Tilt : " + String.valueOf(i + 1));
                                     dt = 0;
                                     //////////////정밀 검사 부분/////////
                                 }

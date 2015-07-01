@@ -155,13 +155,14 @@ public class RegisterActivity extends Activity {
 
         Util.getEndPoint().setPort("40002");
         Util.getHttpSerivce().couponRegisterGPS(Util.getAccessToken().getToken(),
+                Util.getAccessToken().getName(),
                 getResources().getStringArray(R.array.couponTypeKey)[couponTypeIndex],
                 ((EditText)findViewById(R.id.edt_register_title)).getText().toString(),
                 ((EditText)findViewById(R.id.edt_register_desc)).getText().toString(),
                 "link",                                     //TODO : 링크
                 String.valueOf(gpsLat),
                 String.valueOf(gpsLng),
-                "tilt",                                     //TODO : 틸트값 intent 만들기
+                "3",                                     //TODO : 틸트값 intent 만들기
                 fileType,
                 imgType,
                 new Callback<LoginResult>() {

@@ -4,6 +4,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:layout_marginTop="10dp"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:id="@+id/layout_setting_root"
@@ -11,7 +12,6 @@
         android:layout_gravity="center_horizontal">
 
         <ListView
-            android:layout_marginTop="40dp"
             android:layout_width="match_parent"
             android:divider="@null"
             android:layout_height="match_parent"

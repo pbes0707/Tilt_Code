@@ -143,8 +143,14 @@ public class GpsSelectActivity extends FragmentActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
     private void setUpMap() {
 //        mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+        setUpMapIfNeeded();
     }
 
 }

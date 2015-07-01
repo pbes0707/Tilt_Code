@@ -27,7 +27,7 @@
                 android:text="Settings"
                 android:textColor="#efefef"
                 android:textSize="25dp"
-                android:id="@+id/tv_setting_row" />
+                android:id="@+id/tv_couponlist_row" />
 
             <TextView
                 android:layout_width="wrap_content"
