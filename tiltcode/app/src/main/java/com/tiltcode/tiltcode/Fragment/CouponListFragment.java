@@ -49,6 +49,7 @@ import com.tiltcode.tiltcode.Model.CouponResult;
 import com.tiltcode.tiltcode.Model.LoginResult;
 import com.tiltcode.tiltcode.R;
 import com.tiltcode.tiltcode.Util;
+import com.tiltcode.tiltcode.View.BackFragment;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -67,7 +68,7 @@ import retrofit.client.Response;
  * Created by JSpiner on 2015. 6. 17..
  * Contact : jspiner@naver.com
  */
-public class CouponListFragment extends Fragment {
+public class CouponListFragment extends BackFragment {
 
 
     //로그에 쓰일 tag
@@ -103,6 +104,15 @@ public class CouponListFragment extends Fragment {
         super();
         this.layoutid = R.layout.fragment_couponlist;
         this.context = MainPagerAdapter.context;
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        if (mUnfoldableView != null && (mUnfoldableView.isUnfolded() || mUnfoldableView.isUnfolding())) {
+            mUnfoldableView.foldBack();
+            return false;
+        }
+        return true;
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

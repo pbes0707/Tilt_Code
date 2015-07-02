@@ -13,6 +13,9 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.Location;
+import android.location.LocationManager;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.SystemClock;
@@ -101,6 +104,39 @@ public class TiltService extends Service implements SensorEventListener {
 
         list = new LinkedList<AccelData>();
         serviceRunning = true;
+
+        //gps
+        //gps manager에 대한 설정
+        initializeLocationManager();
+
+
+        //gps에 대한 기본 설정 반복시간등
+        try {
+            mLocationManager.requestLocationUpdates(
+                    LocationManager.NETWORK_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE,
+                    mLocationListeners[1]);
+        } catch (java.lang.SecurityException ex) {
+            Log.i(LOG_NAME, "fail to request location update, ignore", ex);
+        } catch (IllegalArgumentException ex) {
+            Log.d(LOG_NAME, "network provider does not exist, " + ex.getMessage());
+        }
+        try {
+            mLocationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE,
+                    mLocationListeners[0]);
+        } catch (java.lang.SecurityException ex) {
+            Log.i(LOG_NAME, "fail to request location update, ignore", ex);
+        } catch (IllegalArgumentException ex) {
+            Log.d(LOG_NAME, "gps provider does not exist " + ex.getMessage());
+        }
+    }
+
+    //GPS서비스
+    private void initializeLocationManager() {
+        Log.e(LOG_NAME, "initializeLocationManager");
+        if (mLocationManager == null) {
+            mLocationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+        }
     }
 
     @Override
@@ -127,12 +163,13 @@ public class TiltService extends Service implements SensorEventListener {
         nm.notify(1234, notification);
     }
 
-    private ArrayList<Coupon> getGPSCoupon(String lat, String lng, String tilt){
+    private void getGPSCoupon(String tilt){
+        if(mLastLocation ==null) return;
 
         Util.getEndPoint().setPort("40003");
         Util.getHttpSerivce().backgroundCouponGetList(Util.getAccessToken().getToken(),
-                lat,
-                lng,
+                String.valueOf(mLastLocation.getLatitude()),
+                String.valueOf(mLastLocation.getLongitude()),
                 tilt,
                 new Callback<LoginResult>() {
                     @Override
@@ -163,7 +200,6 @@ public class TiltService extends Service implements SensorEventListener {
                     }
                 });
 
-        return null;
     }
 
     @Override
@@ -177,9 +213,6 @@ public class TiltService extends Service implements SensorEventListener {
                         SystemClock.sleep(30);
                         dt += 30;
 
-                        if((dt/30)%100==0){
-                        }
-
                         if(dt > RECOGNIZE)
                         {
                             for(int i = 0 ; i<Arr_Accel.length ; i++)
@@ -190,6 +223,7 @@ public class TiltService extends Service implements SensorEventListener {
                                 {
                                     Log.d(LOG_NAME, "Sensor Tilt : " + String.valueOf(i + 1));
                                     dt = 0;
+
                                     ////////////////정밀 검사 부분///////////////
 
                                 }
@@ -209,6 +243,7 @@ public class TiltService extends Service implements SensorEventListener {
                                     Log.d(LOG_NAME, "Tilt : " + String.valueOf(i + 1));
                                     dt = 0;
                                    /////////////////일반 검사 부분 //////////////
+                                    if(isScreenOn()) getGPSCoupon(String.valueOf(i+1));
 
                                 }
                             }
@@ -290,6 +325,7 @@ public class TiltService extends Service implements SensorEventListener {
                         prev = v;
                     }
                 }
+
                 /*Log.d("sensor","Accel X : " + Math.round(prev.x*100d) / 100d +
                         " Y : " + Math.round(prev.y*100d) / 100d +
                         " Z : " + Math.round(prev.z*100d) / 100d);*/
@@ -332,5 +368,50 @@ public class TiltService extends Service implements SensorEventListener {
         sd = Math.sqrt(sum / (array.length - option));
         return sd;
     }
+
+
+    private LocationManager mLocationManager = null; //LocationManager 변
+    private static final int LOCATION_INTERVAL = 1000; //gps업데이트 주기(1000=1초)
+    private static final float LOCATION_DISTANCE = 10f; // gps distance
+    Location mLastLocation; //마지막으로 수신된 gps의 주소
+
+    class LocationListener implements android.location.LocationListener{
+        //생성자
+        public LocationListener(String provider)
+        {
+            Log.e(LOG_NAME, "LocationListener " + provider);
+            mLastLocation = new Location(provider);
+        }
+        //gps좌표가 변경되었을때
+        @Override
+        public void onLocationChanged(Location location)
+        {
+            Log.e(LOG_NAME, "onLocationChanged: " + location);
+            mLastLocation.set(location);
+        }
+        //gps가 disabled됬을때
+        @Override
+        public void onProviderDisabled(String provider)
+        {
+            Log.e(LOG_NAME, "onProviderDisabled: " + provider);
+        }
+        //gps가 enable됬을때
+        @Override
+        public void onProviderEnabled(String provider)
+        {
+            Log.e(LOG_NAME, "onProviderEnabled: " + provider);
+        }
+        //gps의 상태가 변경되었을때
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras)
+        {
+            Log.e(LOG_NAME, "onStatusChanged: " + provider);
+        }
+    }
+    //앱에서 사용할 gps수신방식, gps를 이용한 방식과 네트워크를 이용한방식 둘다 사용
+    LocationListener[] mLocationListeners = new LocationListener[] {
+            new LocationListener(LocationManager.GPS_PROVIDER),
+            new LocationListener(LocationManager.NETWORK_PROVIDER)
+    };
 
 }

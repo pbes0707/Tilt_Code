@@ -2,5 +2,71 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:background="#88ffffff"
+        android:gravity="center"
+        android:layout_height="match_parent">
 
+        <LinearLayout
+            android:background="#00ffff"
+            android:layout_marginBottom="70dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="240dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:background="#dd00dd"
+                android:layout_height="35dp">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Tilt Code" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:textSize="30dp"
+                    android:layout_height="wrap_content"
+                    android:text="새로운 TILT가 감지되었습니다." />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:background="#efefef"
+                        android:layout_height="match_parent">
+
+                    </LinearLayout>
+
+                    <SeekBar
+                        android:id="@+id/myseek"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="false"
+                        android:max="100"
+                        android:progressDrawable="@android:color/transparent"
+                        android:thumb="@drawable/back" />
+                </FrameLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

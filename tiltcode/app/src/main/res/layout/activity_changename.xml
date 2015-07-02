@@ -55,6 +55,7 @@
                     />
 
                 <EditText
+                    android:layout_marginTop="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
@@ -63,6 +64,7 @@
                     android:id="@+id/edt_setting_account_name" />
 
                 <EditText
+                    android:layout_marginTop="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"

@@ -10,13 +10,14 @@ import android.view.ViewGroup;
 
 import com.tiltcode.tiltcode.Adapter.MainPagerAdapter;
 import com.tiltcode.tiltcode.R;
+import com.tiltcode.tiltcode.View.BackFragment;
 
 
 /**
  * Created by JSpiner on 2015. 6. 15..
  * Contact : jspiner@naver.com
  */
-public class TiltCodeFragment extends Fragment {
+public class TiltCodeFragment extends BackFragment {
 
     //로그에 쓰일 tag
     public static final String TAG = TiltCodeFragment.class.getSimpleName();

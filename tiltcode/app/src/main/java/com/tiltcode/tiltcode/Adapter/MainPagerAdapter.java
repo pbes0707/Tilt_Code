@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentTransaction;
 import com.tiltcode.tiltcode.Fragment.CouponListFragment;
 import com.tiltcode.tiltcode.Fragment.SettingFragment;
 import com.tiltcode.tiltcode.Fragment.TiltCodeFragment;
+import com.tiltcode.tiltcode.View.BackFragment;
 
 /**
  * Created by JSpiner on 2015. 6. 15..
@@ -52,6 +53,10 @@ public class MainPagerAdapter extends FragmentStatePagerAdapter {
         ft.add(fragment, "");
         notifyDataSetChanged();
 
+    }
+
+    public boolean onBackPressed(int page){
+        return ((BackFragment)FRAGMENTS[page]).onBackPressed();
     }
 
 }

@@ -30,6 +30,7 @@ public class SettingsActivity extends FragmentActivity {
 
     void init(){
 
+
     }
 
 }
