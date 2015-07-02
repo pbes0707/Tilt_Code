@@ -29,7 +29,6 @@
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyAcbBL6S6wrrL58Nu-J1557BplLbtWPRiQ" />
-        <!--TODO 키값 수정하기 -->
 
 
         <activity android:name=".Activity.SignupActivity">
