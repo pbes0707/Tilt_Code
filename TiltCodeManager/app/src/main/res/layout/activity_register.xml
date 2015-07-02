@@ -71,8 +71,8 @@
                     <Spinner
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/spinner"
-                        android:entries="@array/colors"
+                        android:id="@+id/spinner_register_couponType"
+                        android:entries="@array/couponType"
                         android:layout_gravity="center_horizontal" />
 
                     <TextView
@@ -87,28 +87,41 @@
                     <Spinner
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:entries="@array/colors"
-                        android:id="@+id/spinner2"
+                        android:entries="@array/couponPickType"
+                        android:id="@+id/spinner_register_couponPickType"
                         android:layout_gravity="center_horizontal" />
 
                     <TextView
                         android:layout_marginTop="10dp"
                         android:layout_width="wrap_content"
                         android:textSize="18dp"
-
+                        android:visibility="gone"
                         android:layout_height="wrap_content"
-                        android:text="파일선택"
-                        android:textColor="#b3ffff"
+                        android:id="@+id/tv_register_gps_locale"
                         />
 
+                    <TextView
+                        android:layout_marginTop="10dp"
+                        android:layout_width="wrap_content"
+                        android:textSize="18dp"
+                        android:layout_height="wrap_content"
+                        android:text="파일선택"
+                        android:textColor="#b3ffff" />
+
+                    <TextView
+                        android:layout_marginTop="10dp"
+                        android:layout_width="wrap_content"
+                        android:textSize="18dp"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        android:textColor="#b3ffff"
+                        android:id="@+id/tv_register_file_uri" />
 
                     <ImageButton
                         android:src="@drawable/back"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/imv_register_file" />
-
-
 
                     <TextView
                         android:layout_marginTop="10dp"
@@ -122,9 +135,25 @@
                     <ImageButton
                         android:src="@drawable/back"
                         android:layout_width="wrap_content"
+                        android:maxHeight="100dp"
                         android:layout_height="wrap_content"
                         android:id="@+id/imv_register_image" />
 
+                    <TextView
+                        android:layout_marginTop="10dp"
+                        android:layout_width="wrap_content"
+                        android:textSize="18dp"
+                        android:layout_height="wrap_content"
+                        android:text="제목"
+                        android:textColor="#b3ffff"
+                        />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="description"
+                        android:minLines="3"
+                        android:id="@+id/edt_register_title" />
 
                     <TextView
                         android:layout_marginTop="10dp"
@@ -140,7 +169,7 @@
                         android:layout_height="wrap_content"
                         android:hint="description"
                         android:minLines="3"
-                        android:id="@+id/edt_setting_account_passwd_current" />
+                        android:id="@+id/edt_register_desc" />
 
                     <TextView
                         android:layout_marginTop="10dp"

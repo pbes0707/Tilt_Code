@@ -4,6 +4,9 @@ package com.tiltcode.tiltcode.Service;
  * Created by Secret on 2015. 6. 16..
  */
 import android.app.ActivityManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.*;
 import android.hardware.Sensor;
@@ -11,14 +14,26 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.os.SystemClock;
 import android.util.Log;
 
+import com.tiltcode.tiltcode.Activity.LockScreenActivity;
+import com.tiltcode.tiltcode.Activity.MainActivity;
 import com.tiltcode.tiltcode.Activity.SplashActivity;
 import com.tiltcode.tiltcode.Model.AccelData;
+import com.tiltcode.tiltcode.Model.Coupon;
+import com.tiltcode.tiltcode.Model.LoginResult;
+import com.tiltcode.tiltcode.R;
+import com.tiltcode.tiltcode.Util;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * User: Secret
@@ -34,7 +49,8 @@ public class TiltService extends Service implements SensorEventListener {
     private static int dt = 0, count = 0;
     private static AccelData prev = null, now = null, avg = null;
     private float TOLERANCE_VALUE = 2.f;
-    private float SEARCH_VALUE = 2.f;
+    private float SEARCH_VALUE = 2.5f;
+    private float SENSITIVE_SEARCH_VALUE = 1.3f;
     private int RECOGNIZE = 3000;
     private static float[][] Arr_Accel = {
             {0f, 9.8f, 0f},
@@ -67,6 +83,10 @@ public class TiltService extends Service implements SensorEventListener {
     {
         super.onCreate();
 
+        /*
+        tilt
+         */
+
         mActivityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
@@ -81,6 +101,7 @@ public class TiltService extends Service implements SensorEventListener {
         list = new LinkedList<AccelData>();
         serviceRunning = true;
     }
+
     @Override
     public void onDestroy() {
         serviceRunning = false;
@@ -88,9 +109,70 @@ public class TiltService extends Service implements SensorEventListener {
         super.onDestroy();
     }
 
+    boolean isScreenOn(){
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        boolean isScreenOn = pm.isScreenOn();
+        return isScreenOn;
+    }
+
+    void showNotification(){
+        NotificationManager nm = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        Notification notification = new Notification(R.mipmap.ic_launcher, "Nomal Notification", System.currentTimeMillis());
+        notification.flags = Notification.FLAG_AUTO_CANCEL;
+        notification.defaults = Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE ;
+        notification.number = 13;
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+        notification.setLatestEventInfo(this, "Nomal Title", "Nomal Summary", pendingIntent);
+        nm.notify(1234, notification);
+    }
+
+    private ArrayList<Coupon> getGPSCoupon(String lat, String lng, String tilt){
+
+        Util.getEndPoint().setPort("40003");
+        Util.getHttpSerivce().backgroundCouponGetList(Util.getAccessToken().getToken(),
+                lat,
+                lng,
+                tilt,
+                new Callback<LoginResult>() {
+                    @Override
+                    public void success(LoginResult loginResult, Response response) {
+
+                        if(loginResult.code.equals("1")){
+
+                            if(isScreenOn()){
+                                showNotification();
+                            }
+                            else{
+                                Intent dialogIntent = new Intent(getApplicationContext(), LockScreenActivity.class);
+                                startActivity(dialogIntent);
+                            }
+
+                        }
+                        else if(loginResult.code.equals("-1")){ //생략된 내용이 있음
+                            Log.d(LOG_NAME, "background get gps coupon error : no entry");
+                        }
+                        else if(loginResult.code.equals("-2")){ //받아올 쿠폰이 하나도 없음
+                            Log.d(LOG_NAME, "background get gps coupon error : no coupon");
+                        }
+                        else if(loginResult.code.equals("-3")){//세션이 유효하지 않음
+                            Log.d(LOG_NAME, "background get gps coupon error : invalid session");
+                        }
+
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Log.e(LOG_NAME,"error background get gps coupon");
+                    }
+                });
+
+        return null;
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
+        Log.d(LOG_NAME,"startcommand1");
         if (mThread == null) {
             mThread = new Thread(new Runnable() {
                 @Override
@@ -98,23 +180,31 @@ public class TiltService extends Service implements SensorEventListener {
                     while (serviceRunning) {
                         SystemClock.sleep(30);
                         dt += 30;
+
+                        if((dt/30)%100==0){
+                            Log.d(LOG_NAME,"startcommand");
+                        }
+
                         if(dt > RECOGNIZE)
                         {
                             for(int i = 0 ; i<Arr_Accel.length ; i++)
                             {
-                                if( (Arr_Accel[i][0] - SEARCH_VALUE < avg.x && Arr_Accel[i][0] + SEARCH_VALUE > avg.x ) &&
-                                        (Arr_Accel[i][1] - SEARCH_VALUE < avg.y && Arr_Accel[i][1] + SEARCH_VALUE > avg.y ) &&
-                                        (Arr_Accel[i][2] - SEARCH_VALUE < avg.z && Arr_Accel[i][2] + SEARCH_VALUE > avg.z ) )
+                                if( (Arr_Accel[i][0] - SENSITIVE_SEARCH_VALUE < avg.x && Arr_Accel[i][0] + SENSITIVE_SEARCH_VALUE > avg.x ) &&
+                                        (Arr_Accel[i][1] - SENSITIVE_SEARCH_VALUE < avg.y && Arr_Accel[i][1] + SENSITIVE_SEARCH_VALUE > avg.y ) &&
+                                        (Arr_Accel[i][2] - SENSITIVE_SEARCH_VALUE < avg.z && Arr_Accel[i][2] + SENSITIVE_SEARCH_VALUE > avg.z ) )
                                 {
-                                    Log.d("sensor", "Tilt : " + String.valueOf(i + 1));
+                                    Log.d(LOG_NAME, "Tilt : " + String.valueOf(i + 1));
                                     dt = 0;
-                                    //////////////정밀 검사 부분/////////
+                                    ////////////////정밀 검사 부분///////////////
+
+
+
                                 }
                                 else if( (Arr_Accel[i][0] - SEARCH_VALUE < avg.x && Arr_Accel[i][0] + SEARCH_VALUE > avg.x ) &&
                                         (Arr_Accel[i][1] - SEARCH_VALUE < avg.y && Arr_Accel[i][1] + SEARCH_VALUE > avg.y ) &&
                                         (Arr_Accel[i][2] - SEARCH_VALUE < avg.z && Arr_Accel[i][2] + SEARCH_VALUE > avg.z ) )
                                 {
-                                    Log.d("sensor", "Tilt : " + String.valueOf(i + 1));
+                                    Log.d(LOG_NAME, "Tilt : " + String.valueOf(i + 1));
                                     dt = 0;
                                    /////////////////일반 검사 부분 //////////////
 
@@ -209,9 +299,9 @@ public class TiltService extends Service implements SensorEventListener {
                     }
                     now = v;
                 }
-                /* Log.d("sensor","Accel X : " + Math.round(v.x*100d) / 100d +
+                Log.d("sensor","Accel X : " + Math.round(v.x*100d) / 100d +
                         " Y : " + Math.round(v.y*100d) / 100d +
-                        " Z : " + Math.round(v.z*100d) / 100d);*/
+                        " Z : " + Math.round(v.z*100d) / 100d);
                 /*list.addFirst(v);
                 if(list.size() > 30)
                     list.removeLast();*/

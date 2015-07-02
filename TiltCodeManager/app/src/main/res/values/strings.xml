@@ -21,11 +21,45 @@
     <string name="message_success_change_name">이름 변경을 성공하였습니다.</string>
     <string name="message_success_change_passwd">비밀번호 변경을 성공하였습니다.</string>
     <string name="message_diff_current_passwd">현재 비밀번호가 올바르지 않습니다.</string>
+    <string name="message_gps_zoom_low_level">지도를 확대해서 자세한 주소를 선택해주세요.</string>
+    <string name="message_register_no_link">링크를 입력해주세요.</string>
+    <string name="message_register_no_type">타입을 선택해주세요.</string>
+    <string name="message_register_no_file">파일을 입력해주세요.</string>
+    <string name="message_register_no_image">썸네일 이미지를 선택해주세요.</string>
+    <string name="messge_register_no_tilt">Tilt 값을 선택해주세요.</string>
+    <string name="message_register_error_type">올바르지 않은 Type입니다.</string>
+    <string name="message_register_low_point">포인트가 부족합니다.</string>
+    <string name="message_register_error_tilt">올바르지 않은 tilt값입니다.</string>
+    <string name="message_success_register">쿠폰 등록을 성공하였습니다.</string>
 
-    <string-array name="colors">
-        <item>Red</item>
-        <item>Green</item>
-        <item>Blue</item>
+
+    <string-array name="couponType">
+        <item>쿠폰타입을 선택해주세요.</item>
+        <item>링크</item>
+        <item>파일</item>
+        <item>바코드</item>
+    </string-array>
+
+    <string-array name="couponTypeKey">
+        <item></item>
+        <item>link</item>
+        <item>file</item>
+        <item>barcode</item>
+    </string-array>
+
+    <string-array name="couponPickType">
+        <item>표시방식을 선택해주세요.</item>
+        <item>GPS좌표</item>
+        <item>시간설정</item>
+    </string-array>
+
+    <string-array name="purchaseMoney">
+        <item>10,000</item>
+        <item>30,000</item>
+        <item>50,000</item>
+        <item>100,000</item>
+        <item>300,000</item>
+        <item>500,000</item>
     </string-array>
 
 </resources>

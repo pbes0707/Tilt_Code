@@ -51,12 +51,42 @@ public interface HttpService {
     void couponGet(@Query("session") String session,
                    Callback<CouponResult> ret);
 
-
     @FormUrlEncoded
     @POST("/register")
     void register(@Field("regId") String regId,
                   @Field("id") String id,
                   Callback<LoginResult> ret);
+
+    @Multipart
+    @POST("/couponRegisterGPS")
+    void couponRegisterGPS(@Part("session") String session,
+                           @Part("create") String create,
+                           @Part("type") String type,
+                           @Part("title") String title,
+                           @Part("desc") String desc,
+                           @Part("link") String link,
+                           @Part("lat") String lat,
+                           @Part("lng") String lng,
+                           @Part("tilt") String tilt,
+                           @Part("file") TypedFile file,
+                           @Part("image") TypedFile image,
+                           Callback<LoginResult> ret);
+
+    @Multipart
+    @POST("/couponRegisterTime")
+    void couponRegisterTime(@Part("session") String session,
+                            @Part("create") String create,
+                           @Part("type") String type,
+                           @Part("title") String title,
+                           @Part("desc") String desc,
+                           @Part("link") String link,
+                           @Part("beginT") String beginT,
+                           @Part("endT") String endT,
+                           @Part("tilt") String tilt,
+                           @Part("file") TypedFile file,
+                           @Part("image") TypedFile image,
+                           Callback<LoginResult> ret);
+
 
 
 

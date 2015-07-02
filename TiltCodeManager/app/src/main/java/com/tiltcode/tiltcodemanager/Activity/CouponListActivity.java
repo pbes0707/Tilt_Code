@@ -38,10 +38,10 @@ public class CouponListActivity extends ActionFragmentActivity{
 
 
     //로그에 쓰일 tag
-    public static final String TAG = SignupActivity.class.getSimpleName();
+    public static final String TAG = CouponListActivity.class.getSimpleName();
 
-    Fragment fragment1; //policy fragment
-    Fragment fragment2; //signup fragment
+    Fragment fragment1; //couponlist fragment
+    Fragment fragment2; //couponlistdetail fragment
 
     int nowPage;
 
@@ -64,9 +64,7 @@ public class CouponListActivity extends ActionFragmentActivity{
 
         setPage(1);
 
-
     }
-
 
     void setPage(int page){
         nowPage = page;

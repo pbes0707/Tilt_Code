@@ -161,6 +161,7 @@ public class LoginActivity extends Activity {
                             .setSex(loginResult.info.sex)
                             .setBirthday(loginResult.info.birth)
                             .setIsSkipedUser(false)
+                            .setPoint(Integer.parseInt(loginResult.info.point))
                             .setLoginType(LoginToken.LoginType.TiltCode);
                     Util.getAccessToken().saveToken();
 

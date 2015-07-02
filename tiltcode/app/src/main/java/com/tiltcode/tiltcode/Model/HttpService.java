@@ -66,7 +66,15 @@ public interface HttpService {
     void changePasswd(@Field("session") String session,
                       @Field("currP") String currP,
                       @Field("changeP") String changeP,
-                    Callback<LoginResult> ret);
+                      Callback<LoginResult> ret);
+
+    @FormUrlEncoded
+    @POST("/backgroundCouponGetList")
+    void backgroundCouponGetList(@Field("session") String session,
+                      @Field("lat") String lat,
+                      @Field("lng") String lng,
+                      @Field("tilt") String tilt,
+                      Callback<LoginResult> ret);
 
 
 

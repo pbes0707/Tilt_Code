@@ -1,20 +1,17 @@
 package com.tiltcode.tiltcode.Activity;
 
-import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
-import android.widget.ImageButton;
-import android.widget.Toast;
+import android.os.Handler;
 
 import com.tiltcode.tiltcode.Adapter.MainPagerAdapter;
 import com.tiltcode.tiltcode.R;
@@ -27,7 +24,7 @@ import com.tiltcode.tiltcode.View.ActionFragmentActivity;
  */
 public class MainActivity extends ActionFragmentActivity{
 
-//    private ServiceMonitor serviceMonitor = ServiceMonitor.getInstance();
+    private ServiceMonitor serviceMonitor = ServiceMonitor.getInstance();
     //로그에 쓰일 tag
     public static final String TAG = MainActivity.class.getSimpleName();
 
@@ -47,13 +44,18 @@ public class MainActivity extends ActionFragmentActivity{
         super.initActionBar();
         setEnableBack(false);
 
-        this.context = getBaseContext();
+        Log.d(TAG,"dd");
 
         init();
     }
 
     void init() {
 
+        if (serviceMonitor.isMonitoring() == false) {
+            serviceMonitor.startMonitoring(getApplicationContext());
+        }
+
+        this.context = getBaseContext();
         layout_main_tab = findViewById(R.id.layout_main_tab);
 
         MainPagerAdapter adapter = new MainPagerAdapter(context,getSupportFragmentManager() );
