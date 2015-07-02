@@ -51,10 +51,10 @@ public class TiltService extends Service implements SensorEventListener {
     private LinkedList<AccelData> list;
     private static int dt = 0, count = 0;
     private static AccelData prev = null, now = null;
-    private float TOLERANCE_VALUE = 2.0f;
+    private float TOLERANCE_VALUE = 1.8f;
     private float SEARCH_VALUE = 2.0f;
     private float SENSITIVE_TOLERANCE_VALUE = 1.4f;
-    private float SENSITIVE_SEARCH_VALUE = 1.3f;
+    private float SENSITIVE_SEARCH_VALUE = 1.0f;
     private int RECOGNIZE = 3000;
     private static float[][] Arr_Accel = {
             {0f, 9.8f, 0f},
