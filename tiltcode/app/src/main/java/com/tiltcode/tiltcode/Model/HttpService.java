@@ -71,17 +71,13 @@ public interface HttpService {
     @FormUrlEncoded
     @POST("/backgroundCouponGetList")
     void backgroundCouponGetList(@Field("session") String session,
-                      @Field("lat") String lat,
-                      @Field("lng") String lng,
-                      @Field("tilt") String tilt,
-                      Callback<LoginResult> ret);
+                                 @Field("lat") String lat,
+                                 @Field("lng") String lng,
+                                 @Field("tilt") String tilt,
+                                 Callback<LoginResult> ret);
+    @FormUrlEncoded
+    @POST("/checkVersion")
+    void checkVersion(Callback<VersionResult> ret);
 
-
-
-    @Multipart
-    @POST("/down")
-    void fileSend(@Part("str") String str,
-                  @Part("file")TypedFile file,
-                  Callback<String> ret);
 
 }

@@ -64,7 +64,7 @@ public class MainActivity extends Activity {
         ((Button)findViewById(R.id.btn_main_setting)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, GpsSelectActivity.class);
+                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
                 startActivity(intent);
             }
         });

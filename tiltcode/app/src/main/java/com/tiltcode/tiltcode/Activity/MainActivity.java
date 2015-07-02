@@ -31,10 +31,18 @@ public class MainActivity extends ActionFragmentActivity{
     Context context;
 
     ViewPager mPager;
+    MainPagerAdapter adapter;
 
     public static View layout_main_tab;
 
     int lastPage=1;
+
+    @Override
+    public void onBackPressed() {
+        if(adapter.onBackPressed(lastPage)) {
+            super.onBackPressed();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +55,8 @@ public class MainActivity extends ActionFragmentActivity{
         Log.d(TAG,"dd");
 
         init();
+
+        startActivity(new Intent(MainActivity.this, LockScreenActivity.class));
     }
 
     void init() {
@@ -55,14 +65,13 @@ public class MainActivity extends ActionFragmentActivity{
             serviceMonitor.startMonitoring(getApplicationContext());
         }
 
-        this.context = getBaseContext();
+        this.context = MainActivity.this;
         layout_main_tab = findViewById(R.id.layout_main_tab);
 
-        MainPagerAdapter adapter = new MainPagerAdapter(context,getSupportFragmentManager() );
+        adapter = new MainPagerAdapter(context,getSupportFragmentManager() );
         mPager = (ViewPager) findViewById(R.id.pager_mainview);
         mPager.setAdapter(adapter);
         mPager.setOffscreenPageLimit(3);
-
 
         mPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
