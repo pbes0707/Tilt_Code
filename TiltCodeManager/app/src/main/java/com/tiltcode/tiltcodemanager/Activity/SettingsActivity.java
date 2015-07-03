@@ -37,6 +37,10 @@ import retrofit.client.Response;
  */
 public class SettingsActivity extends FragmentActivity {
 
+    //로그에 쓰일 tag
+    public static final String TAG = SettingsActivity.class.getSimpleName();
+
+
     ListView listView;
     SettingListAdapter adapter;
 
