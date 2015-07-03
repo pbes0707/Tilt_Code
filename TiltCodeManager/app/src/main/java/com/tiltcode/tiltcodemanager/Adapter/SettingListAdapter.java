@@ -8,6 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 
+import com.tiltcode.tiltcodemanager.R;
+
 import java.util.ArrayList;
 
 /**
@@ -48,7 +50,7 @@ public class SettingListAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
 
         if(view==null) {
-//            view = inflater.inflate(R.layout.item_setting_row, null);
+            view = inflater.inflate(R.layout.item_setting_row, null);
 //            ((TextView)view.findViewById(R.id.tv_setting_row)).setText(arrayList.get(i));
         }
         return view;

@@ -66,7 +66,16 @@ public class CouponListActivity extends ActionFragmentActivity{
 
     }
 
-    void setPage(int page){
+    @Override
+    public void onBackPressed() {
+        if (nowPage == 2) {
+            setPage(1);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    public void setPage(int page){
         nowPage = page;
 
         Fragment fr = null;
