@@ -154,17 +154,24 @@ public class TiltService extends Service implements SensorEventListener {
 
     void showNotification(){
         NotificationManager nm = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-        Notification notification = new Notification(R.mipmap.ic_launcher, "Nomal Notification", System.currentTimeMillis());
+        Notification notification = new Notification(R.mipmap.ic_launcher, "틸트 감지됨", System.currentTimeMillis());
         notification.flags = Notification.FLAG_AUTO_CANCEL;
         notification.defaults = Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE ;
         notification.number = 13;
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
-        notification.setLatestEventInfo(this, "Nomal Title", "Nomal Summary", pendingIntent);
+        notification.setLatestEventInfo(this, "쿠폰도착", "새로운 쿠폰을 확인해주세요.", pendingIntent);
         nm.notify(1234, notification);
     }
 
     private void getGPSCoupon(String tilt){
-        if(mLastLocation ==null) return;
+
+        if(mLastLocation ==null) {
+            Log.d(LOG_NAME,"location null");
+            return;
+        }
+        else{
+            Log.d(LOG_NAME,"tilt : "+tilt+"lat : "+mLastLocation.getLatitude()+" lng : "+mLastLocation.getLongitude()+"token : "+Util.getAccessToken().getToken());
+        }
 
         Util.getEndPoint().setPort("40003");
         Util.getHttpSerivce().backgroundCouponGetList(Util.getAccessToken().getToken(),
@@ -174,6 +181,7 @@ public class TiltService extends Service implements SensorEventListener {
                 new Callback<LoginResult>() {
                     @Override
                     public void success(LoginResult loginResult, Response response) {
+                        Log.d(LOG_NAME,"backgroundcouponget success : "+loginResult.code);
 
                         if (loginResult.code.equals("1")) {
 
@@ -181,6 +189,7 @@ public class TiltService extends Service implements SensorEventListener {
                                 showNotification();
                             } else {
                                 Intent dialogIntent = new Intent(getApplicationContext(), LockScreenActivity.class);
+                                dialogIntent.addFlags( Intent.FLAG_ACTIVITY_NEW_TASK );
                                 startActivity(dialogIntent);
                             }
 
@@ -196,7 +205,7 @@ public class TiltService extends Service implements SensorEventListener {
 
                     @Override
                     public void failure(RetrofitError error) {
-                        Log.e(LOG_NAME, "error background get gps coupon");
+                        Log.e(LOG_NAME, "error background get gps coupon"+error.getMessage());
                     }
                 });
 
@@ -205,6 +214,7 @@ public class TiltService extends Service implements SensorEventListener {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
+
         if (mThread == null) {
             mThread = new Thread(new Runnable() {
                 @Override
@@ -212,6 +222,7 @@ public class TiltService extends Service implements SensorEventListener {
                     while (serviceRunning) {
                         SystemClock.sleep(30);
                         dt += 30;
+
 
                         if(dt > RECOGNIZE)
                         {
@@ -222,10 +233,9 @@ public class TiltService extends Service implements SensorEventListener {
                                         (Arr_Accel[i][2] - SENSITIVE_SEARCH_VALUE < now.z && Arr_Accel[i][2] + SENSITIVE_SEARCH_VALUE > now.z ) )
                                 {
                                     Log.d(LOG_NAME, "Sensor Tilt : " + String.valueOf(i + 1));
-                                    dt = 0;
-
+                                    dt = -1000*30;
                                     ////////////////정밀 검사 부분///////////////
-
+                                    /*if(!isScreenOn()) */getGPSCoupon(String.valueOf(i+1));
                                 }
                                 else if( (Arr_Accel[i][0] - SEARCH_VALUE < now.x && Arr_Accel[i][0] + SEARCH_VALUE > now.x ) &&
                                         (Arr_Accel[i][1] - SEARCH_VALUE < now.y && Arr_Accel[i][1] + SEARCH_VALUE > now.y ) &&
@@ -241,15 +251,14 @@ public class TiltService extends Service implements SensorEventListener {
                                         Log.d(LOG_NAME, "Tilt : " + String.valueOf(i + 1));
                                     }*/
                                     Log.d(LOG_NAME, "Tilt : " + String.valueOf(i + 1));
-                                    dt = 0;
-                                   /////////////////일반 검사 부분 //////////////
-                                    if(isScreenOn()) getGPSCoupon(String.valueOf(i+1));
+                                    dt = -1000*30;
+                                    /////////////////일반 검사 부분 //////////////
+                                    /*if(isScreenOn()) */getGPSCoupon(String.valueOf(i+1));
 
                                 }
                             }
                         }
                        /* boolean flag = false;
-
                         if(list.size() > 29) {
                             double[][] values = new double[list.size()][];
                             for (int i = 0; i < list.size(); i++) {
@@ -258,16 +267,12 @@ public class TiltService extends Service implements SensorEventListener {
                                 values[i][1] = list.get(i).y;
                                 values[i][2] = list.get(i).z;
                             }
-
                             double deviX = Float.parseFloat(Double.toString(standardDeviation(values[0], 0)));
                             double deviY = Float.parseFloat(Double.toString(standardDeviation(values[1], 0)));
                             double deviZ = Float.parseFloat(Double.toString(standardDeviation(values[2], 0)));
-
-
                             Log.d("sensor", "Deviation X : " + deviX +
                                     " Y : " + deviY +
                                     " Z : " + deviZ);
-
                             if (flag) {
                                 Intent i = new Intent(TiltService.this, SplashActivity.class);
                                 startActivity(i);
@@ -282,7 +287,6 @@ public class TiltService extends Service implements SensorEventListener {
         } else if (mThread.isAlive() == false) {
             mThread.start();
         }
-
         return START_STICKY;
     }
 
@@ -325,10 +329,9 @@ public class TiltService extends Service implements SensorEventListener {
                         prev = v;
                     }
                 }
-
                 /*Log.d("sensor","Accel X : " + Math.round(prev.x*100d) / 100d +
                         " Y : " + Math.round(prev.y*100d) / 100d +
-                        " Z : " + Math.round(prev.z*100d) / 100d);*/
+                        " Z : " + Math.round(prev.z*100d) / 100d);
                 /*list.addFirst(v);
                 if(list.size() > 30)
                     list.removeLast();*/

@@ -68,16 +68,16 @@ public interface HttpService {
                       @Field("changeP") String changeP,
                       Callback<LoginResult> ret);
 
-    @FormUrlEncoded
-    @POST("/backgroundCouponGetList")
-    void backgroundCouponGetList(@Field("session") String session,
-                                 @Field("lat") String lat,
-                                 @Field("lng") String lng,
-                                 @Field("tilt") String tilt,
+    @GET("/backgroundCouponGetList")
+    void backgroundCouponGetList(@Query("session") String session,
+                                 @Query("lat") String lat,
+                                 @Query("lng") String lng,
+                                 @Query("tilt") String tilt,
                                  Callback<LoginResult> ret);
-    @FormUrlEncoded
-    @POST("/checkVersion")
-    void checkVersion(Callback<VersionResult> ret);
+
+    @GET("/checkVersion")
+    void checkVersion(@Query("session") String session,
+                      Callback<VersionResult> ret);
 
 
 }

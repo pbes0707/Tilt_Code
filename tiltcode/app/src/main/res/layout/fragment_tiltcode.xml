@@ -10,22 +10,17 @@
         android:layout_marginTop="40dp"
         android:layout_gravity="center_horizontal">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/back"
-            android:layout_gravity="center_horizontal" />
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal">
 
-            <!--<com.tiltcode.tiltcode.View.TiltCodeView-->
-                <!--android:layout_marginLeft="30dp"-->
-                <!--android:layout_marginRight="30dp"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent" />-->
+            <com.tiltcode.tiltcode.View.TiltCodeView
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
         </LinearLayout>
     </LinearLayout>

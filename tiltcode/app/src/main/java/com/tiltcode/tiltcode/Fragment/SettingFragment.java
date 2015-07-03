@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -109,7 +110,7 @@ public class SettingFragment extends BackFragment {
         dialog.show();
 
         Util.getEndPoint().setPort("40004");
-        Util.getHttpSerivce().checkVersion(
+        Util.getHttpSerivce().checkVersion("",
                 new Callback<VersionResult>() {
                     @Override
                     public void success(VersionResult versionResult, Response response) {
@@ -119,16 +120,18 @@ public class SettingFragment extends BackFragment {
                             float nowVer = Float.valueOf(getResources().getString(R.string.version));
                             float newVer = Float.valueOf(versionResult.version);
 
-                            //if(nowVer<newVer){
+                            if(nowVer<newVer){
                                 AlertDialog.Builder ab = new AlertDialog.Builder(context);
-                                ab.setTitle("Title");
-                                ab.setMessage("내용");
+                                ab.setTitle("새로운버전");
+                                ab.setMessage("새로운 버전이 출시되었습니다. 마켓으로 이동하시겠습니까?");
                                 ab.setCancelable(false);
 
                                 ab.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface arg0, int arg1) {
-
+                                        Intent marketLaunch = new Intent(Intent.ACTION_VIEW);
+                                        marketLaunch.setData(Uri.parse("market://search?q=com.tiltcode.tiltcode"));
+                                        startActivity(marketLaunch);
 
                                         arg0.dismiss();
                                     }
@@ -140,11 +143,11 @@ public class SettingFragment extends BackFragment {
                                         arg0.dismiss();
                                     }
                                 });
-                                ab.create();
-                           // }
-                            //else{
-
-                          //  }
+                                ab.create().show();
+                            }
+                            else{
+                                Toast.makeText(context,getResources().getString(R.string.message_already_new_version),Toast.LENGTH_LONG).show();
+                            }
 
                         }
 
