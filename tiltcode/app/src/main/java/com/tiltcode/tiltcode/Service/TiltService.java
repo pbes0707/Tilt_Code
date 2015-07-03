@@ -48,14 +48,12 @@ public class TiltService extends Service implements SensorEventListener {
     private final String LOG_NAME = TiltService.class.getSimpleName();
 
     public static Thread mThread;
-    private LinkedList<AccelData> list;
-    private static int dt = 0, count = 0;
+    private static int dt = 0, searchdt = 0, count = 0;
+    private static boolean checkFlag = false;
     private static AccelData prev = null, now = null;
-    private float TOLERANCE_VALUE = 1.8f;
-    private float SEARCH_VALUE = 2.0f;
-    private float SENSITIVE_TOLERANCE_VALUE = 1.4f;
-    private float SENSITIVE_SEARCH_VALUE = 1.0f;
-    private int RECOGNIZE = 3000;
+    private float TOLERANCE_VALUE = 1.5f;
+    private float SEARCH_VALUE = 1.8f;
+    private int RECOGNIZE = 4000;
     private static float[][] Arr_Accel = {
             {0f, 9.8f, 0f},
             {6.9f, 6.8f, 0f},
@@ -102,7 +100,6 @@ public class TiltService extends Service implements SensorEventListener {
         // 가속도 센서 리스너 오브젝트를 등록
         mSensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
-        list = new LinkedList<AccelData>();
         serviceRunning = true;
 
         //gps
@@ -211,13 +208,21 @@ public class TiltService extends Service implements SensorEventListener {
                 public void run() {
                     while (serviceRunning) {
                         SystemClock.sleep(30);
-                        dt += 30;
+
+                        if(checkFlag)
+                        {
+                            Log.d("s", "dt : " + String.valueOf(dt));
+                            dt += 30;
+                            searchdt -= 30;
+                        }
+
+
 
                         if(dt > RECOGNIZE)
                         {
-                            for(int i = 0 ; i<Arr_Accel.length ; i++)
+                            for(int i = 1 ; i<Arr_Accel.length ; i++)
                             {
-                                if( (Arr_Accel[i][0] - SENSITIVE_SEARCH_VALUE < now.x && Arr_Accel[i][0] + SENSITIVE_SEARCH_VALUE > now.x ) &&
+                                /*if( (Arr_Accel[i][0] - SENSITIVE_SEARCH_VALUE < now.x && Arr_Accel[i][0] + SENSITIVE_SEARCH_VALUE > now.x ) &&
                                         (Arr_Accel[i][1] - SENSITIVE_SEARCH_VALUE < now.y && Arr_Accel[i][1] + SENSITIVE_SEARCH_VALUE > now.y ) &&
                                         (Arr_Accel[i][2] - SENSITIVE_SEARCH_VALUE < now.z && Arr_Accel[i][2] + SENSITIVE_SEARCH_VALUE > now.z ) )
                                 {
@@ -226,27 +231,18 @@ public class TiltService extends Service implements SensorEventListener {
 
                                     ////////////////정밀 검사 부분///////////////
 
-                                }
-                                else if( (Arr_Accel[i][0] - SEARCH_VALUE < now.x && Arr_Accel[i][0] + SEARCH_VALUE > now.x ) &&
+                                }*/
+                                if( (Arr_Accel[i][0] - SEARCH_VALUE < now.x && Arr_Accel[i][0] + SEARCH_VALUE > now.x ) &&
                                         (Arr_Accel[i][1] - SEARCH_VALUE < now.y && Arr_Accel[i][1] + SEARCH_VALUE > now.y ) &&
                                         (Arr_Accel[i][2] - SEARCH_VALUE < now.z && Arr_Accel[i][2] + SEARCH_VALUE > now.z ) )
                                 {
-                                    /*if((prev.x - SENSITIVE_TOLERANCE_VALUE < now.x && prev.x + SENSITIVE_TOLERANCE_VALUE > now.x)
-                                            && (prev.y - SENSITIVE_TOLERANCE_VALUE < now.y && prev.y + SENSITIVE_TOLERANCE_VALUE > now.y)
-                                            && (prev.z - SENSITIVE_TOLERANCE_VALUE < now.z && prev.z + SENSITIVE_TOLERANCE_VALUE > now.z))
-                                    {
-                                    }
-                                    else
-                                    {
-                                        Log.d(LOG_NAME, "Tilt : " + String.valueOf(i + 1));
-                                    }*/
                                     Log.d(LOG_NAME, "Tilt : " + String.valueOf(i + 1));
-                                    dt = 0;
-                                   /////////////////일반 검사 부분 //////////////
                                     if(isScreenOn()) getGPSCoupon(String.valueOf(i+1));
 
                                 }
                             }
+                            dt = 0;
+                            checkFlag = false;
                         }
                        /* boolean flag = false;
 
@@ -315,14 +311,31 @@ public class TiltService extends Service implements SensorEventListener {
                 }
                 else
                 {
-                    //prev = now;
                     now = v;
-                    if( !((prev.x - TOLERANCE_VALUE < v.x && prev.x + TOLERANCE_VALUE > v.x)
-                            && (prev.y - TOLERANCE_VALUE < v.y && prev.y + TOLERANCE_VALUE > v.y)
-                            && (prev.z - TOLERANCE_VALUE < v.z && prev.z + TOLERANCE_VALUE > v.z)))
+                    if(checkFlag == false)
                     {
-                        dt = 0;
-                        prev = v;
+                        if( (Arr_Accel[0][0] - SEARCH_VALUE < now.x && Arr_Accel[0][0] + SEARCH_VALUE > now.x ) &&
+                                (Arr_Accel[0][1] - SEARCH_VALUE < now.y && Arr_Accel[0][1] + SEARCH_VALUE > now.y ) &&
+                                (Arr_Accel[0][2] - SEARCH_VALUE < now.z && Arr_Accel[0][2] + SEARCH_VALUE > now.z ) )
+                        {
+                            Log.d("s", "checkFlag true");
+                            checkFlag = true;
+                            searchdt = 2000;
+                            prev = now;
+                        }
+                    }
+                    else
+                    {
+                        if(searchdt > 0)
+                            prev = now;
+                        else if( !((prev.x - TOLERANCE_VALUE < v.x && prev.x + TOLERANCE_VALUE > v.x)
+                                && (prev.y - TOLERANCE_VALUE < v.y && prev.y + TOLERANCE_VALUE > v.y)
+                                && (prev.z - TOLERANCE_VALUE < v.z && prev.z + TOLERANCE_VALUE > v.z)))
+                        {
+                            Log.d("s", "checkFlag false");
+                            checkFlag = false;
+                            dt = 0;
+                        }
                     }
                 }
 
