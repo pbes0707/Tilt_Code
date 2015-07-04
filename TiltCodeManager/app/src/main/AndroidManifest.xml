@@ -70,6 +70,9 @@
         <activity android:name=".Activity.ChangePasswdActivity">
 
         </activity>
+        <activity android:name=".Activity.TiltSelectActivity">
+
+        </activity>
 
         <receiver
             android:name=".Service.GcmBroadcastReceiver"
