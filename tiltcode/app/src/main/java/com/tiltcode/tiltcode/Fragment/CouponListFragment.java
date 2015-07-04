@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -28,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alexvasilkov.foldablelayout.UnfoldableView;
@@ -53,6 +55,8 @@ import com.tiltcode.tiltcode.View.ActionActivity;
 import com.tiltcode.tiltcode.View.ActionFragmentActivity;
 import com.tiltcode.tiltcode.View.BackFragment;
 import com.tiltcode.tiltcode.View.DisableViewPager;
+
+import org.w3c.dom.Text;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -85,6 +89,8 @@ public class CouponListFragment extends BackFragment {
     FrameLayout mDetailsLayout;
     View detailView;
     ScrollView detailScroll;
+
+    TextView tv_couponlist_nocoupon;
 
     DisplayImageOptions options;
     ImageLoader imageLoader;
@@ -131,11 +137,22 @@ public class CouponListFragment extends BackFragment {
             detailScroll = (ScrollView)detailView.findViewById(R.id.sv_foldable_detail);
             mDetailsLayout.addView(detailView);
 
+            tv_couponlist_nocoupon = ((TextView)v.findViewById(R.id.tv_couponlist_nocoupon));
+
             init();
 
         }
         return v;
     }
+
+    Handler refreshComplete = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            mListView.onRefreshComplete();
+
+        }
+    };
 
     public DisplayImageOptions getDisplayImageOptions()
     {
@@ -186,7 +203,52 @@ public class CouponListFragment extends BackFragment {
         ((PullToRefreshListView)mListView).setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
                 @Override
                 public void onRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
-                    mListView.onRefreshComplete();
+
+                    Util.getEndPoint().setPort("40002");
+                    Util.getHttpSerivce().couponGet(Util.getAccessToken().getToken()
+                            , new Callback<CouponResult>() {
+                        @Override
+                        public void success(CouponResult couponResult, Response response) {
+                            Log.d(TAG,"couponget success / code : "+couponResult.code);
+                            refreshComplete.sendEmptyMessageDelayed(0,1000);
+
+                            if (couponResult.code.equals("1")) { //성공
+
+                                if(couponResult.coupon!=null) {
+                                    Log.d(TAG, "count : " + couponResult.coupon.size());
+
+                                    couponAdapter.couponList = couponResult.coupon;
+                                    couponAdapter.notifyDataSetChanged();
+
+                                    if(couponResult.coupon.size()==0){
+                                        tv_couponlist_nocoupon.setVisibility(View.VISIBLE);
+                                    }
+                                    else{
+                                        tv_couponlist_nocoupon.setVisibility(View.GONE);
+                                    }
+
+                                }
+                                else{
+                                    tv_couponlist_nocoupon.setVisibility(View.GONE);
+                                }
+
+                            } else if (couponResult.code.equals("-1")) { //누락된게있음
+                                Toast.makeText(context,getResources().getText(R.string.message_not_enough_data),Toast.LENGTH_LONG).show();
+                            } else if (couponResult.code.equals("-2")) { //유효하지않은 토큰
+                                Toast.makeText(context,getResources().getText(R.string.message_not_allow_permission),Toast.LENGTH_LONG).show();
+                            }
+
+                        }
+
+                        @Override
+                        public void failure(RetrofitError error) {
+                            Log.e(TAG,"login failure : "+error.getMessage());
+                            Toast.makeText(context,getResources().getText(R.string.message_network_error),Toast.LENGTH_LONG).show();
+
+                            refreshComplete.sendEmptyMessageDelayed(0,1000);
+
+                        }
+                    });
                 }
         });
 
@@ -243,18 +305,23 @@ public class CouponListFragment extends BackFragment {
             public void success(CouponResult couponResult, Response response) {
                 Log.d(TAG,"couponget success / code : "+couponResult.code);
                 if (couponResult.code.equals("1")) { //성공
-                    /*
-                    Intent intent = new Intent(context, MainActivity.class);
-                    startActivity(intent);
-                    finish();
 
-                    Util.getAccessToken().setToken(loginResult.session);
-                    Util.getAccessToken().saveToken();*/
                     if(couponResult.coupon!=null) {
                         Log.d(TAG, "count : " + couponResult.coupon.size());
 
                         couponAdapter.couponList = couponResult.coupon;
                         couponAdapter.notifyDataSetChanged();
+
+                        if(couponResult.coupon.size()==0){
+                            tv_couponlist_nocoupon.setVisibility(View.VISIBLE);
+                        }
+                        else{
+                            tv_couponlist_nocoupon.setVisibility(View.GONE);
+                        }
+
+                    }
+                    else{
+                        tv_couponlist_nocoupon.setVisibility(View.GONE);
                     }
 
                 } else if (couponResult.code.equals("-1")) { //누락된게있음

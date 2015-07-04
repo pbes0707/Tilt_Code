@@ -34,6 +34,19 @@
             android:id="@+id/unfoldable_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
+        <TextView
+            android:visibility="gone"
+            android:textColor="#ffffff"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="25dp"
+            android:text="표시할 항목이 없습니다. \nTilt하여 쿠폰을 받아보세요."
+            android:id="@+id/tv_couponlist_nocoupon"
+            android:layout_gravity="center" />
     </FrameLayout>
 
 </LinearLayout>

@@ -31,13 +31,16 @@
             android:value="AIzaSyAcbBL6S6wrrL58Nu-J1557BplLbtWPRiQ" />
 
 
-        <activity android:name=".Activity.SignupActivity">
+        <activity android:name=".Activity.SignupActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize">
 
         </activity>
         <activity android:name=".Activity.MainActivity">
 
         </activity>
-        <activity android:name=".Activity.LoginActivity">
+        <activity android:name=".Activity.LoginActivity"
+
+            android:windowSoftInputMode="stateHidden|adjustResize">
 
         </activity>
         <activity android:name=".Activity.SplashActivity"
@@ -48,7 +51,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.RegisterActivity">
+        <activity android:name=".Activity.RegisterActivity"
+            android:windowSoftInputMode="stateHidden">
 
         </activity>
         <activity android:name=".Activity.CouponListActivity">

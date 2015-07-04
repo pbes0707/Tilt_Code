@@ -51,7 +51,7 @@ public class LockScreenActivity extends Activity {
 
                     value = sb.getProgress();
                     ValueAnimator anim = ValueAnimator.ofInt(value,
-                            0);
+                            5);
                     anim.setDuration((long)(500*((float)value/sb.getMax())));
                     anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                         @Override
@@ -59,10 +59,12 @@ public class LockScreenActivity extends Activity {
                                 ValueAnimator animation) {
                             value = (Integer) animation
                                     .getAnimatedValue();
+                            if(value<0) value=0;
                             sb.setProgress(value);
                         }
                     });
                     anim.start();
+
                     /*
                     new Handler().postDelayed(new Runnable() {
                         @Override

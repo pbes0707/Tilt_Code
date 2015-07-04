@@ -42,7 +42,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <EditText
-                        android:background="#b3ffff"
+                        android:background="@drawable/text"
                         android:padding="5dp"
                         android:layout_margin="5dp"
                         android:hint="ID"
@@ -51,7 +51,7 @@
                         android:id="@+id/edt_login_id" />
 
                     <EditText
-                        android:background="#b3ffff"
+                        android:background="@drawable/text"
                         android:padding="5dp"
                         android:layout_margin="5dp"
                         android:hint="PW"
@@ -63,6 +63,7 @@
 
 
                     <CheckBox
+                        android:checked="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="자동로그인"

@@ -64,7 +64,6 @@ public class GCMRegister
         }
     }
 
-
     private boolean checkPlayServices() {
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(activity);
         if (resultCode != ConnectionResult.SUCCESS) {

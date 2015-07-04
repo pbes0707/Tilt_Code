@@ -2,6 +2,7 @@ package com.tiltcode.tiltcodemanager.Activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.pm.FeatureInfo;
 import android.database.Cursor;
@@ -18,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.tiltcode.tiltcodemanager.Model.GCMRegister;
@@ -56,6 +58,11 @@ public class RegisterActivity extends Activity {
 
     int couponTypeIndex;
     int couponPickIndex;
+
+    int coutponType=0; //0:null 1:gps 2:time
+
+    String tiltHour;
+    String tiltMinute;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +133,7 @@ public class RegisterActivity extends Activity {
 
                         break;
                     case 2:
+                        new TimePickerDialog(RegisterActivity.this, timeSetListener,0,0,false).show();
                         break;
                 }
 
@@ -140,11 +148,28 @@ public class RegisterActivity extends Activity {
         ((Button)findViewById(R.id.btn_register_proc)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                procRegisterGPS();
+                if(couponPickIndex==1) {
+                    procRegisterGPS();
+                }
+                else{
+                    procRegisterTime();
+                }
             }
         });
 
     }
+
+    private TimePickerDialog.OnTimeSetListener timeSetListener = new TimePickerDialog.OnTimeSetListener() {
+
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            // TODO Auto-generated method stub
+//            String msg = String.format("%d / %d / %d", year, hourOfDay, minute);
+            tiltHour = String.valueOf(hourOfDay);
+            tiltMinute = String.valueOf(minute);
+
+        }
+    };
 
     void procRegisterGPS(){
 
@@ -204,6 +229,64 @@ public class RegisterActivity extends Activity {
 
     }
 
+    void procRegisterTime(){
+
+        dialog = new ProgressDialog(RegisterActivity.this);
+        dialog.setTitle("로드중");
+        dialog.setMessage("데이터를 불러오는중입니다..");
+        dialog.show();
+
+        Util.getEndPoint().setPort("40002");
+        Util.getHttpSerivce().couponRegisterTime(Util.getAccessToken().getToken(),
+                Util.getAccessToken().getName(),
+                getResources().getStringArray(R.array.couponTypeKey)[couponTypeIndex],
+                ((EditText) findViewById(R.id.edt_register_title)).getText().toString(),
+                ((EditText) findViewById(R.id.edt_register_desc)).getText().toString(),
+                "link",                                     //TODO : 링크
+                tiltHour,
+                tiltMinute,
+                "3",                                     //TODO : 틸트값 intent 만들기
+                fileType,
+                imgType,
+                new Callback<LoginResult>() {
+                    @Override
+                    public void success(LoginResult loginResult, Response response) {
+
+                        Log.d(TAG, "register success / code : " + loginResult.code);
+                        if (loginResult.code.equals("1")) { //성공
+                        } else if (loginResult.code.equals("-1")) { //누락된게있음
+                            Toast.makeText(getBaseContext(), getResources().getText(R.string.message_not_enough_data), Toast.LENGTH_LONG).show();
+                        } else if (loginResult.code.equals("-2")) { //링크가 빠짐
+                            Toast.makeText(getBaseContext(), getResources().getText(R.string.message_register_no_link), Toast.LENGTH_LONG).show();
+                        } else if (loginResult.code.equals("-3")) { //파일이 없음
+                            Toast.makeText(getBaseContext(), getResources().getText(R.string.message_register_no_file), Toast.LENGTH_LONG).show();
+                        } else if (loginResult.code.equals("-4")) { //썸네일 이미지가 없음
+                            Toast.makeText(getBaseContext(), getResources().getText(R.string.message_register_no_image), Toast.LENGTH_LONG).show();
+                        } else if (loginResult.code.equals("-5")) { //Tilt가 올바르지 않음
+                            Toast.makeText(getBaseContext(), getResources().getText(R.string.message_register_error_tilt), Toast.LENGTH_LONG).show();
+                        } else if (loginResult.code.equals("-6")) { //세션이 유효하지 않음
+                            Toast.makeText(getBaseContext(), getResources().getText(R.string.message_session_invalid), Toast.LENGTH_LONG).show();
+                        } else if (loginResult.code.equals("-7")) { //정의되지 않은 type
+                            Toast.makeText(getBaseContext(), getResources().getText(R.string.message_register_error_type), Toast.LENGTH_LONG).show();
+                        } else if (loginResult.code.equals("-8")) { //포인트가 부족함
+                            Toast.makeText(getBaseContext(), getResources().getText(R.string.message_register_low_point), Toast.LENGTH_LONG).show();
+                        }
+
+                        dialog.dismiss();
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                        Log.e(TAG, "register failure : " + error.getMessage());
+                        Toast.makeText(getBaseContext(), getResources().getText(R.string.message_network_error), Toast.LENGTH_LONG).show();
+
+                        dialog.dismiss();
+                    }
+                });
+
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
@@ -217,7 +300,6 @@ public class RegisterActivity extends Activity {
             1123 : 파일 선택
             1124 : 이미지선택
             1125 : gps 선택
-
              */
             case 1123:
                 String filePath = data.getData().getPath();
