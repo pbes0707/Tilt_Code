@@ -14,6 +14,7 @@ import android.view.animation.TranslateAnimation;
 import android.os.Handler;
 
 import com.tiltcode.tiltcode.Adapter.MainPagerAdapter;
+import com.tiltcode.tiltcode.Model.CouponResult;
 import com.tiltcode.tiltcode.R;
 import com.tiltcode.tiltcode.Service.ServiceMonitor;
 import com.tiltcode.tiltcode.View.ActionFragmentActivity;
@@ -56,7 +57,7 @@ public class MainActivity extends ActionFragmentActivity{
 
         init();
 
-        startActivity(new Intent(MainActivity.this, LockScreenActivity.class));
+//        startActivity(new Intent(MainActivity.this, LockScreenActivity.class));
     }
 
     void init() {

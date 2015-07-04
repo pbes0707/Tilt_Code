@@ -21,6 +21,7 @@ import android.os.PowerManager;
 import android.os.SystemClock;
 import android.util.Log;
 
+import com.tiltcode.tiltcode.Activity.CouponReceiveActivity;
 import com.tiltcode.tiltcode.Activity.LockScreenActivity;
 import com.tiltcode.tiltcode.Activity.MainActivity;
 import com.tiltcode.tiltcode.Activity.SplashActivity;
@@ -155,7 +156,7 @@ public class TiltService extends Service implements SensorEventListener {
         notification.flags = Notification.FLAG_AUTO_CANCEL;
         notification.defaults = Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE ;
         notification.number = 13;
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, CouponReceiveActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
         notification.setLatestEventInfo(this, "쿠폰도착", "새로운 쿠폰을 확인해주세요.", pendingIntent);
         nm.notify(1234, notification);
     }
@@ -180,7 +181,7 @@ public class TiltService extends Service implements SensorEventListener {
                     public void success(LoginResult loginResult, Response response) {
                         Log.d(LOG_NAME,"backgroundcouponget success : "+loginResult.code);
 
-                        if (loginResult.code.equals("1")) {
+//                        if (loginResult.code.equals("1")) {
 
                             if (isScreenOn()) {
                                 showNotification();
@@ -190,13 +191,13 @@ public class TiltService extends Service implements SensorEventListener {
                                 startActivity(dialogIntent);
                             }
 
-                        } else if (loginResult.code.equals("-1")) { //생략된 내용이 있음
+/*                        } else if (loginResult.code.equals("-1")) { //생략된 내용이 있음
                             Log.d(LOG_NAME, "background get gps coupon error : no entry");
                         } else if (loginResult.code.equals("-2")) { //받아올 쿠폰이 하나도 없음
                             Log.d(LOG_NAME, "background get gps coupon error : no coupon");
                         } else if (loginResult.code.equals("-3")) {//세션이 유효하지 않음
                             Log.d(LOG_NAME, "background get gps coupon error : invalid session");
-                        }
+                        }*/
 
                     }
 
@@ -249,7 +250,7 @@ public class TiltService extends Service implements SensorEventListener {
                                 {
                                     Log.d(LOG_NAME, "Tilt : " + String.valueOf(i + 1));
 
-                                    if(isScreenOn()) getGPSCoupon(String.valueOf(i+1));
+                                    getGPSCoupon(String.valueOf(i+1));
 
                                 }
                             }

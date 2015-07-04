@@ -1,0 +1,9 @@
+<RadioButton
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textColor="#efefef"
+    android:buttonTint="#efefef"
+    android:textSize="20dp"
+    android:text="쿠폰 테스트 1"
+    android:id="@+id/radio_coupon_row" />

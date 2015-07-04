@@ -3,7 +3,10 @@ package com.tiltcode.tiltcode.Activity;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.SeekBar;
@@ -16,9 +19,14 @@ import android.os.Handler;
  */
 public class LockScreenActivity extends Activity {
 
+    //로그에 쓰일 tag
+    public static final String TAG = LockScreenActivity.class.getSimpleName();
+
     SeekBar sb;
     int value;
     ValueAnimator anim;
+
+    long stTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +36,8 @@ public class LockScreenActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         setContentView(R.layout.activity_lockscreen);
+
+        stTime = System.currentTimeMillis();
 
         init();
     }
@@ -44,6 +54,10 @@ public class LockScreenActivity extends Activity {
 
                 if (seekBar.getProgress() > 95) {
                     seekBar.setProgress(seekBar.getMax());
+
+                    Intent intent = new Intent(LockScreenActivity.this, CouponReceiveActivity.class);
+                    startActivity(intent);
+                    finish();;
 
                 } else {
 
@@ -91,7 +105,7 @@ public class LockScreenActivity extends Activity {
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
+                stTime = System.currentTimeMillis();
 
             }
 
@@ -105,7 +119,30 @@ public class LockScreenActivity extends Activity {
             }
         });
 
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                while(true){
+                    if(System.currentTimeMillis() - stTime >=1000*5){
+                        Log.d(TAG,"close window");
+                        mHandler.sendEmptyMessageDelayed(0,1);
+                        break;
+                    }
+                }
+
+            }
+        }).start();
     }
+
+    Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            finish();
+            super.handleMessage(msg);
+        }
+    };
 
     public void onAttachedToWindow() {
         Window window = getWindow();
