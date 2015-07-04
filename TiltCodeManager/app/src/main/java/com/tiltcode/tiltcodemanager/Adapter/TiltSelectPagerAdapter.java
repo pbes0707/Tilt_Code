@@ -15,6 +15,8 @@ import com.tiltcode.tiltcodemanager.R;
  */
 public class TiltSelectPagerAdapter extends PagerAdapter {
 
+    int[] resources = {R.drawable.tilt_1,R.drawable.tilt_2,R.drawable.tilt_3,R.drawable.tilt_4,R.drawable.tilt_5,R.drawable.tilt_6,R.drawable.tilt_7,R.drawable.tilt_8,R.drawable.tilt_9,R.drawable.tilt_10,R.drawable.tilt_11,R.drawable.tilt_12,R.drawable.tilt_13,R.drawable.tilt_14};
+
     private LayoutInflater mInflater;
 
     public TiltSelectPagerAdapter(Context c){
@@ -24,7 +26,7 @@ public class TiltSelectPagerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return 14;
     }
 
     @Override
@@ -33,7 +35,7 @@ public class TiltSelectPagerAdapter extends PagerAdapter {
         v = mInflater.inflate(R.layout.item_tiltselect_row, null);
         ImageView imv = ((ImageView)v.findViewById(R.id.imv_tiltselect_row));
 
-        imv.setImageResource(R.drawable.tilt_1);
+        imv.setImageResource(resources[position]);
 
         ((ViewPager) pager).addView(v, 0);
 

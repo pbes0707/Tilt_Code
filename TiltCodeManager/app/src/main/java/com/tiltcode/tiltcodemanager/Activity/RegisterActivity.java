@@ -64,6 +64,8 @@ public class RegisterActivity extends Activity {
     String tiltHour;
     String tiltMinute;
 
+    String tiltValue;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -156,6 +158,13 @@ public class RegisterActivity extends Activity {
                 }
             }
         });
+        ((Button)findViewById(R.id.btn_register_tilt)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(RegisterActivity.this, TiltSelectActivity.class);
+                startActivityForResult(intent,1126);
+            }
+        });
 
     }
 
@@ -187,7 +196,7 @@ public class RegisterActivity extends Activity {
                 "link",                                     //TODO : 링크
                 String.valueOf(gpsLat),
                 String.valueOf(gpsLng),
-                "3",                                     //TODO : 틸트값 intent 만들기
+                tiltValue,
                 fileType,
                 imgType,
                 new Callback<LoginResult>() {
@@ -245,7 +254,7 @@ public class RegisterActivity extends Activity {
                 "link",                                     //TODO : 링크
                 tiltHour,
                 tiltMinute,
-                "3",                                     //TODO : 틸트값 intent 만들기
+                tiltValue,
                 fileType,
                 imgType,
                 new Callback<LoginResult>() {
@@ -300,6 +309,7 @@ public class RegisterActivity extends Activity {
             1123 : 파일 선택
             1124 : 이미지선택
             1125 : gps 선택
+            1126 : tilt 선택
              */
             case 1123:
                 String filePath = data.getData().getPath();
@@ -338,6 +348,11 @@ public class RegisterActivity extends Activity {
 
                 ((TextView)findViewById(R.id.tv_register_gps_locale)).setText(gpsLocale);
                 ((TextView)findViewById(R.id.tv_register_gps_locale)).setVisibility(View.VISIBLE);
+
+                break;
+            case 1126:
+
+                tiltValue = data.getStringExtra("tiltValue");
 
                 break;
 

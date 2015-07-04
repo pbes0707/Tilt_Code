@@ -196,7 +196,8 @@
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="New Button"
+                        android:text="Tilt 선택"
+                        android:background="#b3ffff"
                         android:id="@+id/btn_register_tilt" />
 
 

@@ -23,6 +23,8 @@ public class TiltCodeView extends View {
     private int width;
     private int height;
 
+    public float tiltX;
+
     Bitmap tiltImage;
 
     public TiltCodeView(Context context) {
@@ -45,7 +47,7 @@ public class TiltCodeView extends View {
 
     void init(){
 
-        tiltImage = BitmapFactory.decodeResource(getResources(), R.drawable.back);
+        tiltImage = BitmapFactory.decodeResource(getResources(), R.drawable.tilt);
 
     }
 
@@ -62,9 +64,14 @@ public class TiltCodeView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         Log.d(TAG,"ondraw");
-
-        //canvas.drawBitmap(tiltImage,null, new Rect(0,0,250,250),null);
+//        canvas.rotate(0,0,0,0);
+        float rTilt;
+        rTilt = -tiltX*(45f/10f);
+//        rTilt = ((int)(rTilt/10))*10;
+        canvas.rotate(rTilt,width/2,height/2);
+        canvas.drawBitmap(tiltImage,null, new Rect(width/2-500,height/2-500,width/2+500,height/2+500),null);
         //super.onDraw(canvas);
+        invalidate();
     }
 
     @Override

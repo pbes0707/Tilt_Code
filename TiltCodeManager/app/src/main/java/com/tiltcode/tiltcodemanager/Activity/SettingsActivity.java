@@ -69,7 +69,8 @@ public class SettingsActivity extends FragmentActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if(i==0){
-
+                    Intent intent = new Intent(SettingsActivity.this, PushSettingActivity.class);
+                    startActivity(intent);
                 }
                 else if(i==1){
                     Intent intent = new Intent(SettingsActivity.this, ChangePasswdActivity.class);

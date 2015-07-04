@@ -17,6 +17,7 @@
             android:layout_gravity="center_horizontal">
 
             <com.tiltcode.tiltcode.View.TiltCodeView
+                android:id="@+id/tiltview_tiltcodefragment"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
                 android:layout_width="match_parent"

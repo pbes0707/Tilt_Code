@@ -18,6 +18,7 @@ import com.tiltcode.tiltcode.Adapter.MainPagerAdapter;
 import com.tiltcode.tiltcode.Model.AccelData;
 import com.tiltcode.tiltcode.R;
 import com.tiltcode.tiltcode.View.BackFragment;
+import com.tiltcode.tiltcode.View.TiltCodeView;
 
 
 /**
@@ -37,6 +38,8 @@ public class TiltCodeFragment extends BackFragment implements SensorEventListene
     int layoutid;
     Context context;
 
+    TiltCodeView tiltView;
+
     public TiltCodeFragment() {
         super();
         this.layoutid = R.layout.fragment_tiltcode;
@@ -54,6 +57,7 @@ public class TiltCodeFragment extends BackFragment implements SensorEventListene
         accelerometerSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
         mSensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        tiltView = (TiltCodeView)v.findViewById(R.id.tiltview_tiltcodefragment);
 
         return v;
     }
@@ -92,6 +96,9 @@ public class TiltCodeFragment extends BackFragment implements SensorEventListene
                         Math.round(values[0] * 100d) / 100d,
                         Math.round(values[1] * 100d) / 100d,
                         Math.round(values[2] * 100d) / 100d);
+
+                Log.d(TAG,"x : "+accelData.x+" y : "+accelData.y+" z :"+accelData.z);
+                tiltView.tiltX = (float)accelData.x;
                 break;
             }
         }

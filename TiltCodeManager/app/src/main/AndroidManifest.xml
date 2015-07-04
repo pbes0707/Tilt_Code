@@ -73,6 +73,9 @@
         <activity android:name=".Activity.TiltSelectActivity">
 
         </activity>
+        <activity android:name=".Activity.PushSettingActivity">
+
+        </activity>
 
         <receiver
             android:name=".Service.GcmBroadcastReceiver"
