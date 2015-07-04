@@ -20,7 +20,6 @@ public class MainPagerAdapter extends FragmentStatePagerAdapter {
     //로그에 쓰일 tag
     public static final String TAG = MainPagerAdapter.class.getSimpleName();
 
-
     public Fragment[] FRAGMENTS;
     FragmentManager fm;
 

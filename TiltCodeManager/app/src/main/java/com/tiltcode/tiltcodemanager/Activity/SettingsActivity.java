@@ -68,7 +68,14 @@ public class SettingsActivity extends FragmentActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if(i==2){
+                if(i==0){
+
+                }
+                else if(i==1){
+                    Intent intent = new Intent(SettingsActivity.this, ChangePasswdActivity.class);
+                    startActivity(intent);
+                }
+                else if(i==2){
 
                     Util.getEndPoint().setPort("40001");
                     Util.getHttpSerivce().logOut(Util.getAccessToken().getToken(),
@@ -104,6 +111,7 @@ public class SettingsActivity extends FragmentActivity {
 
                     return;
                 }
+
             }
         });
 

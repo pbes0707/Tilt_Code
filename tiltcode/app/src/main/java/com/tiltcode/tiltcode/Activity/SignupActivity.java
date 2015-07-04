@@ -47,6 +47,8 @@ public class SignupActivity extends FragmentActivity {
     Fragment fragment1; //policy fragment
     Fragment fragment2; //signup fragment
 
+    public static Context context;
+
     int nowPage;
 
     @Override
@@ -54,50 +56,10 @@ public class SignupActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        /*
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("file/*");
-        startActivityForResult(intent,1);*/
+        context = SignupActivity.this;
+
         init();
     }
-    /*
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // TODO Auto-generated method stub
-        switch(requestCode){
-            case 1:
-                if(resultCode==RESULT_OK){
-                    String filePath = data.getData().getPath();
-                    Log.d("asdf","file path : "+filePath);
-        //                    textFile.setText(FilePath);
-                    upload(filePath);
-                }
-                break;
-
-        }
-    }
-*/
-
-    /*
-    void upload(String url){
-
-        TypedFile typedFile = new TypedFile("multipart/form-data", new File(url));
-        String description = "hello, this is description speaking";
-
-        Util.endPoint.setPort("40001");
-        Util.getHttpSerivce().fileSend("asdf", typedFile, new Callback<String>() {
-            @Override
-            public void success(String s, Response response) {
-                Log.e("Upload", "success");
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Log.e("Upload", "error" + error.getMessage());
-            }
-        });
-    }
-*/
     void init(){
 
         fragment1 = new PolicyFragment();
@@ -191,6 +153,17 @@ public class SignupActivity extends FragmentActivity {
         return false;
     }
 
+    @Override
+    public void onBackPressed() {
+        if(nowPage==2){
+            setPage(1);
+        }
+        else{
+            Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
+    }
 
     void setPage(int page){
         nowPage = page;

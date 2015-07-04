@@ -6,7 +6,6 @@ import android.widget.ImageButton;
 
 import com.tiltcode.tiltcodemanager.R;
 
-
 /**
  * Created by JSpiner on 2015. 6. 27..
  */

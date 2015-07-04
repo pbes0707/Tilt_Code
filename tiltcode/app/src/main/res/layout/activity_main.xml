@@ -105,7 +105,7 @@
 
                 </LinearLayout>
 
-                <android.support.v4.view.ViewPager
+                <com.tiltcode.tiltcode.View.DisableViewPager
                     android:id="@+id/pager_mainview"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>

@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -78,7 +79,7 @@ public class LoginActivity extends Activity {
             }
         });
 
-        ((Button)findViewById(R.id.btn_login_signup)).setOnClickListener(new View.OnClickListener() {
+        ((TextView)findViewById(R.id.tv_login_signup)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
@@ -148,6 +149,13 @@ public class LoginActivity extends Activity {
             public void success(com.tiltcode.tiltcodemanager.Model.LoginResult loginResult, Response response) {
                 Log.d(TAG,"login success / code : "+loginResult.code);
                 if (loginResult.code.equals("1")) { //성공
+
+                    if(loginResult.info.point==null){
+                        dialog.dismiss();
+                        Toast.makeText(getBaseContext(),getResources().getString(R.string.message_login_nomal),Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
                     Log.d(TAG,"token : "+loginResult.info.session);
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
@@ -179,7 +187,7 @@ public class LoginActivity extends Activity {
 
             @Override
             public void failure(RetrofitError error) {
-                Log.e(TAG,"login failure : "+error.getMessage());
+                Log.e(TAG, "login failure : " + error.getMessage());
                 Toast.makeText(getBaseContext(),getResources().getText(R.string.message_network_error),Toast.LENGTH_LONG).show();
 
                 dialog.dismiss();

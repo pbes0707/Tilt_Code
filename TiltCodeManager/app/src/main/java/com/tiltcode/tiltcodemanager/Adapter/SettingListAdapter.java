@@ -51,6 +51,8 @@ public class SettingListAdapter extends BaseAdapter {
 
         if(view==null) {
             view = inflater.inflate(R.layout.item_setting_row, null);
+            ((TextView)view.findViewById(R.id.tv_setting_row)).setText(arrayList.get(i));
+
 //            ((TextView)view.findViewById(R.id.tv_setting_row)).setText(arrayList.get(i));
         }
         return view;

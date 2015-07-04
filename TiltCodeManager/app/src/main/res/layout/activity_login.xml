@@ -3,35 +3,111 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <EditText
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/edt_login_id" />
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_main"
+        android:layout_gravity="center_horizontal">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:id="@+id/edt_login_pw" />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="로그인"
-        android:id="@+id/btn_login_proc"
-        android:layout_gravity="center_horizontal" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:layout_height="match_parent">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="회원가입"
-        android:id="@+id/btn_login_signup" />
+                <ImageView
+                    android:layout_width="150dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/logo"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="비회원로그인"
-        android:id="@+id/btn_login_skip"
-        android:layout_gravity="center_horizontal" />
+
+                <TextView
+                    android:textColor="#dfdfdf"
+                    android:textSize="17dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Endless Possibilities with One Tilt"
+                    android:layout_gravity="center_horizontal" />
+
+                <LinearLayout
+                    android:layout_marginTop="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:textColor="#dfdfdf"
+                        android:textSize="12dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Management Application"
+                        android:layout_gravity="center_horizontal" />
+
+                    <EditText
+                        android:background="#b3ffff"
+                        android:padding="5dp"
+                        android:layout_margin="5dp"
+                        android:hint="ID"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/edt_login_id" />
+
+                    <EditText
+                        android:background="#b3ffff"
+                        android:padding="5dp"
+                        android:layout_margin="5dp"
+                        android:hint="PW"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword"
+                        android:ems="10"
+                        android:id="@+id/edt_login_pw" />
+
+
+                    <CheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="자동로그인"
+                        android:textColor="#b3ffff"
+                        android:id="@+id/checkBox" />
+
+                    <Button
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:text="Log In"
+                        android:textColor="#ababab"
+                        android:background="#000000"
+                        android:layout_gravity="center_horizontal"
+                        android:id="@+id/btn_login_proc" />
+
+                    <TextView
+                        android:layout_marginTop="30dp"
+                        android:layout_marginBottom="50dp"
+                        android:layout_gravity="center_horizontal"
+                        android:textColor="#b3ffff"
+                        android:textSize="17dp"
+                        android:id="@+id/tv_login_signup"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="회원가입"/>
+                </LinearLayout>
+
+
+            </LinearLayout>
+        </FrameLayout>
+
+
+    </LinearLayout>
+
+
+
+
 </LinearLayout>

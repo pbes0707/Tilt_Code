@@ -49,7 +49,10 @@ import com.tiltcode.tiltcode.Model.CouponResult;
 import com.tiltcode.tiltcode.Model.LoginResult;
 import com.tiltcode.tiltcode.R;
 import com.tiltcode.tiltcode.Util;
+import com.tiltcode.tiltcode.View.ActionActivity;
+import com.tiltcode.tiltcode.View.ActionFragmentActivity;
 import com.tiltcode.tiltcode.View.BackFragment;
+import com.tiltcode.tiltcode.View.DisableViewPager;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -69,7 +72,6 @@ import retrofit.client.Response;
  * Contact : jspiner@naver.com
  */
 public class CouponListFragment extends BackFragment {
-
 
     //로그에 쓰일 tag
     public static final String TAG = CouponListFragment.class.getSimpleName();
@@ -167,7 +169,7 @@ public class CouponListFragment extends BackFragment {
 
     void init() {
 
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
+        final ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
                 /*.diskCacheFileCount(20)
                 .threadPriority(Thread.NORM_PRIORITY-2)
                 .denyCacheImageMultipleSizesInMemory()
@@ -192,28 +194,35 @@ public class CouponListFragment extends BackFragment {
 
         mDetailsLayout.setVisibility(View.INVISIBLE);
 
-
         mUnfoldableView.setOnFoldingListener(new UnfoldableView.SimpleFoldingListener() {
             @Override
             public void onUnfolding(UnfoldableView unfoldableView) {
                 mListTouchInterceptor.setClickable(true);
                 mDetailsLayout.setVisibility(View.VISIBLE);
+                Log.d(TAG,"unfolding");
+                ((ActionFragmentActivity)context).setEnableBack(true);
             }
 
             @Override
             public void onUnfolded(UnfoldableView unfoldableView) {
+                Log.d(TAG,"unfolded");
                 mListTouchInterceptor.setClickable(false);
+                ((DisableViewPager)MainActivity.mPager).enableTouch=false;
             }
 
             @Override
             public void onFoldingBack(UnfoldableView unfoldableView) {
                 mListTouchInterceptor.setClickable(true);
+                Log.d(TAG,"foldingback");
+                ((ActionFragmentActivity)context).setEnableBack(false);
             }
 
             @Override
             public void onFoldedBack(UnfoldableView unfoldableView) {
+                Log.d(TAG,"foldedback");
                 mListTouchInterceptor.setClickable(false);
                 mDetailsLayout.setVisibility(View.INVISIBLE);
+                ((DisableViewPager)MainActivity.mPager).enableTouch=true;
             }
 
             @Override
@@ -268,8 +277,6 @@ public class CouponListFragment extends BackFragment {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
 //                interceptTouch.onTouch(view,motionEvent);
-
-
 
                 touchList.add((int)motionEvent.getY());
                 if(touchList.size()>5){

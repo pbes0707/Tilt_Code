@@ -221,7 +221,7 @@ public class TiltService extends Service implements SensorEventListener {
 
                         if(checkFlag)
                         {
-                            Log.d("s", "dt : " + String.valueOf(dt));
+                            Log.d(LOG_NAME, "dt : " + String.valueOf(dt));
                             dt += 30;
                             searchdt -= 30;
                         }

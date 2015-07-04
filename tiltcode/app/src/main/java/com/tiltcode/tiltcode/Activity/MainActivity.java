@@ -30,7 +30,7 @@ public class MainActivity extends ActionFragmentActivity{
 
     Context context;
 
-    ViewPager mPager;
+    public static ViewPager mPager;
     MainPagerAdapter adapter;
 
     public static View layout_main_tab;

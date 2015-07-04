@@ -17,6 +17,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.*;
@@ -181,7 +183,7 @@ public class LoginActivity extends Activity {
             }
         });
 
-        ((Button)findViewById(R.id.btn_login_signup)).setOnClickListener(new View.OnClickListener() {
+        ((TextView)findViewById(R.id.tv_login_signup)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
@@ -201,12 +203,12 @@ public class LoginActivity extends Activity {
             dialog.setMessage("데이터를 불러오는중입니다..");
             dialog.show();
 
-
             Util.getEndPoint().setPort("40001");
             Util.getHttpSerivce().validateSession(Util.getAccessToken().getToken(),
                     new Callback<com.tiltcode.tiltcode.Model.LoginResult>() {
                         @Override
                         public void success(com.tiltcode.tiltcode.Model.LoginResult loginResult, Response response) {
+                            dialog.dismiss();
                             Log.d(TAG,"access success / code : "+loginResult.code);
                             if (loginResult.code.equals("1")) { //성공
 
@@ -220,7 +222,6 @@ public class LoginActivity extends Activity {
                                 Toast.makeText(getBaseContext(),getResources().getText(R.string.message_session_invalid),Toast.LENGTH_LONG).show();
                             }
 
-                            dialog.dismiss();
                         }
 
                         @Override
@@ -233,6 +234,52 @@ public class LoginActivity extends Activity {
                     });
         }
 
+        ((LinearLayout)findViewById(R.id.btn_login_nologin)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                dialog = new ProgressDialog(LoginActivity.this);
+                dialog.setTitle("로드중");
+                dialog.setMessage("데이터를 불러오는중입니다..");
+                dialog.show();
+
+
+                TelephonyManager tManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+                String uuid = tManager.getDeviceId();
+
+                Util.getEndPoint().setPort("40001");
+                Util.getHttpSerivce().signFacebook(uuid, "", "", "", "", "",        //비회원 로그인시에는 uuid를 통해 페이스북 로그인인것처럼 로그인한다.
+                        new Callback<com.tiltcode.tiltcode.Model.LoginResult>() {
+                            @Override
+                            public void success(com.tiltcode.tiltcode.Model.LoginResult loginResult, Response response) {
+                                Log.d(TAG,"login success / code : "+loginResult.code);
+                                if (loginResult.code.equals("1") || loginResult.code.equals("2")) { //성공
+                                    Log.d(TAG,"token : "+loginResult.info.session);
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                    startActivity(intent);
+                                    finish();
+
+                                    Util.getAccessToken().setToken(loginResult.info.session)
+                                    .setIsSkipedUser(true);
+                                    Util.getAccessToken().saveToken();
+
+                                } else if (loginResult.code.equals("-1")) { //누락된게있음
+                                    Toast.makeText(getBaseContext(),getResources().getText(R.string.message_not_enough_data),Toast.LENGTH_LONG).show();
+                                }
+
+                                dialog.dismiss();
+                            }
+
+                            @Override
+                            public void failure(RetrofitError error) {
+                                Log.e(TAG,"login failure : "+error.getMessage());
+                                Toast.makeText(getBaseContext(),getResources().getText(R.string.message_network_error),Toast.LENGTH_LONG).show();
+
+                                dialog.dismiss();
+                            }
+                        });
+            }
+        });
     }
 
     void procFbLogin(String id, String name, String birth, String sex, String uuid, String model){

@@ -87,6 +87,12 @@ public interface HttpService {
                            @Part("image") TypedFile image,
                            Callback<LoginResult> ret);
 
+    @FormUrlEncoded
+    @POST("/changePasswd")
+    void changePasswd(@Field("session") String session,
+                      @Field("currP") String currP,
+                      @Field("changeP") String changeP,
+                      Callback<LoginResult> ret);
 
 
 
