@@ -52,6 +52,9 @@ public class CouponListActivity extends ActionFragmentActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_couponlist);
 
+        initActionBar();
+        setEnableBack(true);
+
         init();
     }
 

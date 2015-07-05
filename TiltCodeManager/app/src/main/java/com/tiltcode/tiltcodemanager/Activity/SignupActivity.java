@@ -55,7 +55,7 @@ public class SignupActivity extends FragmentActivity {
 
     void init(){
 
-        context = getBaseContext();
+        context = SignupActivity.this;
 
         fragment1 = new PolicyFragment();
         fragment2 = new SignupFragment();
@@ -110,7 +110,7 @@ public class SignupActivity extends FragmentActivity {
         });
     }
 
-    boolean procSignup(final String id, final String pw,String name, String birthday, String sex, String phone, String company){
+    boolean procSignup(final String id, final String pw, final String name, final String birthday, final String sex, final String phone, String company){
 
         Util.getEndPoint().setPort("40001");
         Util.getHttpSerivce().signUpManager(id, pw, name, birthday, sex, phone, company
@@ -127,7 +127,14 @@ public class SignupActivity extends FragmentActivity {
 
                     Util.getAccessToken()
                             .setToken(loginResult.info.session)
-                            .setUserId(loginResult.info.id);
+                            .setUserId(loginResult.info.id)
+                            .setName(name)
+                            .setBirthday(birthday)
+                            .setSex(sex)
+                            .setPhone(phone)
+                            .setPoint(0);
+                    Util.getAccessToken().saveToken();
+
 
                     GCMRegister reg = new GCMRegister(SignupActivity.this.getApplicationContext(), SignupActivity.this);
                     reg.execute();

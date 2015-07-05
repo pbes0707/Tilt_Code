@@ -209,6 +209,8 @@ public class TiltService extends Service implements SensorEventListener {
 
     }
 
+
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 

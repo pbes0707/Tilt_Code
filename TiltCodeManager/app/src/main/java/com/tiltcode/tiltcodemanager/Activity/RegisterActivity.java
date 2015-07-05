@@ -26,6 +26,7 @@ import com.tiltcode.tiltcodemanager.Model.GCMRegister;
 import com.tiltcode.tiltcodemanager.Model.LoginResult;
 import com.tiltcode.tiltcodemanager.R;
 import com.tiltcode.tiltcodemanager.Util;
+import com.tiltcode.tiltcodemanager.View.ActionActivity;
 
 import java.io.File;
 import java.io.InputStream;
@@ -39,7 +40,7 @@ import retrofit.mime.TypedFile;
 /**
  * Created by JSpiner on 2015. 6. 21..
  */
-public class RegisterActivity extends Activity {
+public class RegisterActivity extends ActionActivity {
 
     //로그에 쓰일 tag
     public static final String TAG = RegisterActivity.class.getSimpleName();
@@ -70,6 +71,9 @@ public class RegisterActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        initActionBar();
+        setEnableBack(true);
 
         init();
 
@@ -352,7 +356,8 @@ public class RegisterActivity extends Activity {
                 break;
             case 1126:
 
-                tiltValue = data.getStringExtra("tiltValue");
+                tiltValue = String.valueOf(data.getIntExtra("tiltValue",1));
+                Log.d(TAG, "tiltValue : "+tiltValue);
 
                 break;
 

@@ -19,6 +19,9 @@ import com.db.chart.view.BarChartView;
 import com.db.chart.view.LineChartView;
 import com.db.chart.view.XController;
 import com.db.chart.view.YController;
+import com.db.chart.view.animation.Animation;
+import com.db.chart.view.animation.easing.cubic.CubicEaseOut;
+import com.db.chart.view.animation.easing.linear.LinearEase;
 import com.tiltcode.tiltcodemanager.Activity.SignupActivity;
 import com.tiltcode.tiltcodemanager.R;
 
@@ -86,13 +89,20 @@ public class CouponListDetailFragment extends Fragment {
                 .setXLabels(XController.LabelPosition.OUTSIDE)
                 .setYLabels(YController.LabelPosition.OUTSIDE);
 
+        Animation ani = new Animation();
+        ani.setDuration(500);
+        ani.setEasing(new LinearEase());
         sexChart.show();
 
         LineSet lineSet = new LineSet();
 
-        for(int i=0;i<10;i++){
-            Point point = new Point("dd",(int)(Math.random()*100));
+        for(int i=0;i<7;i++){
+            Point point = new Point(i*10+"~"+(i+1)*10,(int)(Math.random()*100));
+
             lineSet.addPoint(point);
+
+
+
         }
 
         ageChart.addData(lineSet);
@@ -102,9 +112,14 @@ public class CouponListDetailFragment extends Fragment {
                 .setXLabels(XController.LabelPosition.OUTSIDE)
                 .setYAxis(true)
                 .setYLabels(YController.LabelPosition.OUTSIDE)
-                .setAxisBorderValues(0, 100, 30);
-        ageChart.show();
+                .setAxisBorderValues(0, 100, 25);
+
+        Animation ani2 = new Animation();
+        ani2.setDuration(500);
+        ani2.setEasing(new LinearEase());
+        ageChart.show(ani2);
 
 
     }
+
 }

@@ -50,6 +50,7 @@
                         android:layout_gravity="center"
                         android:layout_marginRight="30dp"
                         android:text="820P"
+                        android:id="@+id/tv_purchase_nowmoney"
                         android:textColor="#efefef"
                         android:textSize="20dp" />
 
@@ -95,6 +96,7 @@
                         android:layout_gravity="center"
                         android:layout_marginRight="30dp"
                         android:text="820P"
+                        android:id="@+id/tv_purchase_summoney"
                         android:textColor="#efefef"
                         android:textSize="20dp" />
 

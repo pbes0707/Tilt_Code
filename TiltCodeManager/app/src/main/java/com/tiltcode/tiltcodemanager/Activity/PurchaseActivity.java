@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.vending.billing.IInAppBillingService;
@@ -19,6 +20,8 @@ import com.tiltcode.tiltcodemanager.BillingUtil.IabHelper;
 import com.tiltcode.tiltcodemanager.BillingUtil.IabResult;
 import com.tiltcode.tiltcodemanager.BillingUtil.Purchase;
 import com.tiltcode.tiltcodemanager.R;
+import com.tiltcode.tiltcodemanager.Util;
+import com.tiltcode.tiltcodemanager.View.ActionActivity;
 
 import org.json.JSONObject;
 
@@ -27,7 +30,7 @@ import java.util.ArrayList;
 /**
  * Created by Secret on 2015. 6. 25..
  */
-public class PurchaseActivity extends Activity implements OnClickListener {
+public class PurchaseActivity extends ActionActivity implements OnClickListener {
 
     IInAppBillingService mService;
     IabHelper mHelper;
@@ -52,10 +55,17 @@ public class PurchaseActivity extends Activity implements OnClickListener {
 
         setContentView(R.layout.activity_purchase);
 
+        initActionBar();
+        setEnableBack(true);
+
         helperInit();
 
         Button btn_purchase = (Button) findViewById(R.id.btn_purchase);
         btn_purchase.setOnClickListener(this);
+
+        ((TextView)findViewById(R.id.tv_purchase_nowmoney)).setText(Util.getAccessToken().getPoint());
+        ((TextView)findViewById(R.id.tv_purchase_summoney)).setText(Util.getAccessToken().getPoint());
+
     }
 
 

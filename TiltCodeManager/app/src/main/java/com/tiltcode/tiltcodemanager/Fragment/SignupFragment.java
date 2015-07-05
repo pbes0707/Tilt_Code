@@ -125,6 +125,8 @@ public class SignupFragment  extends Fragment {
                                                     .setBirthday(getBirthday())
                                                     .setIsSkipedUser(false)
                                                     .setLoginType(LoginToken.LoginType.TiltCode);
+                                            Util.getAccessToken().saveToken();
+
                                         } catch (Exception e) {
 
                                         }

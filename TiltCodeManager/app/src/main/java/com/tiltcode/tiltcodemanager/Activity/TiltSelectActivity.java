@@ -22,6 +22,8 @@ public class TiltSelectActivity extends Activity {
 
     ViewPager pager;
 
+    int nowPage=0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,14 +37,32 @@ public class TiltSelectActivity extends Activity {
         TiltSelectPagerAdapter adapter = new TiltSelectPagerAdapter(TiltSelectActivity.this);
         pager.setAdapter(adapter);
 
+
         ((LinearLayout)findViewById(R.id.layout_tiltselect_proc)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent resultIntent = new Intent();
-                resultIntent.putExtra("tiltValue",pager.getCurrentItem());
+                resultIntent.putExtra("tiltValue", nowPage);
 
                 setResult(RESULT_OK, resultIntent);
                 finish();
+            }
+        });
+
+        pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                nowPage = position;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
             }
         });
 

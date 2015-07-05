@@ -24,6 +24,7 @@ import com.tiltcode.tiltcodemanager.Adapter.SettingListAdapter;
 import com.tiltcode.tiltcodemanager.Model.LoginResult;
 import com.tiltcode.tiltcodemanager.R;
 import com.tiltcode.tiltcodemanager.Util;
+import com.tiltcode.tiltcodemanager.View.ActionFragmentActivity;
 
 import java.util.ArrayList;
 import java.util.Set;
@@ -35,7 +36,7 @@ import retrofit.client.Response;
 /**
  * Created by JSpiner on 2015. 6. 21..
  */
-public class SettingsActivity extends FragmentActivity {
+public class SettingsActivity extends ActionFragmentActivity {
 
     //로그에 쓰일 tag
     public static final String TAG = SettingsActivity.class.getSimpleName();
@@ -50,6 +51,9 @@ public class SettingsActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
+
+        initActionBar();
+        setEnableBack(true);
 
         init();
     }
