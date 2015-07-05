@@ -52,11 +52,11 @@ public class TiltService extends Service implements SensorEventListener {
     private static int dt = 0, searchdt = 0, count = 0;
     private static boolean checkFlag = false;
     private static AccelData prev = null, now = null;
-    private float TOLERANCE_VALUE = 1.7f;
-    private float SEARCH_VALUE = 1.8f;
-    private int RECOGNIZE = 4000;
+    private float TOLERANCE_VALUE = 1.6f;
+    private float SEARCH_VALUE = 2.0f;
+    private int RECOGNIZE = 3000;
     private static float[][] Arr_Accel = {
-            {0f, 9.8f, 0f},
+            {9999f, 9999f, 9999f}, // 1 exclude {0f, 9.8f, 0f}
             {6.9f, 6.8f, 0f},
             {9.8f, 0f, 0f},
             {6.8f, -6.8f, 0f},
@@ -64,11 +64,11 @@ public class TiltService extends Service implements SensorEventListener {
             {-6.8f, -6.8f, 0f},
             {-9.8f, 0f, 0f},
             {-6.8f, 6.8f, 0f},
-            {0f, 6.8f, 6.8f}, // 9
-            {0f, 0f, 9.8f},
+            {9999f, 9999f, 9999f}, // 9 {0f, 6.8f, 6.8f}
+            {9999f, 9999f, 9999f}, // 10 exclude {0f, 0f, 9.8f}
             {0f, -6.8f, 6.8f},
-            //{0f, -9.8f, 0f}, // 12
-            {0f, -6.8f, -6.8f}, // Fixed 12  original 13
+            //{0f, -9.8f, 0f}, // 12 Overlap with 5
+            {0f, -6.8f, -6.8f}, // Fixed 12 , prev 13
             {0f, 0f, -9.8f},
             {0f, 6.8f, -6.8f}
     };
@@ -222,39 +222,22 @@ public class TiltService extends Service implements SensorEventListener {
                     while (serviceRunning) {
                         SystemClock.sleep(30);
 
-                        if(checkFlag)
-                        {
-                            Log.d(LOG_NAME, "dt : " + String.valueOf(dt));
-                            dt += 30;
-                            searchdt -= 30;
-                        }
-
+                        dt += 30;
                         if(dt > RECOGNIZE)
                         {
-                            for(int i = 1 ; i<Arr_Accel.length ; i++)
+                            for(int i = 0 ; i<Arr_Accel.length ; i++)
                             {
-                                /*if( (Arr_Accel[i][0] - SENSITIVE_SEARCH_VALUE < now.x && Arr_Accel[i][0] + SENSITIVE_SEARCH_VALUE > now.x ) &&
-                                        (Arr_Accel[i][1] - SENSITIVE_SEARCH_VALUE < now.y && Arr_Accel[i][1] + SENSITIVE_SEARCH_VALUE > now.y ) &&
-                                        (Arr_Accel[i][2] - SENSITIVE_SEARCH_VALUE < now.z && Arr_Accel[i][2] + SENSITIVE_SEARCH_VALUE > now.z ) )
-                                {
-                                    Log.d(LOG_NAME, "Sensor Tilt : " + String.valueOf(i + 1));
-                                    dt = -1000*30;
-                                    ////////////////정밀 검사 부분///////////////
-
-
-                                }*/
                                 if( (Arr_Accel[i][0] - SEARCH_VALUE < now.x && Arr_Accel[i][0] + SEARCH_VALUE > now.x ) &&
                                         (Arr_Accel[i][1] - SEARCH_VALUE < now.y && Arr_Accel[i][1] + SEARCH_VALUE > now.y ) &&
                                         (Arr_Accel[i][2] - SEARCH_VALUE < now.z && Arr_Accel[i][2] + SEARCH_VALUE > now.z ) )
                                 {
-                                    Log.d(LOG_NAME, "Tilt : " + String.valueOf(i + 1));
-
+                                    Log.d("sensor", "Tilt : " + String.valueOf(i + 1));
+                                    ///// 코딩하셈 씨발련아
                                     getGPSCoupon(String.valueOf(i+1));
 
                                 }
                             }
                             dt = 0;
-                            checkFlag = false;
                         }
                        /* boolean flag = false;
                         if(list.size() > 29) {
@@ -312,41 +295,21 @@ public class TiltService extends Service implements SensorEventListener {
                         Math.round(values[2] * 100d) / 100d);
 
                 if(prev == null)
-                {
                     prev = now = v;
-                }
                 else
                 {
+                    if( !((prev.x - TOLERANCE_VALUE < v.x && prev.x + TOLERANCE_VALUE > v.x)
+                            && (prev.y - TOLERANCE_VALUE < v.y && prev.y + TOLERANCE_VALUE > v.y)
+                            && (prev.z - TOLERANCE_VALUE < v.z && prev.z + TOLERANCE_VALUE > v.z)))
+                    {
+                        dt = 0;
+                        prev = v;
+                    }
                     now = v;
-                    if(checkFlag == false)
-                    {
-                        if( (Arr_Accel[0][0] - SEARCH_VALUE < now.x && Arr_Accel[0][0] + SEARCH_VALUE > now.x ) &&
-                                (Arr_Accel[0][1] - SEARCH_VALUE < now.y && Arr_Accel[0][1] + SEARCH_VALUE > now.y ) &&
-                                (Arr_Accel[0][2] - SEARCH_VALUE < now.z && Arr_Accel[0][2] + SEARCH_VALUE > now.z ) )
-                        {
-                            Log.d("s", "checkFlag true");
-                            checkFlag = true;
-                            searchdt = 2500;
-                            prev = now;
-                        }
-                    }
-                    else
-                    {
-                        if(searchdt > 0)
-                            prev = now;
-                        else if( !((prev.x - TOLERANCE_VALUE < v.x && prev.x + TOLERANCE_VALUE > v.x)
-                                && (prev.y - TOLERANCE_VALUE < v.y && prev.y + TOLERANCE_VALUE > v.y)
-                                && (prev.z - TOLERANCE_VALUE < v.z && prev.z + TOLERANCE_VALUE > v.z)))
-                        {
-                            Log.d("s", "checkFlag false");
-                            checkFlag = false;
-                            dt = 0;
-                        }
-                    }
                 }
-                /*Log.d("sensor","Accel X : " + Math.round(prev.x*100d) / 100d +
-                        " Y : " + Math.round(prev.y*100d) / 100d +
-                        " Z : " + Math.round(prev.z*100d) / 100d);
+                /* Log.d("sensor","Accel X : " + Math.round(v.x*100d) / 100d +
+                        " Y : " + Math.round(v.y*100d) / 100d +
+                        " Z : " + Math.round(v.z*100d) / 100d);*/
                 /*list.addFirst(v);
                 if(list.size() > 30)
                     list.removeLast();*/
