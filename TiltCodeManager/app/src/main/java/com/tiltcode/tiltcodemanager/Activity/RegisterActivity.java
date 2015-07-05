@@ -189,7 +189,6 @@ public class RegisterActivity extends Activity {
 
         Util.getEndPoint().setPort("40002");
         Util.getHttpSerivce().couponRegisterGPS(Util.getAccessToken().getToken(),
-                Util.getAccessToken().getName(),
                 getResources().getStringArray(R.array.couponTypeKey)[couponTypeIndex],
                 ((EditText)findViewById(R.id.edt_register_title)).getText().toString(),
                 ((EditText)findViewById(R.id.edt_register_desc)).getText().toString(),
@@ -247,7 +246,6 @@ public class RegisterActivity extends Activity {
 
         Util.getEndPoint().setPort("40002");
         Util.getHttpSerivce().couponRegisterTime(Util.getAccessToken().getToken(),
-                Util.getAccessToken().getName(),
                 getResources().getStringArray(R.array.couponTypeKey)[couponTypeIndex],
                 ((EditText) findViewById(R.id.edt_register_title)).getText().toString(),
                 ((EditText) findViewById(R.id.edt_register_desc)).getText().toString(),
