@@ -52,7 +52,7 @@ public class TiltService extends Service implements SensorEventListener {
     private static int dt = 0, searchdt = 0, count = 0;
     private static boolean checkFlag = false;
     private static AccelData prev = null, now = null;
-    private float TOLERANCE_VALUE = 1.5f;
+    private float TOLERANCE_VALUE = 1.7f;
     private float SEARCH_VALUE = 1.8f;
     private int RECOGNIZE = 4000;
     private static float[][] Arr_Accel = {
@@ -229,9 +229,6 @@ public class TiltService extends Service implements SensorEventListener {
                             searchdt -= 30;
                         }
 
-
-
-
                         if(dt > RECOGNIZE)
                         {
                             for(int i = 1 ; i<Arr_Accel.length ; i++)
@@ -329,7 +326,7 @@ public class TiltService extends Service implements SensorEventListener {
                         {
                             Log.d("s", "checkFlag true");
                             checkFlag = true;
-                            searchdt = 2000;
+                            searchdt = 2500;
                             prev = now;
                         }
                     }
