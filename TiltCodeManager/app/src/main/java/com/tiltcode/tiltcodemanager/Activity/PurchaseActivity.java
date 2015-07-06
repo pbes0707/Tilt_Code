@@ -32,6 +32,9 @@ import java.util.ArrayList;
  */
 public class PurchaseActivity extends ActionActivity implements OnClickListener {
 
+    //로그에 쓰일 tag
+    public static final String TAG = PurchaseActivity.class.getSimpleName();
+
     IInAppBillingService mService;
     IabHelper mHelper;
 
@@ -63,8 +66,10 @@ public class PurchaseActivity extends ActionActivity implements OnClickListener 
         Button btn_purchase = (Button) findViewById(R.id.btn_purchase);
         btn_purchase.setOnClickListener(this);
 
-        ((TextView)findViewById(R.id.tv_purchase_nowmoney)).setText(Util.getAccessToken().getPoint());
-        ((TextView)findViewById(R.id.tv_purchase_summoney)).setText(Util.getAccessToken().getPoint());
+        Log.d(TAG,"point : "+Util.getAccessToken().getPoint());
+
+//        ((TextView)findViewById(R.id.tv_purchase_nowmoney)).setText(Util.getAccessToken().getPoint());
+//        ((TextView)findViewById(R.id.tv_purchase_summoney)).setText(Util.getAccessToken().getPoint());
 
     }
 
