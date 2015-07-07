@@ -46,7 +46,7 @@
 
                             <ImageView
                                 android:src="@drawable/ic_coupon"
-                                android:layout_width="40dp"
+                                android:layout_width="20dp"
                                 android:layout_height="16dp" />
                         </LinearLayout>
                         <LinearLayout
@@ -58,7 +58,7 @@
                             <ImageView
                                 android:src="@drawable/ic_tilt"
                                 android:layout_width="14dp"
-                                android:layout_height="30dp"/>
+                                android:layout_height="16dp"/>
                         </LinearLayout>
                         <LinearLayout
                             android:gravity="center|bottom"

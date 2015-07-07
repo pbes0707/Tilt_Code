@@ -48,28 +48,35 @@
             android:layout_width="match_parent"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
-            android:layout_marginBottom="80dp"
+            android:layout_marginBottom="110dp"
             android:layout_marginTop="60dp"
-            android:weightSum="2"
             android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_weight="1"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
-                <Button
+                <ImageButton
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scaleType="centerInside"
                     android:layout_weight="1"
+                    android:layout_margin="10dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/btn_register"
                     android:text="등록"
                     android:id="@+id/btn_main_register"/>
 
-                <Button
+                <ImageButton
                     android:layout_weight="1"
+                    android:layout_margin="10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scaleType="centerInside"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/btn_couponlist"
                     android:text="목록"
                     android:id="@+id/btn_main_list"/>
             </LinearLayout>
@@ -77,16 +84,24 @@
                 android:layout_weight="1"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <Button
+                android:layout_height="wrap_content">
+                <ImageButton
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:scaleType="centerInside"
+                    android:layout_margin="10dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/btn_purchase"
                     android:text="결제"
                     android:id="@+id/btn_main_purchase"/>
 
-                <Button
+                <ImageButton
                     android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/btn_setting"
+                    android:layout_margin="10dp"
+                    android:scaleType="centerInside"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="설정"

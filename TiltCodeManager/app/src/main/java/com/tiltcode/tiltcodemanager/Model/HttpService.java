@@ -57,6 +57,12 @@ public interface HttpService {
                   @Field("id") String id,
                   Callback<LoginResult> ret);
 
+    @FormUrlEncoded
+    @POST("/pointCharge")
+    void pointCharge(@Field("session") String session,
+                  @Field("point") String point,
+                  Callback<LoginResult> ret);
+
     @Multipart
     @POST("/couponRegisterGPS")
     void couponRegisterGPS(@Part("session") String session,

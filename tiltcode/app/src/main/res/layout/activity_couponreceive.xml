@@ -35,14 +35,14 @@
             </RadioGroup>
 
             <Button
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="50dp"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:text="쿠폰 받기"
                 android:textColor="#ababab"
                 android:background="#000000"
                 android:layout_gravity="center_horizontal"
-                android:id="@+id/btn_login_proc" />
+                android:id="@+id/btn_couponreceive_proc" />
 
         </LinearLayout>
 

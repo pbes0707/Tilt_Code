@@ -47,7 +47,7 @@ public class TiltCodeView extends View {
 
     void init(){
 
-        tiltImage = BitmapFactory.decodeResource(getResources(), R.drawable.tilt);
+        if(tiltImage==null) tiltImage = BitmapFactory.decodeResource(getResources(), R.drawable.tilt);
 
     }
 

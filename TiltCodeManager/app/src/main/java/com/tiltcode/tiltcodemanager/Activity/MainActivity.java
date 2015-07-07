@@ -14,6 +14,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,28 +41,28 @@ public class MainActivity extends Activity {
         ((TextView)findViewById(R.id.tv_main_name)).setText(Util.getAccessToken().getName()+"님");
         ((TextView)findViewById(R.id.tv_main_point)).setText("현재 잔금 : "+Util.getAccessToken().getPoint()+"P");
 
-        ((Button)findViewById(R.id.btn_main_register)).setOnClickListener(new View.OnClickListener() {
+        ((ImageButton)findViewById(R.id.btn_main_register)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
                 startActivity(intent);
             }
         });
-        ((Button)findViewById(R.id.btn_main_list)).setOnClickListener(new View.OnClickListener() {
+        ((ImageButton)findViewById(R.id.btn_main_list)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, CouponListActivity.class);
                 startActivity(intent);
             }
         });
-        ((Button)findViewById(R.id.btn_main_purchase)).setOnClickListener(new View.OnClickListener() {
+        ((ImageButton)findViewById(R.id.btn_main_purchase)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, PurchaseActivity.class);
                 startActivity(intent);
             }
         });
-        ((Button)findViewById(R.id.btn_main_setting)).setOnClickListener(new View.OnClickListener() {
+        ((ImageButton)findViewById(R.id.btn_main_setting)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, SettingsActivity.class);

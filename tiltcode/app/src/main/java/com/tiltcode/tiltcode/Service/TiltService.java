@@ -27,6 +27,7 @@ import com.tiltcode.tiltcode.Activity.MainActivity;
 import com.tiltcode.tiltcode.Activity.SplashActivity;
 import com.tiltcode.tiltcode.Model.AccelData;
 import com.tiltcode.tiltcode.Model.Coupon;
+import com.tiltcode.tiltcode.Model.CouponResult;
 import com.tiltcode.tiltcode.Model.LoginResult;
 import com.tiltcode.tiltcode.R;
 import com.tiltcode.tiltcode.Util;
@@ -52,16 +53,16 @@ public class TiltService extends Service implements SensorEventListener {
     private static int dt = 0, searchdt = 0, count = 0;
     private static boolean checkFlag = false;
     private static AccelData prev = null, now = null;
-<<<<<<< HEAD
+/*<<<<<<< HEAD
     private float TOLERANCE_VALUE = 2.f;
     private int SEARCH_DT_VALUE = 1500;
     private float SEARCH_VALUE = 1.8f;
     private int RECOGNIZE = 4000;
-=======
+=======*/
     private float TOLERANCE_VALUE = 1.6f;
     private float SEARCH_VALUE = 2.0f;
     private int RECOGNIZE = 3000;
->>>>>>> 65229230fccc0cc4b6de34bc09deb1e1605854cd
+//>>>>>>> 65229230fccc0cc4b6de34bc09deb1e1605854cd
     private static float[][] Arr_Accel = {
             {9999f, 9999f, 9999f}, // 1 exclude {0f, 9.8f, 0f}
             {6.9f, 6.8f, 0f},
@@ -85,6 +86,8 @@ public class TiltService extends Service implements SensorEventListener {
     private SensorManager mSensorManager;
     private Sensor gyroSensor;
     private Sensor accelerometerSensor;
+
+    public static List<Coupon> couponList;
 
     private boolean serviceRunning = false;
 
@@ -183,12 +186,13 @@ public class TiltService extends Service implements SensorEventListener {
                 String.valueOf(mLastLocation.getLatitude()),
                 String.valueOf(mLastLocation.getLongitude()),
                 tilt,
-                new Callback<LoginResult>() {
+                new Callback<CouponResult>() {
                     @Override
-                    public void success(LoginResult loginResult, Response response) {
-                        Log.d(LOG_NAME,"backgroundcouponget success : "+loginResult.code);
+                    public void success(CouponResult couponResult, Response response) {
+                        Log.d(LOG_NAME,"backgroundcouponget success : "+couponResult.code);
 
-//                        if (loginResult.code.equals("1")) {
+                        if (couponResult.code.equals("1")) {
+                            couponList = couponResult.coupon;
 
                             if (isScreenOn()) {
                                 showNotification();
@@ -198,13 +202,13 @@ public class TiltService extends Service implements SensorEventListener {
                                 startActivity(dialogIntent);
                             }
 
-/*                        } else if (loginResult.code.equals("-1")) { //생략된 내용이 있음
+                        } else if (couponResult.code.equals("-1")) { //생략된 내용이 있음
                             Log.d(LOG_NAME, "background get gps coupon error : no entry");
-                        } else if (loginResult.code.equals("-2")) { //받아올 쿠폰이 하나도 없음
+                        } else if (couponResult.code.equals("-2")) { //받아올 쿠폰이 하나도 없음
                             Log.d(LOG_NAME, "background get gps coupon error : no coupon");
-                        } else if (loginResult.code.equals("-3")) {//세션이 유효하지 않음
+                        } else if (couponResult.code.equals("-3")) {//세션이 유효하지 않음
                             Log.d(LOG_NAME, "background get gps coupon error : invalid session");
-                        }*/
+                        }
 
                     }
 
@@ -309,6 +313,7 @@ public class TiltService extends Service implements SensorEventListener {
                             && (prev.y - TOLERANCE_VALUE < v.y && prev.y + TOLERANCE_VALUE > v.y)
                             && (prev.z - TOLERANCE_VALUE < v.z && prev.z + TOLERANCE_VALUE > v.z)))
                     {
+                        /*
 <<<<<<< HEAD
                         if( (Arr_Accel[0][0] - SEARCH_VALUE < now.x && Arr_Accel[0][0] + SEARCH_VALUE > now.x ) &&
                                 (Arr_Accel[0][1] - SEARCH_VALUE < now.y && Arr_Accel[0][1] + SEARCH_VALUE > now.y ) &&
@@ -334,10 +339,10 @@ public class TiltService extends Service implements SensorEventListener {
                             checkFlag = false;
                             dt = 0;
                         }
-=======
+=======*/
                         dt = 0;
                         prev = v;
->>>>>>> 65229230fccc0cc4b6de34bc09deb1e1605854cd
+//>>>>>>> 65229230fccc0cc4b6de34bc09deb1e1605854cd
                     }
                     now = v;
                 }

@@ -92,7 +92,7 @@ public class CouponListDetailFragment extends Fragment {
         Animation ani = new Animation();
         ani.setDuration(500);
         ani.setEasing(new LinearEase());
-        sexChart.show();
+        sexChart.show(ani);
 
         LineSet lineSet = new LineSet();
 

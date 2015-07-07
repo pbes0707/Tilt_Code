@@ -208,6 +208,8 @@ public class RegisterActivity extends ActionActivity {
 
                         Log.d(TAG,"register success / code : "+loginResult.code);
                         if (loginResult.code.equals("1")) { //성공
+                            Toast.makeText(getBaseContext(),getResources().getString(R.string.message_success_register),Toast.LENGTH_LONG).show();
+                            finish();
                         } else if (loginResult.code.equals("-1")) { //누락된게있음
                             Toast.makeText(getBaseContext(),getResources().getText(R.string.message_not_enough_data),Toast.LENGTH_LONG).show();
                         } else if (loginResult.code.equals("-2")) { //링크가 빠짐
@@ -332,12 +334,12 @@ public class RegisterActivity extends ActionActivity {
                     bitmap = BitmapFactory.decodeStream(stream,null,option);
 
                     stream.close();
+                    imgType = new TypedFile("multipart/form-data",new File(getRealPathFromURI(data.getData())));
                     btnImage.setImageBitmap(bitmap);
 
-                    imgType = new TypedFile("multipart/form-data",new File(getRealPathFromURI(data.getData())));
                 }
                 catch(Exception e){
-                    Log.e(TAG,"error : "+e.getMessage());
+                    Log.e(TAG,"file load error : "+e.getMessage());
                 }
                 break;
             case 1125:
