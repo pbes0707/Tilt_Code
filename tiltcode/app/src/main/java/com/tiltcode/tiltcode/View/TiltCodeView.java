@@ -63,13 +63,13 @@ public class TiltCodeView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        Log.d(TAG,"ondraw");
+//        Log.d(TAG,"ondraw");
 //        canvas.rotate(0,0,0,0);
         float rTilt;
         rTilt = -tiltX*(45f/10f);
-//        rTilt = ((int)(rTilt/10))*10;
+        rTilt = ((int)(rTilt/5))*5;
         canvas.rotate(rTilt,width/2,height/2);
-        canvas.drawBitmap(tiltImage,null, new Rect(width/2-500,height/2-500,width/2+500,height/2+500),null);
+        canvas.drawBitmap(tiltImage,null, new Rect(width/2-250,height/2-450,width/2+250,height/2+450),null);
         //super.onDraw(canvas);
         invalidate();
     }

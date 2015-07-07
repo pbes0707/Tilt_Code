@@ -1,9 +1,13 @@
 package com.tiltcode.tiltcodemanager.Activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.location.Address;
+import android.location.Criteria;
 import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -14,6 +18,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -42,7 +48,56 @@ public class GpsSelectActivity extends FragmentActivity {
         setContentView(R.layout.activity_gpsselect);
 
         init();
+        moveMapToMyLocation();
     }
+
+    LocationManager mLocationManager;;
+
+    private Location getLastKnownLocation() {
+        mLocationManager = (LocationManager)getApplicationContext().getSystemService(LOCATION_SERVICE);
+        List<String> providers = mLocationManager.getProviders(true);
+        Location bestLocation = null;
+        for (String provider : providers) {
+            Location l = mLocationManager.getLastKnownLocation(provider);
+            if (l == null) {
+                continue;
+            }
+            if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
+                // Found best last known location: %s", l);
+                bestLocation = l;
+            }
+        }
+        return bestLocation;
+    }
+
+    private void moveMapToMyLocation() {
+
+
+        LocationManager locMan = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+
+        Criteria crit = new Criteria();
+
+        Location loc = getLastKnownLocation();//mMap.getMyLocation();//locMan.getLastKnownLocation(locMan.getBestProvider(crit, false));
+
+
+
+        CameraPosition camPos = new CameraPosition.Builder()
+
+                .target(new LatLng(loc.getLatitude(), loc.getLongitude()))
+
+                .zoom(16f)
+
+                .build();
+
+        CameraUpdate camUpdate = CameraUpdateFactory.newCameraPosition(camPos);
+
+        mMap.moveCamera(camUpdate);
+
+
+
+    }
+
+
 
     void init(){
 
@@ -121,7 +176,7 @@ public class GpsSelectActivity extends FragmentActivity {
                     Log.d(TAG,"zoom : "+mMap.getCameraPosition().zoom);
                     Log.d(TAG,"lat : "+mMap.getCameraPosition().target.latitude+" lng : "+mMap.getCameraPosition().target.longitude);
 
-                    if(mMap.getCameraPosition().zoom>10) {
+                    if(mMap.getCameraPosition().zoom>14) {
 
                         Geocoder geocoder = new Geocoder(getBaseContext(), Locale.getDefault());
                         Address address;

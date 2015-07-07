@@ -3,13 +3,17 @@ package com.tiltcode.tiltcodemanager.Activity;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.ClipData;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.FeatureInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -22,6 +26,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.nononsenseapps.filepicker.FilePickerActivity;
 import com.tiltcode.tiltcodemanager.Model.GCMRegister;
 import com.tiltcode.tiltcodemanager.Model.LoginResult;
 import com.tiltcode.tiltcodemanager.R;
@@ -31,6 +36,8 @@ import com.tiltcode.tiltcodemanager.View.ActionActivity;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -88,16 +95,34 @@ public class RegisterActivity extends ActionActivity {
         btnFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent i = new Intent(RegisterActivity.this, FilePickerActivity.class);
+                // This works if you defined the intent filter
+                // Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+
+                // Set these depending on your use case. These are the defaults.
+                i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
+                i.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, false);
+                i.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_FILE);
+
+                // Configure initial directory by specifying a String.
+                // You could specify a String like "/storage/emulated/0/", but that can
+                // dangerous. Always use Android's API calls to get paths to the SD-card or
+                // internal memory.
+                i.putExtra(FilePickerActivity.EXTRA_START_PATH, Environment.getExternalStorageDirectory().getPath());
+
+                startActivityForResult(i, 1123);
+                /*
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("file/*");
-                startActivityForResult(intent, 1123);
+                intent.setType("*");
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                startActivityForResult(intent, 1123);*/
             }
         });
 
         btnImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 intent.setType("image/*");
                 startActivityForResult(intent, 1124);
             }
@@ -316,10 +341,63 @@ public class RegisterActivity extends ActionActivity {
             1126 : tilt 선택
              */
             case 1123:
+                if (data.getBooleanExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false)) {
+                    // For JellyBean and above
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        ClipData clip = data.getClipData();
+
+                        if (clip != null) {
+                            for (int i = 0; i < clip.getItemCount(); i++) {
+                                Uri uri = clip.getItemAt(i).getUri();
+                                // Do something with the URI
+                                String filePath = uri.getPath();
+                                Log.d(TAG,"filepath : "+filePath);
+
+                                ((TextView) findViewById(R.id.tv_register_file_uri)).setText(filePath);
+                                ((TextView)findViewById(R.id.tv_register_file_uri)).setVisibility(View.VISIBLE);
+                                fileType = new TypedFile("multipart/form-data", new File(filePath));
+                                return;
+                            }
+                        }
+                        // For Ice Cream Sandwich
+                    } else {
+                        ArrayList<String> paths = data.getStringArrayListExtra
+                                (FilePickerActivity.EXTRA_PATHS);
+
+                        if (paths != null) {
+                            for (String path: paths) {
+                                Uri uri = Uri.parse(path);
+                                // Do something with the URI
+                                String filePath = uri.getPath();
+                                Log.d(TAG,"filepath : "+filePath);
+
+                                ((TextView) findViewById(R.id.tv_register_file_uri)).setText(filePath);
+                                ((TextView)findViewById(R.id.tv_register_file_uri)).setVisibility(View.VISIBLE);
+                                fileType = new TypedFile("multipart/form-data", new File(filePath));
+                                return;
+                            }
+                        }
+                    }
+
+                } else {
+                    Uri uri = data.getData();
+                    // Do something with the URI
+
+                    String filePath = uri.getPath();
+                    Log.d(TAG,"filepath : "+filePath);
+
+                    ((TextView) findViewById(R.id.tv_register_file_uri)).setText(filePath);
+                    ((TextView)findViewById(R.id.tv_register_file_uri)).setVisibility(View.VISIBLE);
+                    fileType = new TypedFile("multipart/form-data", new File(filePath));
+                }
+
+                /*
                 String filePath = data.getData().getPath();
-                ((TextView)findViewById(R.id.tv_register_file_uri)).setText(filePath);
+                Log.d(TAG,"filepath : "+filePath);
+
+                ((TextView) findViewById(R.id.tv_register_file_uri)).setText(filePath);
                 ((TextView)findViewById(R.id.tv_register_file_uri)).setVisibility(View.VISIBLE);
-                fileType = new TypedFile("multipart/form-data", new File(filePath));
+                fileType = new TypedFile("multipart/form-data", new File(filePath));*/
                 break;
             case 1124:
                 try {
@@ -364,7 +442,27 @@ public class RegisterActivity extends ActionActivity {
         }
     }
 
+    public String getPath(Context context, Uri uri) throws URISyntaxException {
+        if ("content".equalsIgnoreCase(uri.getScheme())) {
+            String[] projection = { "_data" };
+            Cursor cursor = null;
 
+            try {
+                cursor = context.getContentResolver().query(uri, projection, null, null, null);
+                int column_index = cursor.getColumnIndexOrThrow("_data");
+                if (cursor.moveToFirst()) {
+                    return cursor.getString(column_index);
+                }
+            } catch (Exception e) {
+                // Eat it
+            }
+        }
+        else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            return uri.getPath();
+        }
+
+        return null;
+    }
     private String getRealPathFromURI(Uri contentURI) {
         String result;
         Cursor cursor = getContentResolver().query(contentURI, null, null, null, null);
