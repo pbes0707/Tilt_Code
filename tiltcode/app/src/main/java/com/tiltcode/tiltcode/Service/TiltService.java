@@ -53,16 +53,9 @@ public class TiltService extends Service implements SensorEventListener {
     private static int dt = 0, searchdt = 0, count = 0;
     private static boolean checkFlag = false;
     private static AccelData prev = null, now = null;
-/*<<<<<<< HEAD
-    private float TOLERANCE_VALUE = 2.f;
-    private int SEARCH_DT_VALUE = 1500;
-    private float SEARCH_VALUE = 1.8f;
-    private int RECOGNIZE = 4000;
-=======*/
     private float TOLERANCE_VALUE = 1.6f;
     private float SEARCH_VALUE = 2.0f;
     private int RECOGNIZE = 3000;
-//>>>>>>> 65229230fccc0cc4b6de34bc09deb1e1605854cd
     private static float[][] Arr_Accel = {
             {9999f, 9999f, 9999f}, // 1 exclude {0f, 9.8f, 0f}
             {6.9f, 6.8f, 0f},
@@ -99,7 +92,9 @@ public class TiltService extends Service implements SensorEventListener {
         /*
         tilt
          */
-
+        Notification notification = new Notification(R.drawable.ic_tilt, "서비스 실행됨", System.currentTimeMillis());
+        notification.setLatestEventInfo(getApplicationContext(), "Screen Service", "Foreground로 실행됨", null);
+        startForeground(1, notification);
         mActivityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
@@ -152,6 +147,7 @@ public class TiltService extends Service implements SensorEventListener {
         serviceRunning = false;
         mSensorManager.unregisterListener(this);
         super.onDestroy();
+//        ServiceMonitor.getInstance().startMonitoring(conte);
     }
 
     boolean isScreenOn(){
@@ -165,7 +161,7 @@ public class TiltService extends Service implements SensorEventListener {
         Notification notification = new Notification(R.mipmap.ic_launcher, "틸트 감지됨", System.currentTimeMillis());
         notification.flags = Notification.FLAG_AUTO_CANCEL;
         notification.defaults = Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE ;
-        notification.number = 13;
+        notification.number = 1;
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, CouponReceiveActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
         notification.setLatestEventInfo(this, "쿠폰도착", "새로운 쿠폰을 확인해주세요.", pendingIntent);
         nm.notify(1234, notification);
@@ -226,6 +222,8 @@ public class TiltService extends Service implements SensorEventListener {
     public int onStartCommand(Intent intent, int flags, int startId) {
 
 
+        Log.d(LOG_NAME,"onStartCommand");
+
         if (mThread == null) {
             mThread = new Thread(new Runnable() {
                 @Override
@@ -234,6 +232,10 @@ public class TiltService extends Service implements SensorEventListener {
                         SystemClock.sleep(30);
 
                         dt += 30;
+                        if(dt%30==2){
+
+                            Log.d(LOG_NAME,"service running : "+dt);
+                        }
                         if(dt > RECOGNIZE)
                         {
                             for(int i = 0 ; i<Arr_Accel.length ; i++)
@@ -243,7 +245,7 @@ public class TiltService extends Service implements SensorEventListener {
                                         (Arr_Accel[i][2] - SEARCH_VALUE < now.z && Arr_Accel[i][2] + SEARCH_VALUE > now.z ) )
                                 {
                                     Log.d("sensor", "Tilt : " + String.valueOf(i + 1));
-                                    ///// 코딩하셈 씨발련아
+                                    /////
                                     getGPSCoupon(String.valueOf(i+1));
 
                                 }
@@ -313,61 +315,18 @@ public class TiltService extends Service implements SensorEventListener {
                             && (prev.y - TOLERANCE_VALUE < v.y && prev.y + TOLERANCE_VALUE > v.y)
                             && (prev.z - TOLERANCE_VALUE < v.z && prev.z + TOLERANCE_VALUE > v.z)))
                     {
-                        /*
-<<<<<<< HEAD
-                        if( (Arr_Accel[0][0] - SEARCH_VALUE < now.x && Arr_Accel[0][0] + SEARCH_VALUE > now.x ) &&
-                                (Arr_Accel[0][1] - SEARCH_VALUE < now.y && Arr_Accel[0][1] + SEARCH_VALUE > now.y ) &&
-                                (Arr_Accel[0][2] - SEARCH_VALUE < now.z && Arr_Accel[0][2] + SEARCH_VALUE > now.z ) )
-                        {
-                            Log.d("s", "checkFlag true");
-                            checkFlag = true;
-                            searchdt = SEARCH_DT_VALUE;
-                            prev = now;
-                        }
-                    }
-                    else
-                    {
-                        if(searchdt > 0)
-                        {
-                            prev = now;
-                        }
-                        else if( !((prev.x - TOLERANCE_VALUE < v.x && prev.x + TOLERANCE_VALUE > v.x)
-                                && (prev.y - TOLERANCE_VALUE < v.y && prev.y + TOLERANCE_VALUE > v.y)
-                                && (prev.z - TOLERANCE_VALUE < v.z && prev.z + TOLERANCE_VALUE > v.z)))
-                        {
-                            Log.d("s", "checkFlag false");
-                            checkFlag = false;
-                            dt = 0;
-                        }
-=======*/
+
                         dt = 0;
                         prev = v;
-//>>>>>>> 65229230fccc0cc4b6de34bc09deb1e1605854cd
                     }
                     now = v;
                 }
-                /* Log.d("sensor","Accel X : " + Math.round(v.x*100d) / 100d +
-                        " Y : " + Math.round(v.y*100d) / 100d +
-                        " Z : " + Math.round(v.z*100d) / 100d);*/
-                /*list.addFirst(v);
-                if(list.size() > 30)
-                    list.removeLast();*/
                 break;
             }
-            //자이로스코프 센서일때
-            /*case Sensor.TYPE_GYROSCOPE:
-            {
-                float[] values = event.values;
-                float x = values[0] * 1000;
-                float y = values[1] * 1000;
-                float z = values[2] * 1000;
-                Log.d("sensor","Gyro X : " + Math.round(x*100d) / 100d +
-                        " Y : " + Math.round(y*100d) / 100d +
-                        " Z : " + Math.round(z*100d) / 100d);
-                break;
-            }*/
+
         }
     }
+
     public static double mean(double[] array) {  // 산술 평균 구하기
         double sum = 0.0;
         for (int i = 0; i < array.length; i++)

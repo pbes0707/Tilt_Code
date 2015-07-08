@@ -247,7 +247,7 @@ public class LoginActivity extends Activity {
                 String uuid = tManager.getDeviceId();
 
                 Util.getEndPoint().setPort("40001");
-                Util.getHttpSerivce().signFacebook(uuid, "", "", "", "", "",        //비회원 로그인시에는 uuid를 통해 페이스북 로그인인것처럼 로그인한다.
+                Util.getHttpSerivce().signFacebook(uuid, "null", "null", "null", "null", "null",        //비회원 로그인시에는 uuid를 통해 페이스북 로그인인것처럼 로그인한다.
                         new Callback<com.tiltcode.tiltcode.Model.LoginResult>() {
                             @Override
                             public void success(com.tiltcode.tiltcode.Model.LoginResult loginResult, Response response) {

@@ -62,6 +62,7 @@ import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -197,6 +198,8 @@ public class CouponListFragment extends BackFragment {
         imageLoader = ImageLoader.getInstance();
         imageLoader.init(config);
 
+        Collections.reverse(couponList);
+
         couponAdapter = new CouponListAdapter(couponList,context,mUnfoldableView,mDetailsLayout,imageLoader,options);
         mListView.setAdapter(couponAdapter);
 
@@ -308,6 +311,8 @@ public class CouponListFragment extends BackFragment {
 
                     if(couponResult.coupon!=null) {
                         Log.d(TAG, "count : " + couponResult.coupon.size());
+
+                        Collections.reverse(couponResult.coupon);
 
                         couponAdapter.couponList = couponResult.coupon;
                         couponAdapter.notifyDataSetChanged();

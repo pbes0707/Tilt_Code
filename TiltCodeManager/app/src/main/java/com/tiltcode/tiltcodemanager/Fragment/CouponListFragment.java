@@ -44,6 +44,7 @@ public class CouponListFragment extends Fragment {
     ProgressDialog dialog;
 
     public ArrayList<Coupon> couponList;
+    public static Coupon coupon;
 
     ListView listView;
     CouponListAdapter adapter ;
@@ -83,6 +84,8 @@ public class CouponListFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                coupon = couponList.get(i);
+                Log.d(TAG,"coupoin id : "+coupon.id);
                 ((CouponListActivity)CouponListActivity.context).setPage(2);
             }
         });

@@ -98,6 +98,10 @@ public interface HttpService {
                       @Field("changeP") String changeP,
                       Callback<LoginResult> ret);
 
+    @GET("/getCouponAnalytics")
+    void getCouponAnalytics(@Query("session") String session,
+                            @Query("id") String id,
+                   Callback<AnalyticResult> ret);
 
 
 

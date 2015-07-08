@@ -6,9 +6,12 @@ import android.graphics.Paint;
 import com.db.chart.model.Point;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.db.chart.model.Bar;
 import com.db.chart.model.BarSet;
@@ -22,10 +25,19 @@ import com.db.chart.view.YController;
 import com.db.chart.view.animation.Animation;
 import com.db.chart.view.animation.easing.cubic.CubicEaseOut;
 import com.db.chart.view.animation.easing.linear.LinearEase;
+import com.tiltcode.tiltcodemanager.Activity.CouponListActivity;
 import com.tiltcode.tiltcodemanager.Activity.SignupActivity;
+import com.tiltcode.tiltcodemanager.Model.AnalyticResult;
+import com.tiltcode.tiltcodemanager.Model.Coupon;
+import com.tiltcode.tiltcodemanager.Model.CouponResult;
 import com.tiltcode.tiltcodemanager.R;
+import com.tiltcode.tiltcodemanager.Util;
 
 import java.text.DecimalFormat;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * Created by JSpiner on 2015. 6. 27..
@@ -41,14 +53,22 @@ public class CouponListDetailFragment extends Fragment {
     BarChartView sexChart;
     LineChartView ageChart;
 
+    Coupon coupon;
+
+    TextView tvTitle;
+    TextView tvDownload;
+    TextView tvEarn;
+
     public CouponListDetailFragment() {
         super();
         this.layoutid = R.layout.fragment_coupondetail;
-        this.context = SignupActivity.context;
+        this.context = CouponListActivity.context;
+        this.coupon = CouponListFragment.coupon;
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = null;
+        this.coupon = CouponListFragment.coupon;
 
         if (v == null) {
             v = inflater.inflate(layoutid, null);
@@ -56,68 +76,118 @@ public class CouponListDetailFragment extends Fragment {
             sexChart = (BarChartView)v.findViewById(R.id.chart_coupondetail_sex);
             ageChart = (LineChartView)v.findViewById(R.id.chart_coupondetail_age);
 
+            tvTitle = ((TextView)v.findViewById(R.id.tv_coupondetail_title));
+            tvDownload = ((TextView)v.findViewById(R.id.tv_coupondetail_download));
+            tvEarn = ((TextView)v.findViewById(R.id.tv_coupondetail_earn));
+
+
             init();
 
         }
         return v;
     }
 
+    int getMax(int[] arr){
+        int max = -1;
+        for(int i=0;i<arr.length;i++){
+            if(max<arr[i]) max=arr[i];
+        }
+        return max;
+    }
+
+    int getLinear(int value){
+        return ((value+15)/10)*10;
+    }
+
     void init() {
 
+        tvTitle.setText(coupon.title);
+        tvEarn.setText(coupon.desc);
 
-        BarSet barSet = new BarSet();
-
-        Bar bar1 = new Bar("Man",100);
-        Bar bar2 = new Bar("Women",80);
-        Bar bar3 = new Bar("Unkown",120);
-
-        bar1.setColor(Color.CYAN);
-        bar2.setColor(Color.BLUE);
-        bar3.setColor(Color.MAGENTA);
-
-        barSet.addBar(bar1);
-        barSet.addBar(bar2);
-        barSet.addBar(bar3);
+        Util.getEndPoint().setPort("40004");
+        Util.getHttpSerivce().getCouponAnalytics(Util.getAccessToken().getToken(),
+                coupon.id,
+                new Callback<AnalyticResult>() {
+                    @Override
+                    public void success(AnalyticResult analyticResult, Response response) {
 
 
-        sexChart.addData(barSet);
+                        if(analyticResult.code.equals("1")){
+                            tvDownload.setText("다운로드수 : " +analyticResult.data.count);
 
-        sexChart.setSetSpacing(100);
-        sexChart.setAxisBorderValues(0,140,20)
-                .setBorderSpacing(50)
-                .setYAxis(true)
-                .setXLabels(XController.LabelPosition.OUTSIDE)
-                .setYLabels(YController.LabelPosition.OUTSIDE);
+                            Log.d(TAG,"size : "+analyticResult.data.age.length);
 
-        Animation ani = new Animation();
-        ani.setDuration(500);
-        ani.setEasing(new LinearEase());
-        sexChart.show(ani);
+                            BarSet barSet = new BarSet();
 
-        LineSet lineSet = new LineSet();
+                            Bar bar1 = new Bar("Man",analyticResult.data.sex[0]);
+                            Bar bar2 = new Bar("Women",analyticResult.data.sex[1]);
+                            Bar bar3 = new Bar("Unkown",analyticResult.data.sex[2]);
 
-        for(int i=0;i<7;i++){
-            Point point = new Point(i*10+"~"+(i+1)*10,(int)(Math.random()*100));
+                            bar1.setColor(Color.CYAN);
+                            bar2.setColor(Color.BLUE);
+                            bar3.setColor(Color.MAGENTA);
 
-            lineSet.addPoint(point);
+                            barSet.addBar(bar1);
+                            barSet.addBar(bar2);
+                            barSet.addBar(bar3);
 
 
+                            sexChart.addData(barSet);
 
-        }
+                            sexChart.setSetSpacing(100);
+                            int max = getLinear(getMax(analyticResult.data.age));
+                            sexChart.setAxisBorderValues(0,max,max/10)
+                                    .setBorderSpacing(50)
+                                    .setYAxis(true)
+                                    .setXLabels(XController.LabelPosition.OUTSIDE)
+                                    .setYLabels(YController.LabelPosition.OUTSIDE);
 
-        ageChart.addData(lineSet);
-        ageChart.setBorderSpacing(50)
+                            Animation ani = new Animation();
+                            ani.setDuration(500);
+                            ani.setEasing(new LinearEase());
+                            sexChart.show(ani);
+
+                            LineSet lineSet = new LineSet();
+
+                            for(int i=0;i<7;i++){
+                                Point point = new Point(i*10+"~"+(i+1)*10,analyticResult.data.age[i]);
+
+                                lineSet.addPoint(point);
+
+
+
+                            }
+                            lineSet.setLineColor(Color.CYAN);
+
+                            ageChart.addData(lineSet);
+                            max = getMax(analyticResult.data.age);
+                            ageChart.setBorderSpacing(50)
 //                .setGrid(LineChartView.GridType.HORIZONTAL, mLineGridPaint)
-                .setXAxis(true)
-                .setXLabels(XController.LabelPosition.OUTSIDE)
-                .setYAxis(true)
-                .setYLabels(YController.LabelPosition.OUTSIDE)
-                .setAxisBorderValues(0, 100, 25);
+                                    .setXAxis(true)
+                                    .setXLabels(XController.LabelPosition.OUTSIDE)
+                                    .setYAxis(true)
+                                    .setYLabels(YController.LabelPosition.OUTSIDE)
+                                    .setAxisBorderValues(0, getLinear(max), getLinear(max)/10);
 
-        Animation ani2 = new Animation();
-        ani2.setDuration(500);
-        ani2.setEasing(new LinearEase());
-        ageChart.show(ani2);
+                            Animation ani2 = new Animation();
+                            ani2.setDuration(500);
+                            ani2.setEasing(new LinearEase());
+                            ageChart.show(ani2);
+                        }
+                        else if(analyticResult.code.equals("2")){
+                            tvDownload.setText("다운로드수 : 0");
+                            Toast.makeText(context,"아무도 쿠폰을 다운받지 않았습니다.",Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                    }
+                });
+
+
 
 
     }

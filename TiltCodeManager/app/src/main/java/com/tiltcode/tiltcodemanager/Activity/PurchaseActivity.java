@@ -77,8 +77,9 @@ public class PurchaseActivity extends ActionActivity implements OnClickListener 
 
         Log.d(TAG,"point : "+Util.getAccessToken().getPoint());
 
-//        ((TextView)findViewById(R.id.tv_purchase_nowmoney)).setText(Util.getAccessToken().getPoint());
-//        ((TextView)findViewById(R.id.tv_purchase_summoney)).setText(Util.getAccessToken().getPoint());
+
+        ((TextView)findViewById(R.id.tv_purchase_summoney)).setText(Util.getAccessToken().getPoint()+"P");
+        ((TextView)findViewById(R.id.tv_purchase_nowmoney)).setText(Util.getAccessToken().getPoint()+"P");
 
         ((Spinner)findViewById(R.id.spinner_purchase_money)).setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
