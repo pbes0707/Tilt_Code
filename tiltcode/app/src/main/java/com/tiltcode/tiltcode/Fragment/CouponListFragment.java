@@ -35,14 +35,6 @@ import android.widget.Toast;
 import com.alexvasilkov.foldablelayout.UnfoldableView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
-import com.nostra13.universalimageloader.core.display.SimpleBitmapDisplayer;
 import com.tiltcode.tiltcode.Activity.MainActivity;
 import com.tiltcode.tiltcode.Adapter.CouponListAdapter;
 import com.tiltcode.tiltcode.Adapter.MainPagerAdapter;
@@ -92,9 +84,6 @@ public class CouponListFragment extends BackFragment {
     ScrollView detailScroll;
 
     TextView tv_couponlist_nocoupon;
-
-    DisplayImageOptions options;
-    ImageLoader imageLoader;
 
     List<Coupon> couponList = new ArrayList<>();
     CouponListAdapter couponAdapter;
@@ -155,52 +144,12 @@ public class CouponListFragment extends BackFragment {
         }
     };
 
-    public DisplayImageOptions getDisplayImageOptions()
-    {
-        if(this.options == null)
-        {
-            this.options = new DisplayImageOptions.Builder()
-//                    .showImageOnLoading(R.drawable.ic_stub) // resource or drawable
-//                    .showImageForEmptyUri(R.drawable.ic_empty) // resource or drawable
-//                    .showImageOnFail(R.drawable.ic_error) // resource or drawable
-                    .resetViewBeforeLoading(true)  // default
-                    .delayBeforeLoading(10)
-                    .cacheInMemory(true) // default
-                    .cacheOnDisk(true) // default
-                            .showImageForEmptyUri(R.drawable.test)
-                                    .showImageOnFail(R.drawable.test)
-                                            .showImageOnLoading(R.drawable.test)
-//                    .preProcessor(...)
-//            .postProcessor(...)
-//            .extraForDownloader(...)
-            .considerExifParams(true) // default
-                .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2) // default
-                .bitmapConfig(Bitmap.Config.ARGB_8888) // default
-//                .decodingOptions(...)
-            .displayer(new SimpleBitmapDisplayer()) // default
-//                .handler(new Handler()) // default
-                    .build();
-        }
-
-        return this.options;
-    }
 
     void init() {
 
-        final ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
-                /*.diskCacheFileCount(20)
-                .threadPriority(Thread.NORM_PRIORITY-2)
-                .denyCacheImageMultipleSizesInMemory()
-                .tasksProcessingOrder(QueueProcessingType.LIFO)
-                .diskCacheFileNameGenerator(new Md5FileNameGenerator())
-                .diskCacheSize(10*1024*1024)*/
-                .build();
-        imageLoader = ImageLoader.getInstance();
-        imageLoader.init(config);
-
         Collections.reverse(couponList);
 
-        couponAdapter = new CouponListAdapter(couponList,context,mUnfoldableView,mDetailsLayout,imageLoader,options);
+        couponAdapter = new CouponListAdapter(couponList,context,mUnfoldableView,mDetailsLayout);
         mListView.setAdapter(couponAdapter);
 
         ((PullToRefreshListView)mListView).setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
@@ -218,6 +167,8 @@ public class CouponListFragment extends BackFragment {
                             if (couponResult.code.equals("1")) { //성공
 
                                 if(couponResult.coupon!=null) {
+
+                                    Collections.reverse(couponResult.coupon);
                                     Log.d(TAG, "count : " + couponResult.coupon.size());
 
                                     couponAdapter.couponList = couponResult.coupon;

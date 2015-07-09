@@ -1,6 +1,7 @@
 package com.tiltcode.tiltcode.Adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +30,9 @@ public class SettingListAdapter extends BaseAdapter {
         this.arrayList = arrayList;
         this.context = context;
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
     }
+
 
     @Override
     public int getCount() {
@@ -52,6 +55,7 @@ public class SettingListAdapter extends BaseAdapter {
         if(view==null) {
             view = inflater.inflate(R.layout.item_setting_row, null);
             ((TextView)view.findViewById(R.id.tv_setting_row)).setText(arrayList.get(i));
+
         }
         return view;
     }

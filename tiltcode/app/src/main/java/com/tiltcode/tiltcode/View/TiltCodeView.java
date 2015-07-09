@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -27,6 +29,8 @@ public class TiltCodeView extends View {
 
     Bitmap tiltImage;
 
+    Paint p;
+
     public TiltCodeView(Context context) {
         super(context);
 
@@ -49,6 +53,9 @@ public class TiltCodeView extends View {
 
         if(tiltImage==null) tiltImage = BitmapFactory.decodeResource(getResources(), R.drawable.tilt);
 
+        p = new Paint();
+        p.setColor(Color.CYAN);
+        p.setTextSize(140);
     }
 
     @Override
@@ -67,6 +74,7 @@ public class TiltCodeView extends View {
 //        canvas.rotate(0,0,0,0);
         float rTilt;
         rTilt = -tiltX*(45f/10f);
+        canvas.drawText("Tilt "+((int)tiltX*(90/10)), width/2-200,400,p);
         rTilt = ((int)(rTilt/5))*5;
         canvas.rotate(rTilt,width/2,height/2);
         canvas.drawBitmap(tiltImage,null, new Rect(width/2-250,height/2-450,width/2+250,height/2+450),null);

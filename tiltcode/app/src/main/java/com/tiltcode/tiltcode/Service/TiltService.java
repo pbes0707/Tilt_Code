@@ -93,8 +93,18 @@ public class TiltService extends Service implements SensorEventListener {
         tilt
          */
         Notification notification = new Notification(R.drawable.ic_tilt, "서비스 실행됨", System.currentTimeMillis());
-        notification.setLatestEventInfo(getApplicationContext(), "Screen Service", "Foreground로 실행됨", null);
+        Intent notificationIntent = new Intent(getApplicationContext(), SplashActivity.class);
+
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+        PendingIntent intent = PendingIntent.getActivity(getApplicationContext(), 0,
+                notificationIntent, 0);
+
+//        notification.setLatestEventInfo(context, title, message, intent);
+        notification.setLatestEventInfo(getApplicationContext(), "Tilt Service", "Foreground로 실행됨", intent);
         startForeground(1, notification);
+
         mActivityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
@@ -160,11 +170,19 @@ public class TiltService extends Service implements SensorEventListener {
         NotificationManager nm = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         Notification notification = new Notification(R.mipmap.ic_launcher, "틸트 감지됨", System.currentTimeMillis());
         notification.flags = Notification.FLAG_AUTO_CANCEL;
-        notification.defaults = Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE ;
+//        notification.defaults = Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE ;
         notification.number = 1;
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, CouponReceiveActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
         notification.setLatestEventInfo(this, "쿠폰도착", "새로운 쿠폰을 확인해주세요.", pendingIntent);
-        nm.notify(1234, notification);
+        nm.notify(1175, notification);
+
+        android.os.Handler h = new android.os.Handler();
+        long delayInMilliseconds = 15000;
+        h.postDelayed(new Runnable() {
+            public void run() {
+                ((NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE)).cancel(1175);
+            }
+        }, delayInMilliseconds);
     }
 
     private void getGPSCoupon(String tilt){

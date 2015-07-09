@@ -27,12 +27,20 @@
                 android:layout_height="wrap_content"
                 android:text="쿠폰을 선택해주세요." />
 
+            <!--
             <RadioGroup
                 android:layout_width="match_parent"
                 android:id="@+id/radiogroup_couponreceive"
                 android:layout_height="wrap_content">
 
-            </RadioGroup>
+            </RadioGroup>-->
+
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/lv_couponreceive"
+                android:layout_weight="1"
+                android:layout_gravity="center_horizontal" />
 
             <Button
                 android:layout_marginTop="50dp"

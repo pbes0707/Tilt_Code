@@ -94,7 +94,6 @@ public class PurchaseActivity extends ActionActivity implements OnClickListener 
         });
     }
 
-
     private void helperInit()
     {
         Intent intent = new Intent("com.android.vending.billing.InAppBillingService.BIND");

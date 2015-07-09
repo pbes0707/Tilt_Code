@@ -9,10 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.tiltcode.tiltcode.Adapter.ReceiveListAdapter;
 import com.tiltcode.tiltcode.Model.Coupon;
 import com.tiltcode.tiltcode.Model.LoginResult;
 import com.tiltcode.tiltcode.R;
@@ -33,11 +35,14 @@ public class CouponReceiveActivity extends Activity {
     //로그에 쓰일 tag
     public static final String TAG = CouponReceiveActivity.class.getSimpleName();
 
-    RadioGroup radioGroup;
+//    RadioGroup radioGroup;
     LayoutInflater inflater;
     ArrayList<Coupon> couponList;
+    ListView listview;
 
-    int selectedIndex = 0;
+    public static int selectedIndex = 0;
+
+    ReceiveListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,23 +55,26 @@ public class CouponReceiveActivity extends Activity {
     void init(){
         this.couponList = (ArrayList)TiltService.couponList;
 
-        radioGroup = (RadioGroup)findViewById(R.id.radiogroup_couponreceive);
+//        radioGroup = (RadioGroup)findViewById(R.id.radiogroup_couponreceive);
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        adapter = new ReceiveListAdapter(getBaseContext(), couponList);
+        listview = (ListView)findViewById(R.id.lv_couponreceive);
+        listview.setAdapter(adapter);
         for(int i=0;i<couponList.size();i++){
-            RadioButton v = (RadioButton)inflater.inflate(R.layout.item_radio_row,null);
-            v.setId(i);
-            v.setText(couponList.get(i).title);
+//            RadioButton v = (RadioButton)inflater.inflate(R.layout.item_radio_row,null);
+//            v.setId(i);
+ //           v.setText(couponList.get(i).title);
 //            ((RadioButton)v.findViewById(R.id.radio_coupon_row)).set
-            radioGroup.addView(v);
+ //           radioGroup.addView(v);
 
         }
-
+/*
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 selectedIndex = i;
             }
-        });
+        });*/
 
         ((Button)findViewById(R.id.btn_couponreceive_proc)).setOnClickListener(new View.OnClickListener() {
             @Override

@@ -64,7 +64,6 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         AccessToken token = AccessToken.getCurrentAccessToken();
-        Log.d(TAG,"accesstoken : "+token);
 
         init();
 

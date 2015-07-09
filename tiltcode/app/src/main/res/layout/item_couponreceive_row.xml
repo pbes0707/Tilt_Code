@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:id="@+id/layout_coupon_detail"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="40dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:id="@+id/img_couponreceive_row"
+            android:scaleType="centerCrop"
+            android:background="#aeaeae"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:background="#ababab"
+            android:orientation="horizontal"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:padding="4dp"
+                android:textColor="#efefef"
+                android:textSize="20dp"
+                android:text="RoadCycle"
+                android:id="@+id/tv_couponreceive_row" />
+
+            <CheckBox
+                android:layout_gravity="right"
+                android:layout_marginRight="10dp"
+                android:textColor="#ffffff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/cb_couponreceive_row" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
