@@ -67,7 +67,6 @@ public class CouponListAdapter extends BaseAdapter {
         this.mDetailsLayout = mDetailsLayout;
     }
 
-
     @Override
     public int getCount() {
         return couponList.size();
