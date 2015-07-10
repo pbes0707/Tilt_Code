@@ -18,7 +18,7 @@
 
             <com.handmark.pulltorefresh.library.PullToRefreshListView
                 android:layout_marginTop="40dp"
-                android:id="@+id/list_view"
+                android:id="@+id/lv_couponlist"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
                 android:divider="@null"
