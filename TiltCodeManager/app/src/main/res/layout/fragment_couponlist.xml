@@ -11,10 +11,52 @@
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal">
 
-        <ListView
+
+        <FrameLayout
             android:layout_width="match_parent"
-            android:divider="@null"
-            android:layout_height="match_parent"
-            android:id="@+id/lv_couponlist" />
+            android:layout_height="match_parent">
+
+            <com.handmark.pulltorefresh.library.PullToRefreshListView
+                android:layout_marginTop="40dp"
+                android:id="@+id/list_view"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:divider="@null"
+                android:layout_height="fill_parent"
+                android:layout_width="fill_parent" />
+
+            <View
+                android:id="@+id/touch_interceptor_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <FrameLayout
+                android:background="#000000"
+                android:id="@+id/details_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+            </FrameLayout>
+
+            <com.alexvasilkov.foldablelayout.UnfoldableView
+                android:id="@+id/unfoldable_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:visibility="gone"
+                android:textColor="#ffffff"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25dp"
+                android:text="표시할 항목이 없습니다. \nTilt하여 쿠폰을 받아보세요."
+                android:id="@+id/tv_couponlist_nocoupon"
+                android:layout_gravity="center" />
+        </FrameLayout>
+
     </LinearLayout>
 </LinearLayout>

@@ -10,9 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
+import com.alexvasilkov.foldablelayout.UnfoldableView;
 import com.tiltcode.tiltcodemanager.Activity.CouponListActivity;
 import com.tiltcode.tiltcodemanager.Activity.MainActivity;
 import com.tiltcode.tiltcodemanager.Activity.SignupActivity;
@@ -48,6 +51,13 @@ public class CouponListFragment extends Fragment {
 
     ListView listView;
     CouponListAdapter adapter ;
+
+
+    View mListTouchInterceptor;
+    UnfoldableView mUnfoldableView;
+    FrameLayout mDetailsLayout;
+    View detailView;
+    ScrollView detailScroll;
 
     public CouponListFragment() {
         super();
