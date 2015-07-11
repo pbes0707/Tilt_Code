@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.handmark.pulltorefresh.library.PullToRefreshListView
+            <ListView
                 android:layout_marginTop="40dp"
                 android:id="@+id/lv_couponlist"
                 android:layout_marginLeft="30dp"

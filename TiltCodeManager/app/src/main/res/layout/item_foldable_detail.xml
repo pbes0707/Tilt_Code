@@ -31,7 +31,6 @@
                     android:layout_height="350dp"
                     android:id="@+id/img_coupon_detail"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/test"
                     android:layout_gravity="center_horizontal" />
 
             </LinearLayout>

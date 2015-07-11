@@ -28,6 +28,7 @@ import com.tiltcode.tiltcodemanager.R;
 import com.tiltcode.tiltcodemanager.Util;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import retrofit.Callback;
@@ -107,6 +108,7 @@ public class CouponListFragment extends Fragment {
 
         couponList = new ArrayList<Coupon>();
 
+        /*
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -114,7 +116,7 @@ public class CouponListFragment extends Fragment {
                 Log.d(TAG,"coupoin id : "+coupon.id);
                 ((CouponListActivity)CouponListActivity.context).setPage(2);
             }
-        });
+        });*/
 
 
         Util.getEndPoint().setPort("40002");
@@ -123,10 +125,11 @@ public class CouponListFragment extends Fragment {
                     @Override
                     public void success(com.tiltcode.tiltcodemanager.Model.CouponResult couponResult, Response response) {
                         Log.d(TAG, "access success / code : " + couponResult.code);
+                        Collections.reverse(couponResult.coupon);
                         if (couponResult.code.equals("1")) { //성공
                             couponList = (ArrayList)couponResult.coupon;
                             Log.d(TAG,"count : "+couponResult.coupon.size());
-                            adapter = new CouponListAdapter(context, couponList);
+                            adapter = new CouponListAdapter(context, couponList, mUnfoldableView, detailView);
 //                            adapter.arrayList = couponList;
 //                            adapter.notifyDataSetChanged();
                             listView.setAdapter(adapter);
