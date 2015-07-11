@@ -78,19 +78,39 @@
                     android:text=""
                     android:id="@+id/tv_coupon_detail_desc" />
 
-
-                <Button
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
+                <LinearLayout
                     android:layout_marginTop="50dp"
-                    android:layout_marginBottom="30dp"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:text="쿠폰 다운로드"
-                    android:textColor="#ababab"
-                    android:background="#000000"
-                    android:layout_gravity="center_horizontal"
-                    android:id="@+id/btn_couponitem_proc" />
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginTop="50dp"
+                        android:layout_marginBottom="30dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:text="수정"
+                        android:textColor="#ababab"
+                        android:background="#000000"
+                        android:layout_gravity="center_horizontal"
+                        android:id="@+id/btn_couponitem_edit" />
+                    <Button
+                        android:layout_marginRight="20dp"
+                        android:layout_weight="1"
+                        android:layout_marginTop="50dp"
+                        android:layout_marginBottom="30dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:text="통계"
+                        android:textColor="#ababab"
+                        android:background="#000000"
+                        android:layout_gravity="center_horizontal"
+                        android:id="@+id/btn_couponitem_anaylize" />
+                </LinearLayout>
+
             </LinearLayout>
 
         </LinearLayout>
