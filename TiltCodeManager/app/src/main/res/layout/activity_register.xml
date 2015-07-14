@@ -68,7 +68,7 @@
                         android:textColor="#b3ffff"
                         />
 
-                    <Spinner
+                    <com.tiltcode.tiltcodemanager.View.NDSpinner
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/spinner_register_couponType"
@@ -84,7 +84,7 @@
                         android:textColor="#b3ffff"
                         />
 
-                    <Spinner
+                    <com.tiltcode.tiltcodemanager.View.NDSpinner
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:entries="@array/couponPickType"
@@ -96,6 +96,7 @@
                         android:layout_width="wrap_content"
                         android:textSize="18dp"
                         android:visibility="gone"
+                        android:textColor="#ffffb3"
                         android:layout_height="wrap_content"
                         android:id="@+id/tv_register_gps_locale"
                         />

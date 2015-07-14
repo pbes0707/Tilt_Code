@@ -248,6 +248,7 @@ public class GpsSelectActivity extends FragmentActivity {
                             list = geocoder.getFromLocation(mMap.getCameraPosition().target.latitude, mMap.getCameraPosition().target.longitude, 1);
                             address = list.get(0);
                             result = address.getAddressLine(0) + ", " + address.getLocality();
+                            result = result.replace("남한","");
                         } catch (Exception e) {
                             e.printStackTrace();
                             Log.e(TAG, "error : " + e.getMessage());

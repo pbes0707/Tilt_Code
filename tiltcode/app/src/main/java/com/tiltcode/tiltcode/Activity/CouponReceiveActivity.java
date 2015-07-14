@@ -15,6 +15,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.tiltcode.tiltcode.Adapter.ReceiveListAdapter;
+import com.tiltcode.tiltcode.Fragment.CouponListFragment;
 import com.tiltcode.tiltcode.Model.Coupon;
 import com.tiltcode.tiltcode.Model.LoginResult;
 import com.tiltcode.tiltcode.R;
@@ -87,6 +88,9 @@ public class CouponReceiveActivity extends Activity {
                             public void success(LoginResult loginResult, Response response) {
                                 if (loginResult.code.equals("1")) { //성공
                                     Toast.makeText(getBaseContext(),getResources().getText(R.string.message_success_receive),Toast.LENGTH_LONG).show();
+                                    if(CouponListFragment.mListView != null){
+                                        CouponListFragment.mListView.setRefreshing();
+                                    }
                                     finish();
                                 } else if (loginResult.code.equals("-1")) { //누락된게있음
                                     Toast.makeText(getBaseContext(),getResources().getText(R.string.message_not_enough_data),Toast.LENGTH_LONG).show();

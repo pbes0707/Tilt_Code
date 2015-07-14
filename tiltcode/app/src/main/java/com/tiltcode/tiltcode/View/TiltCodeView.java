@@ -73,8 +73,8 @@ public class TiltCodeView extends View {
 //        Log.d(TAG,"ondraw");
 //        canvas.rotate(0,0,0,0);
         float rTilt;
-        rTilt = -tiltX*(45f/10f);
-        canvas.drawText("Tilt "+((int)tiltX*(90/10)), width/2-200,400,p);
+        rTilt = tiltX*(90f/10f);
+        canvas.drawText(((int)tiltX*(90/10))+"°", width/2-100,400,p);
         rTilt = ((int)(rTilt/5))*5;
         canvas.rotate(rTilt,width/2,height/2);
         canvas.drawBitmap(tiltImage,null, new Rect(width/2-250,height/2-450,width/2+250,height/2+450),null);

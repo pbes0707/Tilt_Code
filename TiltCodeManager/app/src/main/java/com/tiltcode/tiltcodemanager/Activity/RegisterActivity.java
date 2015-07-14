@@ -1,10 +1,12 @@
 package com.tiltcode.tiltcodemanager.Activity;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.ClipData;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.FeatureInfo;
 import android.database.Cursor;
@@ -19,6 +21,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
@@ -37,7 +40,9 @@ import java.io.File;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -71,8 +76,9 @@ public class RegisterActivity extends ActionActivity {
 
     String tiltHour;
     String tiltMinute;
-
     String tiltValue;
+
+    String dateTime; //yyyy-mm-dd
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,6 +154,18 @@ public class RegisterActivity extends ActionActivity {
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
+                int i = ((Spinner)findViewById(R.id.spinner_register_couponType)).getSelectedItemPosition();
+
+                couponTypeIndex = i;
+
+                switch (i){
+                    case 1:
+
+                        break;
+                    case 2:
+
+                        break;
+                }
             }
         });
 
@@ -164,7 +182,11 @@ public class RegisterActivity extends ActionActivity {
 
                         break;
                     case 2:
-                        new TimePickerDialog(RegisterActivity.this, timeSetListener,0,0,false).show();
+                        Calendar calendar = Calendar.getInstance();
+
+                        new DatePickerDialog(RegisterActivity.this, dateSetListener,calendar.get(Calendar.YEAR),
+                                calendar.get(Calendar.MONTH),
+                                calendar.get(Calendar.DAY_OF_MONTH)).show();
                         break;
                 }
 
@@ -173,6 +195,23 @@ public class RegisterActivity extends ActionActivity {
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
+                int i = ((Spinner)findViewById(R.id.spinner_register_couponType)).getSelectedItemPosition();
+
+                couponPickIndex = i;
+
+                switch (i){
+                    case 1:
+                        Intent intent = new Intent(RegisterActivity.this, GpsSelectActivity.class);
+                        startActivityForResult(intent, 1125);
+
+                        break;
+                    case 2:
+                        Calendar calendar = Calendar.getInstance();
+                        new DatePickerDialog(RegisterActivity.this, dateSetListener,calendar.get(Calendar.YEAR),
+                                calendar.get(Calendar.MONTH),
+                                calendar.get(Calendar.DAY_OF_MONTH)).show();
+                        break;
+                }
             }
         });
 
@@ -206,7 +245,31 @@ public class RegisterActivity extends ActionActivity {
             tiltHour = String.valueOf(hourOfDay);
             tiltMinute = String.valueOf(minute);
 
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR_OF_DAY,Integer.valueOf(tiltHour));
+            calendar.set(Calendar.MINUTE,Integer.valueOf(tiltMinute));
+
+            SimpleDateFormat format1 = new SimpleDateFormat("HH:mm");
+            String beginT = format1.format(calendar.getTime());
+            calendar.add(Calendar.MINUTE,30);
+            String endT = format1.format(calendar.getTime());
+
+            ((TextView)findViewById(R.id.tv_register_gps_locale)).setText(dateTime+"  "+tiltHour+":"+tiltMinute+"~"+beginT+":"+endT);
+            ((TextView)findViewById(R.id.tv_register_gps_locale)).setVisibility(View.VISIBLE);
+
         }
+    };
+
+    private DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+
+        @Override
+        public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+            dateTime = String.format("%04d",datePicker.getYear())+"-"+
+                    String.format("%02d",(datePicker.getMonth()+1))+"-"+
+                            String.format("%02d",datePicker.getDayOfMonth());
+            new TimePickerDialog(RegisterActivity.this, timeSetListener,0,0,false).show();
+        }
+
     };
 
     void procRegisterGPS(){
@@ -234,6 +297,8 @@ public class RegisterActivity extends ActionActivity {
                         Log.d(TAG,"register success / code : "+loginResult.code);
                         if (loginResult.code.equals("1")) { //성공
                             Toast.makeText(getBaseContext(),getResources().getString(R.string.message_success_register),Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(RegisterActivity.this, CouponListActivity.class);
+                            startActivity(intent);
                             finish();
                         } else if (loginResult.code.equals("-1")) { //누락된게있음
                             Toast.makeText(getBaseContext(),getResources().getText(R.string.message_not_enough_data),Toast.LENGTH_LONG).show();
@@ -275,14 +340,28 @@ public class RegisterActivity extends ActionActivity {
         dialog.setMessage("데이터를 불러오는중입니다..");
         dialog.show();
 
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY,Integer.valueOf(tiltHour));
+        calendar.set(Calendar.MINUTE,Integer.valueOf(tiltMinute));
+
+        SimpleDateFormat format1 = new SimpleDateFormat("HH:mm");
+        String beginT = format1.format(calendar.getTime());
+        calendar.add(Calendar.MINUTE,30);
+        String endT = format1.format(calendar.getTime());
+
+//        ((TextView)findViewById(R.id.tv_register_gps_locale)).setText(beginT+"~"+endT);
+//        ((TextView)findViewById(R.id.tv_register_gps_locale)).setVisibility(View.VISIBLE);
+
         Util.getEndPoint().setPort("40002");
         Util.getHttpSerivce().couponRegisterTime(Util.getAccessToken().getToken(),
                 getResources().getStringArray(R.array.couponTypeKey)[couponTypeIndex],
                 ((EditText) findViewById(R.id.edt_register_title)).getText().toString(),
                 ((EditText) findViewById(R.id.edt_register_desc)).getText().toString(),
                 "link",                                     //TODO : 링크
-                tiltHour,
-                tiltMinute,
+                beginT,
+                endT,
+                dateTime,
+                dateTime,
                 tiltValue,
                 fileType,
                 imgType,
@@ -412,7 +491,7 @@ public class RegisterActivity extends ActionActivity {
                     bitmap = BitmapFactory.decodeStream(stream,null,option);
 
                     stream.close();
-                    imgType = new TypedFile("multipart/form-data",new File(getRealPathFromURI(data.getData())));
+                    imgType = new TypedFile("multipart/form-data",new File(Util.getRealPathFromURI(getContentResolver(), data.getData())));
                     btnImage.setImageBitmap(bitmap);
 
                 }
@@ -440,41 +519,6 @@ public class RegisterActivity extends ActionActivity {
                 break;
 
         }
-    }
-
-    public String getPath(Context context, Uri uri) throws URISyntaxException {
-        if ("content".equalsIgnoreCase(uri.getScheme())) {
-            String[] projection = { "_data" };
-            Cursor cursor = null;
-
-            try {
-                cursor = context.getContentResolver().query(uri, projection, null, null, null);
-                int column_index = cursor.getColumnIndexOrThrow("_data");
-                if (cursor.moveToFirst()) {
-                    return cursor.getString(column_index);
-                }
-            } catch (Exception e) {
-                // Eat it
-            }
-        }
-        else if ("file".equalsIgnoreCase(uri.getScheme())) {
-            return uri.getPath();
-        }
-
-        return null;
-    }
-    private String getRealPathFromURI(Uri contentURI) {
-        String result;
-        Cursor cursor = getContentResolver().query(contentURI, null, null, null, null);
-        if (cursor == null) { // Source is Dropbox or other similar local file path
-            result = contentURI.getPath();
-        } else {
-            cursor.moveToFirst();
-            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-            result = cursor.getString(idx);
-            cursor.close();
-        }
-        return result;
     }
 
 }

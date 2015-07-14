@@ -63,7 +63,7 @@ public class CouponListFragment extends Fragment {
     };
 
     View mListTouchInterceptor;
-    UnfoldableView mUnfoldableView;
+    public static UnfoldableView mUnfoldableView;
     FrameLayout mDetailsLayout;
     View detailView;
     ScrollView detailScroll;
@@ -163,7 +163,7 @@ public class CouponListFragment extends Fragment {
                 mListTouchInterceptor.setClickable(true);
                 mDetailsLayout.setVisibility(View.VISIBLE);
                 Log.d(TAG,"unfolding");
-                ((CouponListActivity)context).setEnableBack(true);
+//                ((CouponListActivity)context).setEnableBack(true);
             }
 
             @Override
@@ -171,13 +171,14 @@ public class CouponListFragment extends Fragment {
                 Log.d(TAG,"unfolded");
                 mListTouchInterceptor.setClickable(false);
 //                ((DisableViewPager)MainActivity.mPager).enableTouch=false;
+
             }
 
             @Override
             public void onFoldingBack(UnfoldableView unfoldableView) {
                 mListTouchInterceptor.setClickable(true);
                 Log.d(TAG,"foldingback");
-                ((CouponListActivity)context).setEnableBack(false);
+//                ((CouponListActivity)context).setEnableBack(false);
             }
 
             @Override

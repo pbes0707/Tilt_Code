@@ -20,6 +20,8 @@ import android.widget.Toast;
 
 import com.alexvasilkov.foldablelayout.UnfoldableView;
 import com.squareup.picasso.Picasso;
+import com.tiltcode.tiltcodemanager.Activity.CouponListActivity;
+import com.tiltcode.tiltcodemanager.Fragment.CouponListFragment;
 import com.tiltcode.tiltcodemanager.Model.Coupon;
 import com.tiltcode.tiltcodemanager.R;
 import com.tiltcode.tiltcodemanager.Util;
@@ -128,6 +130,24 @@ public class CouponListAdapter extends BaseAdapter {
                     e.printStackTrace();
                     Log.e(TAG, "error : " + e.getMessage());
                 }
+
+
+                ((Button)mDetailsLayout.findViewById(R.id.btn_couponitem_anaylize)).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        CouponListFragment.coupon = arrayList.get(i);
+                        ((CouponListActivity) CouponListActivity.context).setPage(2);
+                    }
+                });
+
+
+                ((Button)mDetailsLayout.findViewById(R.id.btn_couponitem_edit)).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        CouponListFragment.coupon = arrayList.get(i);
+                        ((CouponListActivity) CouponListActivity.context).setPage(3);
+                    }
+                });
 
 
                 /*

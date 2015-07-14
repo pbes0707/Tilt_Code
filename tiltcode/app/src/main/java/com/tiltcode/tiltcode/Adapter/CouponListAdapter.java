@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Scanner;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -90,66 +91,83 @@ public class CouponListAdapter extends BaseAdapter {
         if(v==null) {
             v = inflater.inflate(R.layout.item_coupon_row, null);
         }
-        else {
 
-            final ImageView imv = (ImageView)v.findViewById(R.id.img_coupon_row);
-            TextView tv = (TextView)v.findViewById(R.id.tv_coupon_row);
+        final ImageView imv = (ImageView)v.findViewById(R.id.img_coupon_row);
+        TextView tv = (TextView)v.findViewById(R.id.tv_coupon_row);
 
-            Log.d(TAG,"i : "+i+" id : "+couponList.get(i).id);
+        Log.d(TAG,"i : "+i+" id : "+couponList.get(i).id);
 
-            Picasso.with(context).load(context.getResources().getText(R.string.API_SERVER)+":40002/couponGetImage?id="
-                    +couponList.get(i).id+"."+couponList.get(i).imageEx).resize(400,400).centerCrop().into(imv);
-    //        imageLoader.displayImage(context.getResources().getText(R.string.API_SERVER)+":40002/couponGetImage?id="
-    //                +couponList.get(i).id+"."+couponList.get(i).imageEx,imv,options);
-            tv.setText(couponList.get(i).title);
+        Picasso.with(context).load(context.getResources().getText(R.string.API_SERVER)+":40002/couponGetImage?id="
+                +couponList.get(i).id+"."+couponList.get(i).imageEx).resize(400,400).centerCrop().into(imv);
+//        imageLoader.displayImage(context.getResources().getText(R.string.API_SERVER)+":40002/couponGetImage?id="
+//                +couponList.get(i).id+"."+couponList.get(i).imageEx,imv,options);
+        tv.setText(couponList.get(i).title);
 
 
-            ((LinearLayout)v.findViewById(R.id.layout_coupon_detail)).setOnClickListener(new View.OnClickListener(){
+        ((LinearLayout)v.findViewById(R.id.layout_coupon_detail)).setOnClickListener(new View.OnClickListener(){
 
-                @Override
-                public void onClick(View view) {
-                    mUnfoldableView.unfold(view, mDetailsLayout);
+            @Override
+            public void onClick(View view) {
+                mUnfoldableView.unfold(view, mDetailsLayout);
 
-                    ImageView couponDetail = ((ImageView) mDetailsLayout.findViewById(R.id.img_coupon_detail));
-                    couponDetail.setImageDrawable(imv.getDrawable());
+                ImageView couponDetail = ((ImageView) mDetailsLayout.findViewById(R.id.img_coupon_detail));
+                couponDetail.setImageDrawable(imv.getDrawable());
 
-                    final TextView couponCreate = ((TextView)mDetailsLayout.findViewById(R.id.tv_coupon_detail_create));
-                    TextView couponTitle = ((TextView)mDetailsLayout.findViewById(R.id.tv_coupon_detail_title));
-                    TextView couponDesc = ((TextView)mDetailsLayout.findViewById(R.id.tv_coupon_detail_desc));
+                final TextView couponCreate = ((TextView)mDetailsLayout.findViewById(R.id.tv_coupon_detail_create));
+                TextView couponTitle = ((TextView)mDetailsLayout.findViewById(R.id.tv_coupon_detail_title));
+                TextView couponDesc = ((TextView)mDetailsLayout.findViewById(R.id.tv_coupon_detail_desc));
 
-                    couponCreate.setText(couponList.get(i).create);
-                    couponTitle.setText(couponList.get(i).title);
-                    couponDesc.setText(couponList.get(i).desc);
+                couponCreate.setText(couponList.get(i).create);
+                couponTitle.setText(couponList.get(i).title);
+                couponDesc.setText(couponList.get(i).desc);
 
-                    Geocoder geocoder = new Geocoder(context, Locale.getDefault());
-                    Address address;
-                    String result = null;
-                    List<Address> list = null;
+                Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+                Address address;
+                String result = null;
+                List<Address> list = null;
+                try {
+                    Log.d(TAG, "lat : " + couponList.get(i).lat+" lng : "+couponList.get(i).lng);
+                    list = geocoder.getFromLocation(Double.valueOf(couponList.get(i).lat),Double.valueOf(couponList.get(i).lng), 1);
+                    address = list.get(0);
+                    result = address.getAddressLine(0) + ", " + address.getLocality();
+
+                    ((TextView) mDetailsLayout.findViewById(R.id.tv_coupon_detail_location)).setText(result);
+                    Log.d(TAG, "location : " + result);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.e(TAG, "error : " + e.getMessage());
+                }
+
+
+                File pdfFile = new File(Environment.getExternalStorageDirectory() + "/Download/" + couponList.get(i).tilt + "." + couponList.get(i).fileEx);
+                if(pdfFile.exists()){
+                    ((Button)mDetailsLayout.findViewById(R.id.btn_couponitem_proc)).setText("열기");
                     try {
-                        Log.d(TAG, "lat : " + couponList.get(i).lat+" lng : "+couponList.get(i).lng);
-                        list = geocoder.getFromLocation(Double.valueOf(couponList.get(i).lat),Double.valueOf(couponList.get(i).lng), 1);
-                        address = list.get(0);
-                        result = address.getAddressLine(0) + ", " + address.getLocality();
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.fromFile(pdfFile));
+                        intent.addCategory(Intent.CATEGORY_BROWSABLE);
+                        context.startActivity(intent);
 
-                        ((TextView) mDetailsLayout.findViewById(R.id.tv_coupon_detail_location)).setText(result);
-                        Log.d(TAG, "location : " + result);
                     } catch (Exception e) {
-                        e.printStackTrace();
-                        Log.e(TAG, "error : " + e.getMessage());
+                        Toast.makeText(context,"파일을 열수 없습니다. "+e.getMessage(),Toast.LENGTH_LONG).show();
                     }
+                }
 
-                    ((Button)mDetailsLayout.findViewById(R.id.btn_couponitem_proc)).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
+                ((Button)mDetailsLayout.findViewById(R.id.btn_couponitem_proc)).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
 
-                            if(couponList.get(i).type.equals("file")|couponList.get(i).type.equals("image")) {
+                        if(((Button)view).getText().toString().equals("열기")){
+
+                        }
+                        else {
+                            if (couponList.get(i).type.equals("file") | couponList.get(i).type.equals("image")) {
 
                                 new Thread(new Runnable() {
                                     @Override
                                     public void run() {
                                         Util.getEndPoint().setPort("40002");
                                         retrofit.client.Response response = Util.getHttpSerivce().getFile(Util.getAccessToken().getToken(), couponList.get(i).id + "." + couponList.get(i).fileEx);
-    //                                        byte[] bytes = FileHelper.getBytesFromStream(response.getBody().in());
+//                                        byte[] bytes = FileHelper.getBytesFromStream(response.getBody().in());
 
                                         try {
 
@@ -157,8 +175,8 @@ public class CouponListAdapter extends BaseAdapter {
 
                                             byte[] fileBytes = streamToBytes(stream);
 
-                                            File pdfFile = new File(Environment.getExternalStorageDirectory() + "/Downloads/" + couponList.get(i).id + "." + couponList.get(i).fileEx);
-                                            File filePath = new File(Environment.getExternalStorageDirectory() + "/Downloads/");
+                                            File pdfFile = new File(Environment.getExternalStorageDirectory() + "/Download/" + couponList.get(i).tilt + "." + couponList.get(i).fileEx);
+                                            File filePath = new File(Environment.getExternalStorageDirectory() + "/Download/");
                                             filePath.mkdir();
                                             Log.d(TAG, "file : " + pdfFile.getAbsolutePath() + " name : " + pdfFile.getName() + " size : " + fileBytes.length);
 
@@ -167,7 +185,7 @@ public class CouponListAdapter extends BaseAdapter {
                                             output.write(fileBytes);
                                             output.flush();
                                             output.close();
-    //                                            org.apache.commons.io.IOUtils.write(fileBytes, output);
+//                                            org.apache.commons.io.IOUtils.write(fileBytes, output);
                                         } catch (Exception e) {
                                             e.printStackTrace();
                                             Log.e(TAG, "error : " + e.getMessage());
@@ -184,24 +202,25 @@ public class CouponListAdapter extends BaseAdapter {
                                             public void run() {
 
                                                 Toast.makeText(context, context.getResources().getText(R.string.message_download_coupon_success), Toast.LENGTH_LONG).show();
+
+                                                ((Button)mDetailsLayout.findViewById(R.id.btn_couponitem_proc)).setText("열기");
                                             }
                                         });
                                     }
                                 }).start();
-                            }
-                            else if(couponList.get(i).type.equals("link")){
+                            } else if (couponList.get(i).type.equals("link")) {
                                 String url = couponList.get(i).desc;
                                 Intent i = new Intent(Intent.ACTION_VIEW);
                                 i.setData(Uri.parse(url));
                                 context.startActivity(i);
                             }
-
                         }
-                    });
+                    }
+                });
 
-                }
-            });
-        }
+            }
+        });
+
 
         return v;
 
