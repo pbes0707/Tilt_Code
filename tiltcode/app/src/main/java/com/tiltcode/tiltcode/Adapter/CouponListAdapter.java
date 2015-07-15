@@ -154,8 +154,13 @@ public class CouponListAdapter extends BaseAdapter {
                 ((Button)mDetailsLayout.findViewById(R.id.btn_couponitem_proc)).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
-                        if(((Button)view).getText().toString().equals("열기")){
+                        if (couponList.get(i).type.equals("link")) {
+                            String url = couponList.get(i).desc;
+                            Intent i = new Intent(Intent.ACTION_VIEW);
+                            i.setData(Uri.parse(url));
+                            context.startActivity(i);
+                        }
+                        else if(((Button)view).getText().toString().equals("열기")){
                             File pdfFile = new File(Environment.getExternalStorageDirectory() + "/Download/" + setFilePath(couponList.get(i).title) + "." + couponList.get(i).fileEx);
 
                             try {
@@ -228,11 +233,6 @@ public class CouponListAdapter extends BaseAdapter {
                                         });
                                     }
                                 }).start();
-                            } else if (couponList.get(i).type.equals("link")) {
-                                String url = couponList.get(i).desc;
-                                Intent i = new Intent(Intent.ACTION_VIEW);
-                                i.setData(Uri.parse(url));
-                                context.startActivity(i);
                             }
                         }
                     }

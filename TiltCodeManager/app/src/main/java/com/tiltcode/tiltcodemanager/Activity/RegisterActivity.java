@@ -371,6 +371,10 @@ public class RegisterActivity extends ActionActivity {
 
                         Log.d(TAG, "register success / code : " + loginResult.code);
                         if (loginResult.code.equals("1")) { //성공
+                         Toast.makeText(getBaseContext(),getResources().getString(R.string.message_success_register),Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(RegisterActivity.this, CouponListActivity.class);
+                            startActivity(intent);
+                            finish();
                         } else if (loginResult.code.equals("-1")) { //누락된게있음
                             Toast.makeText(getBaseContext(), getResources().getText(R.string.message_not_enough_data), Toast.LENGTH_LONG).show();
                         } else if (loginResult.code.equals("-2")) { //링크가 빠짐

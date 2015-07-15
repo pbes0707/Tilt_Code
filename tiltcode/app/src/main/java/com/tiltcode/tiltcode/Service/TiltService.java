@@ -4,6 +4,7 @@ package com.tiltcode.tiltcode.Service;
  * Created by Secret on 2015. 6. 16..
  */
 import android.app.ActivityManager;
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -49,6 +50,8 @@ public class TiltService extends Service implements SensorEventListener {
 
     private final String LOG_NAME = TiltService.class.getSimpleName();
 
+    private static final int REBOOT_DELAY_TIMER = 10 * 1000;
+
     public static Thread mThread;
     private static int dt = 0, searchdt = 0, count = 0;
     private static boolean checkFlag = false;
@@ -87,6 +90,8 @@ public class TiltService extends Service implements SensorEventListener {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        unRegister();
 
         /*
         tilt
@@ -144,6 +149,30 @@ public class TiltService extends Service implements SensorEventListener {
             Log.d(LOG_NAME, "gps provider does not exist " + ex.getMessage());
         }
     }
+    private void register() {
+
+        Log.d("PersistentService", "registerRestartAlarm()");
+
+        Intent intent = new Intent(TiltService.this, RestartService.class);
+        intent.setAction(RestartService.ACTION_RESTART_PERSISTENTSERVICE);
+        PendingIntent sender = PendingIntent.getBroadcast(TiltService.this, 0, intent, 0);
+
+        long firstTime = SystemClock.elapsedRealtime();
+        firstTime += REBOOT_DELAY_TIMER; // 10초 후에 알람이벤트 발생
+
+        AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+        am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, firstTime,REBOOT_DELAY_TIMER, sender);
+    }
+
+    void unRegister(){
+        Log.d("PersistentService", "unregisterRestartAlarm()");
+        Intent intent = new Intent(TiltService.this, RestartService.class);
+        intent.setAction(RestartService.ACTION_RESTART_PERSISTENTSERVICE);
+        PendingIntent sender = PendingIntent.getBroadcast(TiltService.this, 0, intent, 0);
+
+        AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+        am.cancel(sender);
+    }
 
     //GPS서비스
     private void initializeLocationManager() {
@@ -157,6 +186,7 @@ public class TiltService extends Service implements SensorEventListener {
     public void onDestroy() {
         serviceRunning = false;
         mSensorManager.unregisterListener(this);
+        register();
         super.onDestroy();
 //        ServiceMonitor.getInstance().startMonitoring(conte);
     }
@@ -240,7 +270,6 @@ public class TiltService extends Service implements SensorEventListener {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-
         Log.d(LOG_NAME,"onStartCommand onoff : "+Util.getBoolean("serviceonoff", true));
 
         if (mThread == null) {
@@ -249,9 +278,9 @@ public class TiltService extends Service implements SensorEventListener {
                 public void run() {
                     while (serviceRunning) {
                         SystemClock.sleep(30);
+
+                        //설정페이지에서 onoff조작가능
                         if(!Util.getBoolean("serviceonoff", true)) continue;
-
-
 
                         dt += 30;
                         if(dt%30==2){
