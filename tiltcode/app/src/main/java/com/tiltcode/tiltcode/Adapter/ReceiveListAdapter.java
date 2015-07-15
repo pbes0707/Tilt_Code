@@ -72,7 +72,7 @@ public class ReceiveListAdapter extends BaseAdapter {
             view = inflater.inflate(R.layout.item_couponreceive_row, null);
         }
 
-        else{((TextView)view.findViewById(R.id.tv_couponreceive_row)).setText(arrayList.get(i).title);
+        ((TextView)view.findViewById(R.id.tv_couponreceive_row)).setText(arrayList.get(i).title);
             ImageView imv = (ImageView)view.findViewById(R.id.img_couponreceive_row);
             Picasso.with(context).load(context.getResources().getText(R.string.API_SERVER)+":40002/couponGetImage?id="
                     +arrayList.get(i).id+"."+arrayList.get(i).imageEx).into(imv);
@@ -96,7 +96,7 @@ public class ReceiveListAdapter extends BaseAdapter {
                     }
                 }
             });
-        }
+
         return view;
     }
 

@@ -10,10 +10,11 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
+        android:persistent="true"
         android:allowBackup="true"
         android:name=".TiltCodeApplication"
         android:hardwareAccelerated="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         
@@ -71,6 +72,10 @@
         <activity android:name=".Activity.CouponReceiveActivity"
             android:screenOrientation="portrait"
             android:label="couponReceiveActivity">
+        </activity>
+        <activity android:name=".Activity.ServiceSettingActivity"
+            android:screenOrientation="portrait"
+            android:label="servicdsettingactivity">
         </activity>
 
         <activity android:name="com.facebook.FacebookActivity"

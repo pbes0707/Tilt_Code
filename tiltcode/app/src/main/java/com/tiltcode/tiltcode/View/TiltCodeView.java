@@ -28,6 +28,7 @@ public class TiltCodeView extends View {
     public float tiltX;
 
     Bitmap tiltImage;
+    Bitmap tiltpImage;
 
     Paint p;
 
@@ -51,7 +52,10 @@ public class TiltCodeView extends View {
 
     void init(){
 
-        if(tiltImage==null) tiltImage = BitmapFactory.decodeResource(getResources(), R.drawable.tilt);
+        if(tiltImage==null) {
+            tiltImage = BitmapFactory.decodeResource(getResources(), R.drawable.tilt);
+            tiltpImage = BitmapFactory.decodeResource(getResources(), R.drawable.tiltp);
+        }
 
         p = new Paint();
         p.setColor(Color.CYAN);
@@ -75,9 +79,14 @@ public class TiltCodeView extends View {
         float rTilt;
         rTilt = tiltX*(90f/10f);
         canvas.drawText(((int)tiltX*(90/10))+"°", width/2-100,400,p);
-        rTilt = ((int)(rTilt/5))*5;
+        rTilt = ((int)(rTilt/6))*6;
         canvas.rotate(rTilt,width/2,height/2);
-        canvas.drawBitmap(tiltImage,null, new Rect(width/2-250,height/2-450,width/2+250,height/2+450),null);
+        if(Math.abs(rTilt)>=40 && Math.abs(rTilt)<=50){
+            canvas.drawBitmap(tiltpImage,null, new Rect(width/2-250,height/2-450,width/2+250,height/2+450),null);
+        }
+        else {
+            canvas.drawBitmap(tiltImage, null, new Rect(width / 2 - 250, height / 2 - 450, width / 2 + 250, height / 2 + 450), null);
+        }
         //super.onDraw(canvas);
         invalidate();
     }

@@ -85,8 +85,7 @@ public class TiltService extends Service implements SensorEventListener {
     private boolean serviceRunning = false;
 
     @Override
-    public void onCreate()
-    {
+    public void onCreate() {
         super.onCreate();
 
         /*
@@ -97,13 +96,15 @@ public class TiltService extends Service implements SensorEventListener {
 
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                 | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        notification.flags  |= Notification.FLAG_NO_CLEAR;
+        notification.priority = Notification.PRIORITY_MIN;
 
         PendingIntent intent = PendingIntent.getActivity(getApplicationContext(), 0,
                 notificationIntent, 0);
 
 //        notification.setLatestEventInfo(context, title, message, intent);
         notification.setLatestEventInfo(getApplicationContext(), "Tilt Service", "Foreground로 실행됨", intent);
-        startForeground(1, notification);
+//        startForeground(1, notification);
 
         mActivityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 
@@ -240,7 +241,7 @@ public class TiltService extends Service implements SensorEventListener {
     public int onStartCommand(Intent intent, int flags, int startId) {
 
 
-        Log.d(LOG_NAME,"onStartCommand");
+        Log.d(LOG_NAME,"onStartCommand onoff : "+Util.getBoolean("serviceonoff", true));
 
         if (mThread == null) {
             mThread = new Thread(new Runnable() {
@@ -248,6 +249,9 @@ public class TiltService extends Service implements SensorEventListener {
                 public void run() {
                     while (serviceRunning) {
                         SystemClock.sleep(30);
+                        if(!Util.getBoolean("serviceonoff", true)) continue;
+
+
 
                         dt += 30;
                         if(dt%30==2){

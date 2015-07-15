@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -135,21 +136,19 @@ public class CouponListAdapter extends BaseAdapter {
                     Log.d(TAG, "location : " + result);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Log.e(TAG, "error : " + e.getMessage());
+                    Log.e(TAG, "locale error : " + e.getMessage());
                 }
 
 
-                File pdfFile = new File(Environment.getExternalStorageDirectory() + "/Download/" + couponList.get(i).tilt + "." + couponList.get(i).fileEx);
+                File pdfFile = new File(Environment.getExternalStorageDirectory() + "/Download/" + setFilePath(couponList.get(i).title) + "." + couponList.get(i).fileEx);
                 if(pdfFile.exists()){
                     ((Button)mDetailsLayout.findViewById(R.id.btn_couponitem_proc)).setText("열기");
-                    try {
-                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.fromFile(pdfFile));
-                        intent.addCategory(Intent.CATEGORY_BROWSABLE);
-                        context.startActivity(intent);
+                    ((TextView)mDetailsLayout.findViewById(R.id.tv_coupon_detail_file)).setText("/Download/"+setFilePath(couponList.get(i).title)+"."+couponList.get(i).fileEx);
 
-                    } catch (Exception e) {
-                        Toast.makeText(context,"파일을 열수 없습니다. "+e.getMessage(),Toast.LENGTH_LONG).show();
-                    }
+                }
+                else{
+                    ((Button)mDetailsLayout.findViewById(R.id.btn_couponitem_proc)).setText("쿠폰 다운로드");
+                    ((TextView)mDetailsLayout.findViewById(R.id.tv_coupon_detail_file)).setText("");
                 }
 
                 ((Button)mDetailsLayout.findViewById(R.id.btn_couponitem_proc)).setOnClickListener(new View.OnClickListener() {
@@ -157,7 +156,27 @@ public class CouponListAdapter extends BaseAdapter {
                     public void onClick(View view) {
 
                         if(((Button)view).getText().toString().equals("열기")){
+                            File pdfFile = new File(Environment.getExternalStorageDirectory() + "/Download/" + setFilePath(couponList.get(i).title) + "." + couponList.get(i).fileEx);
 
+                            try {
+/*                                Intent myIntent = new Intent(Intent.ACTION_VIEW);
+                                myIntent.setData(Uri.fromFile(pdfFile));
+                                Intent j = Intent.createChooser(myIntent, "이 파일을 열 어플리케이션을 선택해주세요.");
+                                context.startActivity(j);
+                                /**/
+                                /*
+                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.fromFile(pdfFile));
+                                intent.addCategory(Intent.CATEGORY_BROWSABLE);
+                                context.startActivity(intent);*/
+
+                                Intent intent = new Intent();
+                                intent.setAction(android.content.Intent.ACTION_VIEW);
+                                intent.setDataAndType(Uri.fromFile(pdfFile),getMimeType(pdfFile.getAbsolutePath()));
+                                context.startActivity(intent);
+
+                            } catch (Exception e) {
+                                Toast.makeText(context,"파일을 열수 없습니다. "+e.getMessage(),Toast.LENGTH_LONG).show();
+                            }
                         }
                         else {
                             if (couponList.get(i).type.equals("file") | couponList.get(i).type.equals("image")) {
@@ -169,13 +188,14 @@ public class CouponListAdapter extends BaseAdapter {
                                         retrofit.client.Response response = Util.getHttpSerivce().getFile(Util.getAccessToken().getToken(), couponList.get(i).id + "." + couponList.get(i).fileEx);
 //                                        byte[] bytes = FileHelper.getBytesFromStream(response.getBody().in());
 
+
                                         try {
 
                                             InputStream stream = (response.getBody().in());
 
                                             byte[] fileBytes = streamToBytes(stream);
 
-                                            File pdfFile = new File(Environment.getExternalStorageDirectory() + "/Download/" + couponList.get(i).tilt + "." + couponList.get(i).fileEx);
+                                            File pdfFile = new File(Environment.getExternalStorageDirectory() + "/Download/" + setFilePath(couponList.get(i).title) + "." + couponList.get(i).fileEx);
                                             File filePath = new File(Environment.getExternalStorageDirectory() + "/Download/");
                                             filePath.mkdir();
                                             Log.d(TAG, "file : " + pdfFile.getAbsolutePath() + " name : " + pdfFile.getName() + " size : " + fileBytes.length);
@@ -188,7 +208,7 @@ public class CouponListAdapter extends BaseAdapter {
 //                                            org.apache.commons.io.IOUtils.write(fileBytes, output);
                                         } catch (Exception e) {
                                             e.printStackTrace();
-                                            Log.e(TAG, "error : " + e.getMessage());
+                                            Log.e(TAG, "file error : " + e.getMessage());
                                             ((Activity) context).runOnUiThread(new Runnable() {
                                                 @Override
                                                 public void run() {
@@ -224,6 +244,22 @@ public class CouponListAdapter extends BaseAdapter {
 
         return v;
 
+    }
+
+    public String setFilePath(String title){
+        return title.replace(' ','_');
+    }
+
+    private String getMimeType(String url)
+    {
+        String parts[]=url.split("\\.");
+        String extension=parts[parts.length-1];
+        String type = null;
+        if (extension != null) {
+            MimeTypeMap mime = MimeTypeMap.getSingleton();
+            type = mime.getMimeTypeFromExtension(extension);
+        }
+        return type;
     }
 
     byte[] streamToBytes(InputStream stream) throws IOException {
