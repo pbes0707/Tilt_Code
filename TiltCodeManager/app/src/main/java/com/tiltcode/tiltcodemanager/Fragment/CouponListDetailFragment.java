@@ -87,6 +87,7 @@ public class CouponListDetailFragment extends Fragment {
         return v;
     }
 
+    //최댓값 구함
     int getMax(int[] arr){
         int max = -1;
         for(int i=0;i<arr.length;i++){
@@ -95,6 +96,7 @@ public class CouponListDetailFragment extends Fragment {
         return max;
     }
 
+    //그래프에서 최대값을 기준으로 정규화함
     int getLinear(int value){
         return ((value+15)/10)*10;
     }
@@ -104,6 +106,7 @@ public class CouponListDetailFragment extends Fragment {
         tvTitle.setText(coupon.title);
         tvEarn.setText(coupon.desc);
 
+        //쿠폰의 통계정보를 받아옴
         Util.getEndPoint().setPort("40004");
         Util.getHttpSerivce().getCouponAnalytics(Util.getAccessToken().getToken(),
                 coupon.id,
@@ -155,14 +158,12 @@ public class CouponListDetailFragment extends Fragment {
                                 lineSet.addPoint(point);
 
 
-
                             }
                             lineSet.setLineColor(Color.CYAN);
 
                             ageChart.addData(lineSet);
                             max = getMax(analyticResult.data.age);
                             ageChart.setBorderSpacing(50)
-//                .setGrid(LineChartView.GridType.HORIZONTAL, mLineGridPaint)
                                     .setXAxis(true)
                                     .setXLabels(XController.LabelPosition.OUTSIDE)
                                     .setYAxis(true)

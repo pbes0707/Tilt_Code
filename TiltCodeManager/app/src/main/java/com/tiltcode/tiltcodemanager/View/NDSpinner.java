@@ -9,6 +9,10 @@ import android.widget.Spinner;
  */
 public class NDSpinner extends Spinner {
 
+    /*
+    item 선택후 재선택시 호출이 안되는 버그때문에 만듬
+     */
+
     OnItemSelectedListener listener;
 
     public NDSpinner(Context context) {
@@ -33,6 +37,7 @@ public class NDSpinner extends Spinner {
     }
 
 
+    // 이부분이 재선택시 listener를 다시 호출해주는부분
     @Override
     public void setSelection(int position)
     {

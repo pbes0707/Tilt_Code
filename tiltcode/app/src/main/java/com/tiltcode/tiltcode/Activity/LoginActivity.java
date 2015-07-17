@@ -327,7 +327,8 @@ public class LoginActivity extends Activity {
         dialog.show();
 
         Util.getEndPoint().setPort("40001");
-        Util.getHttpSerivce().login(id, pw
+        Util.getHttpSerivce().login(Util.encrypt(id),
+                Util.encrypt(pw)
                 , new Callback<com.tiltcode.tiltcode.Model.LoginResult>() {
             @Override
             public void success(com.tiltcode.tiltcode.Model.LoginResult loginResult, Response response) {

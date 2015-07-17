@@ -48,12 +48,17 @@ public class CouponListFragment extends Fragment {
 
     ProgressDialog dialog;
 
+    //모든 쿠폰리스트와 선택된 coupon
     public ArrayList<Coupon> couponList;
     public static Coupon coupon;
 
     ListView listView;
     CouponListAdapter adapter ;
 
+    /*
+    ViewPager와 mDetailLayout의 ScrollView와 unFoldableLayout에서
+    터치가 겹쳐서 아래와같은 방법으로 intercept해서 해결
+     */
     public static View.OnTouchListener interceptTouch = new View.OnTouchListener(){
 
         @Override
@@ -119,6 +124,7 @@ public class CouponListFragment extends Fragment {
         });*/
 
 
+        //쿠폰 목록 불러옴
         Util.getEndPoint().setPort("40002");
         Util.getHttpSerivce().couponGet(Util.getAccessToken().getToken(),
                 new Callback<CouponResult>() {
@@ -157,49 +163,42 @@ public class CouponListFragment extends Fragment {
 
         mDetailsLayout.setVisibility(View.INVISIBLE);
 
+        // foldablelayout의 상태가 변할때마다 각각 맞게 처리함
         mUnfoldableView.setOnFoldingListener(new UnfoldableView.SimpleFoldingListener() {
             @Override
             public void onUnfolding(UnfoldableView unfoldableView) {
                 mListTouchInterceptor.setClickable(true);
                 mDetailsLayout.setVisibility(View.VISIBLE);
                 Log.d(TAG,"unfolding");
-//                ((CouponListActivity)context).setEnableBack(true);
             }
 
             @Override
             public void onUnfolded(UnfoldableView unfoldableView) {
                 Log.d(TAG,"unfolded");
                 mListTouchInterceptor.setClickable(false);
-//                ((DisableViewPager)MainActivity.mPager).enableTouch=false;
-
             }
 
             @Override
             public void onFoldingBack(UnfoldableView unfoldableView) {
                 mListTouchInterceptor.setClickable(true);
                 Log.d(TAG,"foldingback");
-//                ((CouponListActivity)context).setEnableBack(false);
-            }
+           }
 
             @Override
             public void onFoldedBack(UnfoldableView unfoldableView) {
                 Log.d(TAG,"foldedback");
                 mListTouchInterceptor.setClickable(false);
                 mDetailsLayout.setVisibility(View.INVISIBLE);
-//                ((DisableViewPager)MainActivity.mPager).enableTouch=true;
             }
 
             @Override
             public void onFoldProgress(UnfoldableView unfoldableView, float progress) {
                 super.onFoldProgress(unfoldableView, progress);
-//                Log.d(TAG,"progress : "+progress + " / height : "+(int) ((float)layout_main_tab_height * progress) + "rheight : "+MainActivity.layout_main_tab.getHeight());
-
-//                MainActivity.layout_main_tab.animate().translationY(progress*layout_main_tab_height).start();
-//                MainActivity.layout_main_tab.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, (int) ((float)layout_main_tab_height * (1-progress))));
             }
         });
 
 
+        //mDetailView의 scrollview와 unfoldablelayout터치문제 인터셉트
         detailScroll.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -247,7 +246,7 @@ public class CouponListFragment extends Fragment {
 
     }
 
-
+    //터치관련 정보
     boolean lastPressed;
     ArrayList<Integer> touchList = new ArrayList<>();
 }

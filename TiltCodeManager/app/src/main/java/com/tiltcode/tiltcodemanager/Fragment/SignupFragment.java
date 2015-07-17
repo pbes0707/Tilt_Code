@@ -46,7 +46,6 @@ public class SignupFragment  extends Fragment {
     EditText edt_pw;
     EditText edt_pw_confirm;
     EditText edt_name;
-//    EditText edt_sex;
     EditText edt_birth;
     EditText edt_phone;
     EditText edt_company;
@@ -74,7 +73,6 @@ public class SignupFragment  extends Fragment {
             edt_pw = ((EditText)v.findViewById(R.id.edt_signup_pw));
             edt_pw_confirm = ((EditText)v.findViewById(R.id.edt_signup_pw_confirm));
             edt_name = ((EditText)v.findViewById(R.id.edt_signup_name));
-//            edt_sex = ((EditText)v.findViewById(R.id.edt_signup_sex));
             edt_birth = ((EditText)v.findViewById(R.id.edt_signup_birthday));
             edt_phone = ((EditText)v.findViewById(R.id.edt_signup_phone));
             radio_sex = ((RadioGroup)v.findViewById(R.id.radiogroup_signup_sex));
@@ -89,6 +87,7 @@ public class SignupFragment  extends Fragment {
 
     void init() {
 
+        //성별선택
         radio_sex.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
@@ -99,6 +98,7 @@ public class SignupFragment  extends Fragment {
             @Override
             public void onClick(View view) {
 
+                //빈칸이 있으면 취소
                 if(!checkForm()) return;
 
                 dialog = new ProgressDialog(context);
@@ -108,7 +108,8 @@ public class SignupFragment  extends Fragment {
 
                 Util.getEndPoint().setPort("40001");
                 try {
-                    Util.getHttpSerivce().signUpManager(getUserId(), getUserPw(), getName(), getBirthday(), getSex(), getPhone(), getCompany(),
+                    //회원가입 요청
+                    Util.getHttpSerivce().signUpManager(Util.encrypt(getUserId()), Util.encrypt(getUserPw()), getName(), getBirthday(), getSex(), getPhone(), getCompany(),
                             new Callback<LoginResult>() {
                                 @Override
                                 public void success(LoginResult loginResult, Response response) {
@@ -149,7 +150,7 @@ public class SignupFragment  extends Fragment {
 
                                 @Override
                                 public void failure(RetrofitError error) {
-
+                                    //서버 내부 에러가 아닌 요청오류
                                     Log.e(TAG, "signup failure : " + error.getMessage());
                                     Toast.makeText(context, getResources().getText(R.string.message_network_error), Toast.LENGTH_LONG).show();
 

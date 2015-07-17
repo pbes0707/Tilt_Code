@@ -12,6 +12,12 @@ import android.view.ViewPropertyAnimator;
  */
 public class DisableViewPager extends ViewPager {
 
+    /*
+    ViewPager 움직이는걸 막도록 ViewPager를 상속받아 만듦
+     */
+
+    //public
+    //public으로된 enableTouch를 바꿔주면 됩니다.
     public boolean enableTouch = true;
 
     public DisableViewPager(Context context) {

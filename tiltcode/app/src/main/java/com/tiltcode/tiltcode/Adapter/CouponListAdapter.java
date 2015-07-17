@@ -118,7 +118,7 @@ public class CouponListAdapter extends BaseAdapter {
                 TextView couponTitle = ((TextView)mDetailsLayout.findViewById(R.id.tv_coupon_detail_title));
                 TextView couponDesc = ((TextView)mDetailsLayout.findViewById(R.id.tv_coupon_detail_desc));
 
-                couponCreate.setText(couponList.get(i).create);
+                couponCreate.setText(Util.decrypt(couponList.get(i).create));
                 couponTitle.setText(couponList.get(i).title);
                 couponDesc.setText(couponList.get(i).desc);
 

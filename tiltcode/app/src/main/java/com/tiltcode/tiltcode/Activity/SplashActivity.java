@@ -6,9 +6,11 @@ import android.os.Bundle;
 
 import com.tiltcode.tiltcode.R;
 import com.tiltcode.tiltcode.Service.ServiceMonitor;
+import com.tiltcode.tiltcode.Util;
 
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 /**
  * Created by JSpiner on 2015. 6. 15..
@@ -44,6 +46,7 @@ public class SplashActivity extends Activity {
 
 
         handler.sendEmptyMessageDelayed(0,1500);
+
 
     }
 }

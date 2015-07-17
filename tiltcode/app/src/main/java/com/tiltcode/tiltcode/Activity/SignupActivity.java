@@ -118,7 +118,7 @@ public class SignupActivity extends FragmentActivity {
     boolean procSignup(final String id, final String pw,String name, String birthday, String sex, String uuid, String model){
 
         Util.getEndPoint().setPort("40001");
-        Util.getHttpSerivce().signUp(id, pw, name, birthday, sex, uuid, model
+        Util.getHttpSerivce().signUp(Util.encrypt(id),Util.encrypt(pw), name, birthday, sex, uuid, model
                 , new Callback<LoginResult>() {
 
             @Override

@@ -254,7 +254,7 @@ public class RegisterActivity extends ActionActivity {
             calendar.add(Calendar.MINUTE,30);
             String endT = format1.format(calendar.getTime());
 
-            ((TextView)findViewById(R.id.tv_register_gps_locale)).setText(dateTime+"  "+tiltHour+":"+tiltMinute+"~"+beginT+":"+endT);
+            ((TextView)findViewById(R.id.tv_register_gps_locale)).setText(dateTime+"  "+tiltHour+":"+tiltMinute+"~"+endT);
             ((TextView)findViewById(R.id.tv_register_gps_locale)).setVisibility(View.VISIBLE);
 
         }

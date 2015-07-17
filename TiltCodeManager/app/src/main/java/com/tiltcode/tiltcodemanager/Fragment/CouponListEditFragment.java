@@ -117,6 +117,7 @@ public class CouponListEditFragment extends Fragment {
             ((Button)v.findViewById(R.id.btn_register_tilt)).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    //tilt선택시 해당 activity로 result activity시작
                     Intent intent = new Intent(context, TiltSelectActivity.class);
                     startActivityForResult(intent,1126);
                 }
@@ -127,6 +128,8 @@ public class CouponListEditFragment extends Fragment {
         }
         return v;
     }
+
+    //timedialog 선택시 이벤트
     private TimePickerDialog.OnTimeSetListener timeSetListener = new TimePickerDialog.OnTimeSetListener() {
 
         @Override
@@ -145,12 +148,13 @@ public class CouponListEditFragment extends Fragment {
             calendar.add(Calendar.MINUTE,30);
             endT = format1.format(calendar.getTime());
 
-            gpsText.setText(dateTime + "  " + tiltHour + ":" + tiltMinute + "~" + beginT + ":" + endT);
+            gpsText.setText(dateTime + "  " + tiltHour + ":" + tiltMinute + "~" + endT);
             gpsText.setVisibility(View.VISIBLE);
 
         }
     };
 
+    //date선택시 이벤트
     private DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
 
         @Override
@@ -165,6 +169,9 @@ public class CouponListEditFragment extends Fragment {
 
     void init() {
 
+        /*
+        기존 쿠폰 정보를 불러옴
+         */
         switch (coupon.type){
             case "link":
                 couponType.setSelection(1);
@@ -187,6 +194,7 @@ public class CouponListEditFragment extends Fragment {
         }
 
 
+        //type 선택 리스너
         couponPickType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -195,11 +203,13 @@ public class CouponListEditFragment extends Fragment {
 
                 switch (i) {
                     case 1:
+                        //gps선택시 해당액티비티 실행
                         Intent intent = new Intent(context, GpsSelectActivity.class);
                         getActivity().startActivityForResult(intent, 1125);
 
                         break;
                     case 2:
+                        //시간 선택시 해당 액티비티 실행
                         Calendar calendar = Calendar.getInstance();
                         new DatePickerDialog(context, dateSetListener,calendar.get(Calendar.YEAR),
                                 calendar.get(Calendar.MONTH),
@@ -280,6 +290,7 @@ public class CouponListEditFragment extends Fragment {
         btnFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //파일선택 다이얼로그
                 Intent i = new Intent(context, FilePickerActivity.class);
                 // This works if you defined the intent filter
                 // Intent i = new Intent(Intent.ACTION_GET_CONTENT);
@@ -307,6 +318,7 @@ public class CouponListEditFragment extends Fragment {
         btnImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //이미지선택
                 Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 intent.setType("image/*");
                 getActivity().startActivityForResult(intent, 1124);
@@ -323,6 +335,7 @@ public class CouponListEditFragment extends Fragment {
                 dialog.setMessage("데이터를 불러오는중입니다..");
                 dialog.show();
 
+                //선택한 쿠폰등록타입에 맞게 요청을 실행
                 if(couponPickType.getSelectedItemPosition()==1){
                     updateGpsCoupon();
                 }
@@ -335,6 +348,7 @@ public class CouponListEditFragment extends Fragment {
     }
 
     void updateGpsCoupon(){
+        //gps타입의 쿠폰 수정
         Util.getEndPoint().setPort("40002");
         Util.getHttpSerivce().couponManageModifyGPS(Util.getAccessToken().getToken(),
                 coupon.id,
@@ -370,7 +384,7 @@ public class CouponListEditFragment extends Fragment {
     }
 
     void updateTimeCoupon(){
-
+        //시간형태의 쿠폰 수정
         Log.d(TAG,"beginT : "+beginT+" endT : "+endT);
         Log.d(TAG,"session : "+Util.getAccessToken().getToken()+" id : "+coupon.id);
         Util.getEndPoint().setPort("40002");

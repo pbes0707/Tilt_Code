@@ -1,13 +1,18 @@
 package com.tiltcode.tiltcode;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 
 import com.tiltcode.tiltcode.Model.HttpService;
 import com.tiltcode.tiltcode.Model.LoginToken;
 
-import org.apache.commons.codec.binary.Hex;
 
 import java.security.NoSuchAlgorithmException;
 
@@ -35,16 +40,28 @@ public class Util {
     //로그에 쓰일 tag
     public static final String TAG = Util.class.getSimpleName();
 
+    //context
     public static Context context;
 
+    //aes 암호 seed
+    private static String seed = "ZCXpveXjFTRA83Yh73hgACFq";
+
+    //설정값 및 각종 정보 저장용 sharedpreference
     private static SharedPreferences sharedPreferences;
     private static SharedPreferences.Editor editor;
 
+    //static으로된 token <- 이 변수로 모든 유저정보를 관리
     public static LoginToken accessToken;
 
+    //앱내에서 모든 http 통신은 httpservice로 동작
     private static HttpService httpService;
 
+    //http통신시 endPoint를 이 변수로 변경, ex) endPoint.setPort("80");
     public static FooEndPoint endPoint;
+    
+    /*
+    sharedpreference로 데이터 저장및 불러옴
+     */
 
     public static String getString(String key,String defValue){
         return getSharedPreferences().getString(key, defValue);
@@ -56,7 +73,7 @@ public class Util {
     }
 
     public static boolean getBoolean(String key, boolean defValue){
-        return getSharedPreferences().getBoolean(key,defValue);
+        return getSharedPreferences().getBoolean(key, defValue);
     }
 
     public static void putBoolean(String key, boolean value){
@@ -64,10 +81,23 @@ public class Util {
         getEditor().commit();
     }
 
+    public static int getInt(String key, int defValue){
+        return getSharedPreferences().getInt(key, defValue);
+    }
+
+    public static void putInt(String key, int value){
+        getEditor().putInt(key, value);
+        getEditor().commit();
+    }
+
+    /*
+    저장된 모든 데이터 삭제
+     */
     public static void destroyToken(){
         getEditor().clear().commit();
     }
 
+    //signleton sharedpreference
     private static SharedPreferences getSharedPreferences(){
         if(sharedPreferences==null){
             sharedPreferences = context.getSharedPreferences("tiltcode",Context.MODE_PRIVATE);
@@ -75,6 +105,7 @@ public class Util {
         return sharedPreferences;
     }
 
+    //singleton editor
     private static SharedPreferences.Editor getEditor(){
         if(editor==null){
             editor = getSharedPreferences().edit();
@@ -82,6 +113,8 @@ public class Util {
         return editor;
     }
 
+    //singleton LoginToken
+    //loginToken은 변경후 saveToken을 반드시 호출하여야한다.
     public static LoginToken getAccessToken(){
         if(accessToken==null){
             accessToken = new LoginToken();
@@ -89,6 +122,7 @@ public class Util {
         return accessToken;
     }
 
+    //HttpService의 EndPoint
     public static class FooEndPoint implements Endpoint {
         private static final String BASE = context.getResources().getString(R.string.API_SERVER);
 
@@ -109,15 +143,15 @@ public class Util {
         }
     }
 
+    //Singleton Endpoint
     public static FooEndPoint getEndPoint(){
         if(endPoint==null){
             endPoint = new FooEndPoint();
-
-
         }
         return endPoint;
     }
 
+    //Singleton HttpService
     public static HttpService getHttpSerivce() {
 
         if(httpService==null) {
@@ -132,41 +166,57 @@ public class Util {
     }
 
 
-
-    public static String encrypt192(String str){
+    /**
+     * Encrypts the text.
+     * @param clearText The text you want to encrypt
+     * @return Encrypted data if successful, or null if unsucessful
+     */
+    public static String encrypt(String clearText) {
+        byte[] encryptedText = null;
         try {
-
-            PBEKeySpec keySpec = new PBEKeySpec("1234".toCharArray());
-            SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("PBE");
-            Key secureKey = new SecretKeySpec("1234".getBytes(),"AES");
-            Cipher ciper = Cipher.getInstance("AES");
-            ciper.init(Cipher.ENCRYPT_MODE,secureKey);
-            byte[] encryptedData = ciper.doFinal("asdf".getBytes());
-
-
-
-            /*
-            KeyGenerator kg = KeyGenerator.getInstance("AES");
-            SecretKey sk;
-            kg.init(192);
-            sk = kg.generateKey("1234");*/
-//            Log.d(TAG, "AES 192 - "+Hex.encodeHex(sk.getEncoded()));
-
-            return encryptedData.toString();
-
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
+            byte[] keyData = seed.getBytes();
+            SecretKey ks = new SecretKeySpec(keyData, "AES");
+            Cipher c = Cipher.getInstance("AES");
+            c.init(Cipher.ENCRYPT_MODE, ks);
+            encryptedText = c.doFinal(clearText.getBytes("UTF-8"));
+            return Base64.encodeToString(encryptedText, Base64.DEFAULT);
+        } catch (Exception e) {
+            return null;
         }
+    }
 
-        return null;
+    /**
+     * Decrypts the text
+     * @param encryptedText The text you want to encrypt
+     * @return Decrypted data if successful, or null if unsucessful
+     */
+    public static String decrypt (String encryptedText) {
+        byte[] clearText = null;
+        try {
+            byte[] keyData = seed.getBytes();
+            SecretKey ks = new SecretKeySpec(keyData, "AES");
+            Cipher c = Cipher.getInstance("AES");
+            c.init(Cipher.DECRYPT_MODE, ks);
+            clearText = c.doFinal(Base64.decode(encryptedText, Base64.DEFAULT));
+            return new String(clearText, "UTF-8");
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    //getContentResolver -> contentResolver
+    public static String getRealPathFromURI(ContentResolver contentResolver, Uri contentURI) {
+        String result;
+        Cursor cursor = contentResolver.query(contentURI, null, null, null, null);
+        if (cursor == null) { // Source is Dropbox or other similar local file path
+            result = contentURI.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            result = cursor.getString(idx);
+            cursor.close();
+        }
+        return result;
     }
 
 }

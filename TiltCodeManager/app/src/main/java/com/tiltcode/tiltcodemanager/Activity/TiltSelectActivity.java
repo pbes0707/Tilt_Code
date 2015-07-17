@@ -33,11 +33,13 @@ public class TiltSelectActivity extends Activity {
     }
 
     void init(){
+        //pager 셋팅
         pager = (ViewPager)findViewById(R.id.pager_tiltselect);
         TiltSelectPagerAdapter adapter = new TiltSelectPagerAdapter(TiltSelectActivity.this);
         pager.setAdapter(adapter);
 
 
+        //선택된 tilt값을 result에 넣어서 리턴함
         ((LinearLayout)findViewById(R.id.layout_tiltselect_proc)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -28,10 +28,12 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+
 /**
  * Created by JSpiner on 2015. 6. 17..
  * Contact : jspiner@naver.com
  */
+
 public class SignupActivity extends FragmentActivity {
 
     //로그에 쓰일 tag
@@ -113,7 +115,7 @@ public class SignupActivity extends FragmentActivity {
     boolean procSignup(final String id, final String pw, final String name, final String birthday, final String sex, final String phone, String company){
 
         Util.getEndPoint().setPort("40001");
-        Util.getHttpSerivce().signUpManager(id, pw, name, birthday, sex, phone, company
+        Util.getHttpSerivce().signUpManager(Util.encrypt(id), Util.encrypt(pw), name, birthday, sex, phone, company
                 , new Callback<LoginResult>() {
 
             @Override

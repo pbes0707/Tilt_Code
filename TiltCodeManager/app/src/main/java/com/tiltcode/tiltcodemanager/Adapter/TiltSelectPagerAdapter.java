@@ -15,6 +15,7 @@ import com.tiltcode.tiltcodemanager.R;
  */
 public class TiltSelectPagerAdapter extends PagerAdapter {
 
+    //각도별 이미지 14개
     int[] resources = {R.drawable.tilt_1,R.drawable.tilt_2,R.drawable.tilt_3,R.drawable.tilt_4,R.drawable.tilt_5,R.drawable.tilt_6,R.drawable.tilt_7,R.drawable.tilt_8,R.drawable.tilt_9,R.drawable.tilt_10,R.drawable.tilt_11,R.drawable.tilt_12,R.drawable.tilt_13,R.drawable.tilt_14};
 
     private LayoutInflater mInflater;
@@ -32,6 +33,7 @@ public class TiltSelectPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(View pager, int position) {
         View v = null;
+        //각도별 이미지를 viewpager에 설정
         v = mInflater.inflate(R.layout.item_tiltselect_row, null);
         ImageView imv = ((ImageView)v.findViewById(R.id.imv_tiltselect_row));
 

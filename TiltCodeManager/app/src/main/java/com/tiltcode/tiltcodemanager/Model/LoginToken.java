@@ -119,6 +119,7 @@ public class LoginToken {
         return this;
     }
 
+    //token의 값은 수정후 반드시 saveToken이 호출되야한다.
     public void saveToken(){
         Util.putBoolean("isSkipedUser",isSkipedUser);
         Util.putString("token",token);
@@ -132,6 +133,8 @@ public class LoginToken {
         Util.putInt("point",point);
     }
 
+    //loadToken후 반드시 session valid검사해야함.
+    //내부에서 토큰이 없을시 false반환
     public boolean loadToken(){
 
         isSkipedUser = Util.getBoolean("isSkipedUser",false);
@@ -148,6 +151,7 @@ public class LoginToken {
         return token.length()>1?true:false;
     }
 
+    //token destroy
     public void destroyToken(){
         Util.destroyToken();
     }

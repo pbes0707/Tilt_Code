@@ -7,6 +7,10 @@ import android.app.Application;
  */
 public class TiltCodeApplication extends Application {
 
+    /*
+    app 실행시 처음 시작되는부분
+     */
+
     @Override
     public void onCreate() {
         super.onCreate();

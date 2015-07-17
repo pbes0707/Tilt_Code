@@ -109,7 +109,13 @@ public class SignupFragment  extends Fragment {
 
                 Util.getEndPoint().setPort("40001");
                 try {
-                    Util.getHttpSerivce().signUp(getUserId(), getUserPw(), getName(), getBirthday(), getSex(), uuid,model,
+                    Util.getHttpSerivce().signUp(Util.encrypt(getUserId()),
+                            Util.encrypt(getUserPw()),
+                            getName(),
+                            getBirthday(),
+                            getSex(),
+                            uuid,
+                            model,
                             new Callback<LoginResult>() {
                                 @Override
                                 public void success(LoginResult loginResult, Response response) {

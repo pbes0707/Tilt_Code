@@ -97,8 +97,8 @@ public class ChangePasswdActivity extends ActionActivity {
 
                 Util.getEndPoint().setPort("40001");
                 Util.getHttpSerivce().changePasswd(Util.getAccessToken().getToken(),
-                        edt_passwd_current.getText().toString(),
-                        edt_passwd.getText().toString(),
+                        Util.encrypt(edt_passwd_current.getText().toString()),
+                        Util.encrypt(edt_passwd.getText().toString()),
                         new Callback<LoginResult>() {
                             @Override
                             public void success(LoginResult loginResult, Response response) {

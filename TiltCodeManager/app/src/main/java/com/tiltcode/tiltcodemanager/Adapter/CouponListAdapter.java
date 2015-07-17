@@ -90,6 +90,8 @@ public class CouponListAdapter extends BaseAdapter {
 
         Log.d(TAG,"i : "+i+" id : "+arrayList.get(i).id);
 
+
+        //이미지를 불러옴 Picasso
         Picasso.with(context).load(context.getResources().getText(R.string.API_SERVER)+":40002/couponGetImage?id="
                 +arrayList.get(i).id+"."+arrayList.get(i).imageEx).resize(400,400).centerCrop().into(imv);
         //        imageLoader.displayImage(context.getResources().getText(R.string.API_SERVER)+":40002/couponGetImage?id="
@@ -97,6 +99,7 @@ public class CouponListAdapter extends BaseAdapter {
         tv.setText(arrayList.get(i).title);
 
 
+        //쿠폰 선택시 foldableview 설정
         ((LinearLayout)v.findViewById(R.id.layout_coupon_detail)).setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -110,10 +113,11 @@ public class CouponListAdapter extends BaseAdapter {
                 TextView couponTitle = ((TextView)mDetailsLayout.findViewById(R.id.tv_coupon_detail_title));
                 TextView couponDesc = ((TextView)mDetailsLayout.findViewById(R.id.tv_coupon_detail_desc));
 
-                couponCreate.setText(arrayList.get(i).create);
+                couponCreate.setText(Util.decrypt(arrayList.get(i).create));
                 couponTitle.setText(arrayList.get(i).title);
                 couponDesc.setText(arrayList.get(i).desc);
 
+                //gps 좌표를 기준으로 주소값을 가져옴
                 Geocoder geocoder = new Geocoder(context, Locale.getDefault());
                 Address address;
                 String result = null;
@@ -132,6 +136,7 @@ public class CouponListAdapter extends BaseAdapter {
                 }
 
 
+                //수정과 통계 선택시 해당 페이지로 이동
                 ((Button)mDetailsLayout.findViewById(R.id.btn_couponitem_anaylize)).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -140,7 +145,6 @@ public class CouponListAdapter extends BaseAdapter {
                     }
                 });
 
-
                 ((Button)mDetailsLayout.findViewById(R.id.btn_couponitem_edit)).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -148,69 +152,6 @@ public class CouponListAdapter extends BaseAdapter {
                         ((CouponListActivity) CouponListActivity.context).setPage(3);
                     }
                 });
-
-
-                /*
-                ((Button)mDetailsLayout.findViewById(R.id.btn_couponitem_proc)).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        if(arrayList.get(i).type.equals("file")|arrayList.get(i).type.equals("image")) {
-
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Util.getEndPoint().setPort("40002");
-                                    retrofit.client.Response response = Util.getHttpSerivce().getFile(Util.getAccessToken().getToken(), arrayList.get(i).id + "." + arrayList.get(i).fileEx);
-                                    //                                        byte[] bytes = FileHelper.getBytesFromStream(response.getBody().in());
-
-                                    try {
-
-                                        InputStream stream = (response.getBody().in());
-
-                                        byte[] fileBytes = streamToBytes(stream);
-
-                                        File pdfFile = new File(Environment.getExternalStorageDirectory() + "/Downloads/" + arrayList.get(i).id + "." + arrayList.get(i).fileEx);
-                                        File filePath = new File(Environment.getExternalStorageDirectory() + "/Downloads/");
-                                        filePath.mkdir();
-                                        Log.d(TAG, "file : " + pdfFile.getAbsolutePath() + " name : " + pdfFile.getName() + " size : " + fileBytes.length);
-
-                                        FileOutputStream output = null;
-                                        output = new FileOutputStream(pdfFile);
-                                        output.write(fileBytes);
-                                        output.flush();
-                                        output.close();
-                                        //                                            org.apache.commons.io.IOUtils.write(fileBytes, output);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                        Log.e(TAG, "error : " + e.getMessage());
-                                        ((Activity) context).runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                Toast.makeText(context, context.getResources().getText(R.string.message_download_coupon_fail), Toast.LENGTH_LONG).show();
-                                            }
-                                        });
-                                        return;
-                                    }
-                                    ((Activity) context).runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-
-                                            Toast.makeText(context, context.getResources().getText(R.string.message_download_coupon_success), Toast.LENGTH_LONG).show();
-                                        }
-                                    });
-                                }
-                            }).start();
-                        }
-                        else if(arrayList.get(i).type.equals("link")){
-                            String url = arrayList.get(i).desc;
-                            Intent i = new Intent(Intent.ACTION_VIEW);
-                            i.setData(Uri.parse(url));
-                            context.startActivity(i);
-                        }
-
-                    }
-                });*/
 
             }
         });

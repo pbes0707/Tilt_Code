@@ -17,6 +17,13 @@ import retrofit.mime.TypedFile;
  */
 public interface HttpService {
 
+
+    /*
+
+    모든 REST API들은 이곳에 기입됨.
+
+     */
+
     @FormUrlEncoded
     @POST("/signUp")
     void signUp(@Field("id") String id,
