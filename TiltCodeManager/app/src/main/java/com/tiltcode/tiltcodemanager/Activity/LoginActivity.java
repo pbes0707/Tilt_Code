@@ -111,6 +111,19 @@ public class LoginActivity extends Activity {
                                 GCMRegister reg = new GCMRegister(LoginActivity.this.getApplicationContext(), LoginActivity.this);
                                 reg.execute();
 
+                                /*
+                                Util.getAccessToken()
+                                        .setName(loginResult.info.name)
+                                        .setToken(loginResult.info.session)
+                                        .setUserId(loginResult.info.id)
+                                        .setPhone(loginResult.info.phone)
+                                        .setSex(loginResult.info.sex)
+                                        .setBirthday(loginResult.info.birth)
+                                        .setIsSkipedUser(false)
+                                        .setPoint(Integer.parseInt(loginResult.info.point))
+                                        .setLoginType(LoginToken.LoginType.TiltCode);
+                                Util.getAccessToken().saveToken();*/
+
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
                                 finish();

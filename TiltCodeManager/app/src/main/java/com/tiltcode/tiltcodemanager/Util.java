@@ -1,7 +1,12 @@
 package com.tiltcode.tiltcodemanager;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.util.Log;
 
 import com.tiltcode.tiltcodemanager.Model.HttpService;
@@ -175,6 +180,21 @@ public class Util {
         }
 
         return null;
+    }
+
+    //getContentResolver -> contentResolver
+    public static String getRealPathFromURI(ContentResolver contentResolver, Uri contentURI) {
+        String result;
+        Cursor cursor = contentResolver.query(contentURI, null, null, null, null);
+        if (cursor == null) { // Source is Dropbox or other similar local file path
+            result = contentURI.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            result = cursor.getString(idx);
+            cursor.close();
+        }
+        return result;
     }
 
 }

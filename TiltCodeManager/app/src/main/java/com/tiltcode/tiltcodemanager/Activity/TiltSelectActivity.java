@@ -42,7 +42,7 @@ public class TiltSelectActivity extends Activity {
             @Override
             public void onClick(View view) {
                 Intent resultIntent = new Intent();
-                resultIntent.putExtra("tiltValue", nowPage);
+                resultIntent.putExtra("tiltValue", (nowPage+1));
 
                 setResult(RESULT_OK, resultIntent);
                 finish();

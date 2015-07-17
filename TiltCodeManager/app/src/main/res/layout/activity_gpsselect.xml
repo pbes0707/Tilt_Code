@@ -3,51 +3,10 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <FrameLayout
+        android:id="@+id/ll_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center_horizontal">
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center">
-
-            <fragment
-                android:id="@+id/map"
-                android:name="com.google.android.gms.maps.SupportMapFragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-        </LinearLayout>
-
-
-        <TextView
-            android:layout_marginTop="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="15dp"
-            android:text=""
-            android:id="@+id/tv_gpsselect_locale"
-            android:layout_gravity="top|center_horizontal" />
-
-
-        <ImageView
-                android:src="@drawable/back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageView"
-                android:layout_gravity="center" />
-
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="좌표 선택"
-                android:layout_gravity="center_horizontal|bottom"
-                android:id="@+id/btn_gpsselect_proc" />
-
-    </FrameLayout>
-
+        android:orientation="vertical" />
 </LinearLayout>

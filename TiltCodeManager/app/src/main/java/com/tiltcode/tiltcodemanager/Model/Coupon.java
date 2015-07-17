@@ -49,5 +49,11 @@ public class Coupon {
     @SerializedName("active")
     public String active;
 
+    @SerializedName("beginT")
+    public String beginT;
+
+    @SerializedName("endT")
+    public String endT;
+
 
 }

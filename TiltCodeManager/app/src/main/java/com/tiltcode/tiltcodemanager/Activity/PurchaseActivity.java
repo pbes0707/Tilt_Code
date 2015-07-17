@@ -11,7 +11,9 @@ import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +21,7 @@ import com.android.vending.billing.IInAppBillingService;
 import com.tiltcode.tiltcodemanager.BillingUtil.IabHelper;
 import com.tiltcode.tiltcodemanager.BillingUtil.IabResult;
 import com.tiltcode.tiltcodemanager.BillingUtil.Purchase;
+import com.tiltcode.tiltcodemanager.Model.LoginResult;
 import com.tiltcode.tiltcodemanager.R;
 import com.tiltcode.tiltcodemanager.Util;
 import com.tiltcode.tiltcodemanager.View.ActionActivity;
@@ -27,13 +30,22 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+
 /**
  * Created by Secret on 2015. 6. 25..
  */
 public class PurchaseActivity extends ActionActivity implements OnClickListener {
 
+    //로그에 쓰일 tag
+    public static final String TAG = PurchaseActivity.class.getSimpleName();
+
     IInAppBillingService mService;
     IabHelper mHelper;
+
+    int selectedIndex = 0;
 
     ServiceConnection mServiceConn = new ServiceConnection() {
         @Override
@@ -63,11 +75,24 @@ public class PurchaseActivity extends ActionActivity implements OnClickListener 
         Button btn_purchase = (Button) findViewById(R.id.btn_purchase);
         btn_purchase.setOnClickListener(this);
 
-        ((TextView)findViewById(R.id.tv_purchase_nowmoney)).setText(Util.getAccessToken().getPoint());
-        ((TextView)findViewById(R.id.tv_purchase_summoney)).setText(Util.getAccessToken().getPoint());
+        Log.d(TAG,"point : "+Util.getAccessToken().getPoint());
 
+
+        ((TextView)findViewById(R.id.tv_purchase_summoney)).setText(Util.getAccessToken().getPoint()+"P");
+        ((TextView)findViewById(R.id.tv_purchase_nowmoney)).setText(Util.getAccessToken().getPoint()+"P");
+
+        ((Spinner)findViewById(R.id.spinner_purchase_money)).setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                selectedIndex = i;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
-
 
     private void helperInit()
     {
@@ -151,6 +176,32 @@ public class PurchaseActivity extends ActionActivity implements OnClickListener 
             if(result.isSuccess())
             {
                 AlreadyPurchaseItems();
+
+                Util.getEndPoint().setPort("40001");
+                Util.getHttpSerivce().pointCharge(Util.getAccessToken().getToken(),
+                        String.valueOf(selectedIndex),
+                        new Callback<LoginResult>() {
+                            @Override
+                            public void success(LoginResult loginResult, Response response) {
+                                if (loginResult.code.equals("1")) {
+                                    Toast.makeText(getBaseContext(), getResources().getText(R.string.message_success_purchase), Toast.LENGTH_LONG).show();
+                                    finish();
+                                } else if (loginResult.code.equals("-1")) {
+                                    Toast.makeText(getBaseContext(), getResources().getText(R.string.message_not_enough_data), Toast.LENGTH_LONG).show();
+                                } else if (loginResult.code.equals("-3")) {
+                                    Toast.makeText(getBaseContext(), getResources().getText(R.string.message_session_invalid), Toast.LENGTH_LONG).show();
+                                }
+                            }
+
+                            @Override
+                            public void failure(RetrofitError error) {
+
+                                Log.e(TAG, "login failure : " + error.getMessage());
+                                Toast.makeText(getBaseContext(), getResources().getText(R.string.message_network_error), Toast.LENGTH_LONG).show();
+
+                            }
+                        });
+
             }
 
         }
@@ -181,7 +232,7 @@ public class PurchaseActivity extends ActionActivity implements OnClickListener 
         switch (v.getId()) {
 
             case R.id.btn_purchase:
-                Buy("product_1");
+                Buy("product_"+selectedIndex);
                 break;
 
         }

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -26,6 +28,9 @@ public class TiltCodeView extends View {
     public float tiltX;
 
     Bitmap tiltImage;
+    Bitmap tiltpImage;
+
+    Paint p;
 
     public TiltCodeView(Context context) {
         super(context);
@@ -47,8 +52,14 @@ public class TiltCodeView extends View {
 
     void init(){
 
-        tiltImage = BitmapFactory.decodeResource(getResources(), R.drawable.tilt);
+        if(tiltImage==null) {
+            tiltImage = BitmapFactory.decodeResource(getResources(), R.drawable.tilt);
+            tiltpImage = BitmapFactory.decodeResource(getResources(), R.drawable.tiltp);
+        }
 
+        p = new Paint();
+        p.setColor(Color.CYAN);
+        p.setTextSize(140);
     }
 
     @Override
@@ -63,13 +74,19 @@ public class TiltCodeView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        Log.d(TAG,"ondraw");
+//        Log.d(TAG,"ondraw");
 //        canvas.rotate(0,0,0,0);
         float rTilt;
-        rTilt = -tiltX*(45f/10f);
-//        rTilt = ((int)(rTilt/10))*10;
+        rTilt = tiltX*(90f/10f);
+        canvas.drawText(((int)tiltX*(90/10))+"°", width/2-100,400,p);
+        rTilt = ((int)(rTilt/6))*6;
         canvas.rotate(rTilt,width/2,height/2);
-        canvas.drawBitmap(tiltImage,null, new Rect(width/2-500,height/2-500,width/2+500,height/2+500),null);
+        if(Math.abs(rTilt)>=40 && Math.abs(rTilt)<=50){
+            canvas.drawBitmap(tiltpImage,null, new Rect(width/2-250,height/2-450,width/2+250,height/2+450),null);
+        }
+        else {
+            canvas.drawBitmap(tiltImage, null, new Rect(width / 2 - 250, height / 2 - 450, width / 2 + 250, height / 2 + 450), null);
+        }
         //super.onDraw(canvas);
         invalidate();
     }

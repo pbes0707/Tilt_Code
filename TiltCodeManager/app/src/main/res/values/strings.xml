@@ -97,20 +97,20 @@
     <string name="message_register_error_tilt">올바르지 않은 tilt값입니다.</string>
     <string name="message_success_register">쿠폰 등록을 성공하였습니다.</string>
     <string name="message_login_nomal">관리자계정으로 로그인해주세요.</string>
-
+    <string name="message_success_purchase">포인트 적립에 성공하였습니다.</string>
 
     <string-array name="couponType">
         <item>쿠폰타입을 선택해주세요.</item>
         <item>링크</item>
         <item>파일</item>
-        <item>바코드</item>
+        <item>이미지</item>
     </string-array>
 
     <string-array name="couponTypeKey">
         <item></item>
         <item>link</item>
         <item>file</item>
-        <item>barcode</item>
+        <item>file</item>
     </string-array>
 
     <string-array name="couponPickType">

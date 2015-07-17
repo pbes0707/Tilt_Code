@@ -97,7 +97,7 @@ public class TiltCodeFragment extends BackFragment implements SensorEventListene
                         Math.round(values[1] * 100d) / 100d,
                         Math.round(values[2] * 100d) / 100d);
 
-                Log.d(TAG,"x : "+accelData.x+" y : "+accelData.y+" z :"+accelData.z);
+//                Log.d(TAG,"x : "+accelData.x+" y : "+accelData.y+" z :"+accelData.z);
                 tiltView.tiltX = (float)accelData.x;
                 break;
             }

@@ -57,6 +57,12 @@ public interface HttpService {
                   @Field("id") String id,
                   Callback<LoginResult> ret);
 
+    @FormUrlEncoded
+    @POST("/pointCharge")
+    void pointCharge(@Field("session") String session,
+                  @Field("point") String point,
+                  Callback<LoginResult> ret);
+
     @Multipart
     @POST("/couponRegisterGPS")
     void couponRegisterGPS(@Part("session") String session,
@@ -80,6 +86,8 @@ public interface HttpService {
                            @Part("link") String link,
                            @Part("beginT") String beginT,
                            @Part("endT") String endT,
+                           @Part("beginD") String beginD,
+                           @Part("endD") String endD,
                            @Part("tilt") String tilt,
                            @Part("file") TypedFile file,
                            @Part("image") TypedFile image,
@@ -92,8 +100,52 @@ public interface HttpService {
                       @Field("changeP") String changeP,
                       Callback<LoginResult> ret);
 
+    @GET("/getCouponAnalytics")
+    void getCouponAnalytics(@Query("session") String session,
+                            @Query("id") String id,
+                   Callback<AnalyticResult> ret);
 
+    @GET("/pointCheck")
+    void pointCheck(@Query("session") String session,
+                            Callback<PointResult> ret);
 
+    @FormUrlEncoded
+    @POST("/couponManageModifyGPS")
+    void couponManageModifyGPS(@Field("session") String session,
+                               @Field("id") String id,
+                               @Field("title") String title,
+                               @Field("desc") String desc,
+                               @Field("lat") String lat,
+                               @Field("lng") String lng,
+                               @Field("tilt") String tilt,
+                    Callback<LoginResult> ret);
+
+    @FormUrlEncoded
+    @POST("/couponManageModifyTime")
+    void couponManageModifyTime(@Field("session") String session,
+                                @Field("id") String id,
+                                @Field("title") String title,
+                                @Field("desc") String desc,
+                                @Field("beginT") String beginT,
+                                @Field("endT") String endT,
+                                @Field("beginD") String beginD,
+                                @Field("endD") String endD,
+                                @Field("tilt") String tilt,
+                    Callback<LoginResult> ret);
+
+    @FormUrlEncoded
+    @POST("/couponImageModify")
+    void couponImageModify(@Part("session") String session,
+                  @Part("id") String id,
+                  @Part("image") TypedFile image,
+                  Callback<LoginResult> ret);
+
+    @Multipart
+    @POST("/couponFileModify")
+    void couponFileModify(@Part("session") String session,
+                  @Part("id") String id,
+                  @Part("image") TypedFile image,
+                  Callback<LoginResult> ret);
 
     @Multipart
     @POST("/down")

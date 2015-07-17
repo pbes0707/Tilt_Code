@@ -101,10 +101,11 @@ public class MainActivity extends ActionFragmentActivity{
     // 현재 보이는 탭을 포커스처리함
     public void selectTab(int position) {
 
+        mPager.setCurrentItem(position);
 
         switch (position) {
             case 0:
-//                tabCouponList.setSelected(true);
+//                tabCo  ponList.setSelected(true);
                 break;
             case 1:
 //                tabTiltCode.setSelected(true);
@@ -154,4 +155,17 @@ public class MainActivity extends ActionFragmentActivity{
         return super.onOptionsItemSelected(item);
     }
 
+    public void onTabClicked(View v){
+        switch(v.getId()){
+            case R.id.tab_main_list:
+                selectTab(0);
+                break;
+            case R.id.tab_main_tilt:
+                selectTab(1);
+                break;
+            case R.id.tab_main_setting:
+                selectTab(2);
+                break;
+        }
+    }
 }

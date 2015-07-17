@@ -64,7 +64,6 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         AccessToken token = AccessToken.getCurrentAccessToken();
-        Log.d(TAG,"accesstoken : "+token);
 
         init();
 
@@ -212,7 +211,6 @@ public class LoginActivity extends Activity {
                             Log.d(TAG,"access success / code : "+loginResult.code);
                             if (loginResult.code.equals("1")) { //성공
 
-
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
                                 finish();
@@ -248,7 +246,7 @@ public class LoginActivity extends Activity {
                 String uuid = tManager.getDeviceId();
 
                 Util.getEndPoint().setPort("40001");
-                Util.getHttpSerivce().signFacebook(uuid, "", "", "", "", "",        //비회원 로그인시에는 uuid를 통해 페이스북 로그인인것처럼 로그인한다.
+                Util.getHttpSerivce().signFacebook(uuid, "null", "null", "null", "null", "null",        //비회원 로그인시에는 uuid를 통해 페이스북 로그인인것처럼 로그인한다.
                         new Callback<com.tiltcode.tiltcode.Model.LoginResult>() {
                             @Override
                             public void success(com.tiltcode.tiltcode.Model.LoginResult loginResult, Response response) {

@@ -10,10 +10,11 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
+        android:persistent="true"
         android:allowBackup="true"
         android:name=".TiltCodeApplication"
         android:hardwareAccelerated="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         
@@ -25,6 +26,7 @@
 
 
         <activity android:name=".Activity.SplashActivity"
+            android:screenOrientation="portrait"
             android:label="TiltCode">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,36 +36,50 @@
         </activity>
 
         <activity android:name=".Activity.MainActivity"
+            android:screenOrientation="portrait"
             android:label="mainactivity">
         </activity>
         <activity android:name=".Activity.LoginActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize"
             android:label="loginactivity">
         </activity>
         <activity android:name=".Activity.SignupActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize"
             android:label="signupactivity">
         </activity>
         <activity android:name=".Activity.NotificationActivity"
+            android:screenOrientation="portrait"
             android:label="notificationActivity">
         </activity>
         <activity android:name=".Activity.SettingAccountActivity"
+            android:screenOrientation="portrait"
             android:label="settingAccountActivity">
         </activity>
         <activity android:name=".Activity.ChangeNameActivity"
+            android:screenOrientation="portrait"
             android:label=".changeNameActivity">
         </activity>
         <activity android:name=".Activity.ChangePasswdActivity"
+            android:screenOrientation="portrait"
              android:label="changePasswdActivity">
         </activity>
         <activity android:name=".Activity.LockScreenActivity"
+            android:screenOrientation="portrait"
             android:label="lockScreenActivity" android:theme="@android:style/Theme.Translucent">
         </activity>
         <activity android:name=".Activity.CouponReceiveActivity"
+            android:screenOrientation="portrait"
             android:label="couponReceiveActivity">
+        </activity>
+        <activity android:name=".Activity.ServiceSettingActivity"
+            android:screenOrientation="portrait"
+            android:label="servicdsettingactivity">
         </activity>
 
         <activity android:name="com.facebook.FacebookActivity"
+            android:screenOrientation="portrait"
             android:configChanges=
                 "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"

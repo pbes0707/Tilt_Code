@@ -17,6 +17,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.Transformation;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -35,14 +36,6 @@ import android.widget.Toast;
 import com.alexvasilkov.foldablelayout.UnfoldableView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
-import com.nostra13.universalimageloader.core.display.SimpleBitmapDisplayer;
 import com.tiltcode.tiltcode.Activity.MainActivity;
 import com.tiltcode.tiltcode.Adapter.CouponListAdapter;
 import com.tiltcode.tiltcode.Adapter.MainPagerAdapter;
@@ -62,6 +55,7 @@ import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -83,7 +77,7 @@ public class CouponListFragment extends BackFragment {
     int layoutid;
     Context context;
 
-    PullToRefreshListView mListView;
+    public static PullToRefreshListView mListView;
     View mListTouchInterceptor;
     UnfoldableView mUnfoldableView;
     FrameLayout mDetailsLayout;
@@ -91,9 +85,6 @@ public class CouponListFragment extends BackFragment {
     ScrollView detailScroll;
 
     TextView tv_couponlist_nocoupon;
-
-    DisplayImageOptions options;
-    ImageLoader imageLoader;
 
     List<Coupon> couponList = new ArrayList<>();
     CouponListAdapter couponAdapter;
@@ -154,107 +145,71 @@ public class CouponListFragment extends BackFragment {
         }
     };
 
-    public DisplayImageOptions getDisplayImageOptions()
-    {
-        if(this.options == null)
-        {
-            this.options = new DisplayImageOptions.Builder()
-//                    .showImageOnLoading(R.drawable.ic_stub) // resource or drawable
-//                    .showImageForEmptyUri(R.drawable.ic_empty) // resource or drawable
-//                    .showImageOnFail(R.drawable.ic_error) // resource or drawable
-                    .resetViewBeforeLoading(true)  // default
-                    .delayBeforeLoading(10)
-                    .cacheInMemory(true) // default
-                    .cacheOnDisk(true) // default
-                            .showImageForEmptyUri(R.drawable.test)
-                                    .showImageOnFail(R.drawable.test)
-                                            .showImageOnLoading(R.drawable.test)
-//                    .preProcessor(...)
-//            .postProcessor(...)
-//            .extraForDownloader(...)
-            .considerExifParams(true) // default
-                .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2) // default
-                .bitmapConfig(Bitmap.Config.ARGB_8888) // default
-//                .decodingOptions(...)
-            .displayer(new SimpleBitmapDisplayer()) // default
-//                .handler(new Handler()) // default
-                    .build();
-        }
-
-        return this.options;
-    }
 
     void init() {
 
-        final ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
-                /*.diskCacheFileCount(20)
-                .threadPriority(Thread.NORM_PRIORITY-2)
-                .denyCacheImageMultipleSizesInMemory()
-                .tasksProcessingOrder(QueueProcessingType.LIFO)
-                .diskCacheFileNameGenerator(new Md5FileNameGenerator())
-                .diskCacheSize(10*1024*1024)*/
-                .build();
-        imageLoader = ImageLoader.getInstance();
-        imageLoader.init(config);
+        Collections.reverse(couponList);
 
-        couponAdapter = new CouponListAdapter(couponList,context,mUnfoldableView,mDetailsLayout,imageLoader,options);
+        couponAdapter = new CouponListAdapter(couponList,context,mUnfoldableView,mDetailsLayout);
         mListView.setAdapter(couponAdapter);
 
         ((PullToRefreshListView)mListView).setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
-                @Override
-                public void onRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
+            @Override
+            public void onRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
 
-                    Util.getEndPoint().setPort("40002");
-                    Util.getHttpSerivce().couponGet(Util.getAccessToken().getToken()
-                            , new Callback<CouponResult>() {
-                        @Override
-                        public void success(CouponResult couponResult, Response response) {
-                            Log.d(TAG,"couponget success / code : "+couponResult.code);
-                            refreshComplete.sendEmptyMessageDelayed(0,1000);
+                Util.getEndPoint().setPort("40002");
+                Util.getHttpSerivce().couponGet(Util.getAccessToken().getToken()
+                        , new Callback<CouponResult>() {
+                    @Override
+                    public void success(CouponResult couponResult, Response response) {
+                        Log.d(TAG, "couponget success / code : " + couponResult.code);
+                        refreshComplete.sendEmptyMessageDelayed(0, 1000);
 
-                            if (couponResult.code.equals("1")) { //성공
+                        if (couponResult.code.equals("1")) { //성공
 
-                                if(couponResult.coupon!=null) {
-                                    Log.d(TAG, "count : " + couponResult.coupon.size());
+                            if (couponResult.coupon != null) {
 
-                                    couponAdapter.couponList = couponResult.coupon;
-                                    couponAdapter.notifyDataSetChanged();
+                                Collections.reverse(couponResult.coupon);
+                                Log.d(TAG, "count : " + couponResult.coupon.size());
 
-                                    if(couponResult.coupon.size()==0){
-                                        tv_couponlist_nocoupon.setVisibility(View.VISIBLE);
-                                    }
-                                    else{
-                                        tv_couponlist_nocoupon.setVisibility(View.GONE);
-                                    }
+                                couponAdapter.couponList = couponResult.coupon;
+                                couponAdapter.notifyDataSetChanged();
 
-                                }
-                                else{
+                                if (couponResult.coupon.size() == 0) {
+                                    tv_couponlist_nocoupon.setVisibility(View.VISIBLE);
+                                } else {
                                     tv_couponlist_nocoupon.setVisibility(View.GONE);
                                 }
 
-                            } else if (couponResult.code.equals("-1")) { //누락된게있음
-                                Toast.makeText(context,getResources().getText(R.string.message_not_enough_data),Toast.LENGTH_LONG).show();
-                            } else if (couponResult.code.equals("-2")) { //유효하지않은 토큰
-                                Toast.makeText(context,getResources().getText(R.string.message_not_allow_permission),Toast.LENGTH_LONG).show();
+                            } else {
+                                tv_couponlist_nocoupon.setVisibility(View.GONE);
                             }
 
+                        } else if (couponResult.code.equals("-1")) { //누락된게있음
+                            Toast.makeText(context, getResources().getText(R.string.message_not_enough_data), Toast.LENGTH_LONG).show();
+                        } else if (couponResult.code.equals("-2")) { //유효하지않은 토큰
+                            Toast.makeText(context, getResources().getText(R.string.message_not_allow_permission), Toast.LENGTH_LONG).show();
                         }
 
-                        @Override
-                        public void failure(RetrofitError error) {
-                            Log.e(TAG,"login failure : "+error.getMessage());
-                            Toast.makeText(context,getResources().getText(R.string.message_network_error),Toast.LENGTH_LONG).show();
+                    }
 
-                            refreshComplete.sendEmptyMessageDelayed(0,1000);
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Log.e(TAG, "login failure : " + error.getMessage());
+                        Toast.makeText(context, getResources().getText(R.string.message_network_error), Toast.LENGTH_LONG).show();
 
-                        }
-                    });
-                }
+                        refreshComplete.sendEmptyMessageDelayed(0, 1000);
+
+                    }
+                });
+            }
         });
 
         mListTouchInterceptor.setClickable(false);
 
         mDetailsLayout.setVisibility(View.INVISIBLE);
+
+        final View tab = getActivity().findViewById(R.id.layout_main_tabview);
 
         mUnfoldableView.setOnFoldingListener(new UnfoldableView.SimpleFoldingListener() {
             @Override
@@ -262,7 +217,11 @@ public class CouponListFragment extends BackFragment {
                 mListTouchInterceptor.setClickable(true);
                 mDetailsLayout.setVisibility(View.VISIBLE);
                 Log.d(TAG,"unfolding");
-                ((ActionFragmentActivity)context).setEnableBack(true);
+
+                tab.setAnimation(AnimationUtils.loadAnimation(context, android.R.anim.fade_out));
+                tab.setVisibility(View.GONE);
+
+                        ((ActionFragmentActivity) context).setEnableBack(true);
             }
 
             @Override
@@ -276,6 +235,9 @@ public class CouponListFragment extends BackFragment {
             public void onFoldingBack(UnfoldableView unfoldableView) {
                 mListTouchInterceptor.setClickable(true);
                 Log.d(TAG,"foldingback");
+
+                tab.setAnimation(AnimationUtils.loadAnimation(context, android.R.anim.fade_in));
+                tab.setVisibility(View.VISIBLE);
                 ((ActionFragmentActivity)context).setEnableBack(false);
             }
 
@@ -308,6 +270,8 @@ public class CouponListFragment extends BackFragment {
 
                     if(couponResult.coupon!=null) {
                         Log.d(TAG, "count : " + couponResult.coupon.size());
+
+                        Collections.reverse(couponResult.coupon);
 
                         couponAdapter.couponList = couponResult.coupon;
                         couponAdapter.notifyDataSetChanged();

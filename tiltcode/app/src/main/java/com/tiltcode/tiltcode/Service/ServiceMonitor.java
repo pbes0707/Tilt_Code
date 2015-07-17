@@ -48,7 +48,7 @@ public class ServiceMonitor {
         intent = new Intent(context, MonitorBR.class);
         sender = PendingIntent.getBroadcast(context, 0, intent, 0);
         am.setRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), interval, sender);
-    }ㅑ
+    }
 
     public void stopMonitoring(Context context) {
         am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);

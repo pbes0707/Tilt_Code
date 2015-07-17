@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal">
+
+        <FrameLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center">
+
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/mapView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                class="com.google.android.gms.maps.SupportMapFragment" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"/>
+
+        </FrameLayout>
+
+
+        <TextView
+
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15dp"
+            android:text=""
+            android:id="@+id/tv_gpsselect_locale"
+            android:layout_gravity="top|center_horizontal" />
+
+
+        <ImageView
+                android:src="@drawable/gps"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:id="@+id/imageView"
+                android:layout_gravity="center" />
+
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="좌표 선택"
+                android:layout_gravity="center_horizontal|bottom"
+                android:id="@+id/btn_gpsselect_proc" />
+
+    </FrameLayout>
+
+</LinearLayout>

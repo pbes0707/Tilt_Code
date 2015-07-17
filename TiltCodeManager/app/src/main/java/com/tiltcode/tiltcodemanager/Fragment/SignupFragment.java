@@ -120,10 +120,12 @@ public class SignupFragment  extends Fragment {
                                             Util.getAccessToken()
                                                     .setToken(loginResult.info.session)
                                                     .setUserId(getUserId())
+                                                    .setName(getName())
                                                     .setPhone("")
                                                     .setSex(getSex())
                                                     .setBirthday(getBirthday())
                                                     .setIsSkipedUser(false)
+                                                    .setPoint(0)
                                                     .setLoginType(LoginToken.LoginType.TiltCode);
                                             Util.getAccessToken().saveToken();
 

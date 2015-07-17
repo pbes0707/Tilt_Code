@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.tiltcode.tiltcode.Activity.MainActivity;
 import com.tiltcode.tiltcode.Activity.NotificationActivity;
+import com.tiltcode.tiltcode.Activity.ServiceSettingActivity;
 import com.tiltcode.tiltcode.Activity.SettingAccountActivity;
 import com.tiltcode.tiltcode.Adapter.MainPagerAdapter;
 import com.tiltcode.tiltcode.Adapter.SettingListAdapter;
@@ -47,8 +48,8 @@ public class SettingFragment extends BackFragment {
     //로그에 쓰일 tag
     public static final String TAG = SettingFragment.class.getSimpleName();
 
-    private String[] strArray = {"계정설정","공지사항","버전정보"};
-    private Class [] clsArray = {SettingAccountActivity.class, NotificationActivity.class,null};
+    private String[] strArray = {"계정설정","서비스설정","공지사항","버전정보"};
+    private Class [] clsArray = {SettingAccountActivity.class, ServiceSettingActivity.class, NotificationActivity.class,null};
 
     int layoutid;
     Context context;
@@ -92,7 +93,7 @@ public class SettingFragment extends BackFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if(i==2){
+                if(i==3){
                     checkUpdate();
                     return;
                 }

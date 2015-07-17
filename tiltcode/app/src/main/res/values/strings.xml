@@ -87,6 +87,16 @@
     <string name='message_success_change_passwd'>비밀번호 변경을 성공하였습니다.</string>
     <string name='message_diff_current_passwd'>현재 비밀번호가 올바르지 않습니다.</string>
     <string name='message_already_new_version'>이미 최신버전입니다.</string>
+    <string name="message_download_coupon_success">쿠폰을 다운로드받았습니다.</string>
+    <string name="message_download_coupon_fail">쿠폰을 다운받지 못하였습니다.</string>
+    <string name="message_success_receive">쿠폰을 추가하였습니다.</string>
+    <string name="message_unkown_coupon_id">알수없는 쿠폰 ID입니다.</string>
+    <string name="message_deactivated_coupon">비활성화된 쿠폰입니다.</string>
+    <string name="message_unkown_coupon_create">쿠폰 발급자가 존재하지 않습니다.</string>
+    <string name="message_no_enough_point">등록자의 포인트가 부족합니다.</string>
+    <string name="message_already_have_coupon">이미 가지고 있는 쿠폰입니다.</string>
+
+
 
     <string name='version'>0.1</string>
 </resources>
