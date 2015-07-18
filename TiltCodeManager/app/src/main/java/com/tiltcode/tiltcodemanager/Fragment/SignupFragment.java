@@ -1,7 +1,9 @@
 package com.tiltcode.tiltcodemanager.Fragment;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -13,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -26,6 +29,8 @@ import com.tiltcode.tiltcodemanager.Model.LoginResult;
 import com.tiltcode.tiltcodemanager.Model.LoginToken;
 import com.tiltcode.tiltcodemanager.R;
 import com.tiltcode.tiltcodemanager.Util;
+
+import java.util.Calendar;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -85,8 +90,27 @@ public class SignupFragment  extends Fragment {
         return v;
     }
 
+
+    private DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+
+        @Override
+        public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+            edt_birth.setText(String.format("%04d",datePicker.getYear())+"/"+
+                    String.format("%02d",(datePicker.getMonth()+1))+"/"+
+                    String.format("%02d",datePicker.getDayOfMonth()));
+        }
+
+    };
+
     void init() {
 
+        edt_birth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar cal = Calendar.getInstance();
+                new DatePickerDialog(context,dateSetListener,cal.get(Calendar.YEAR), cal.get(Calendar.MONTH)+1, cal.get(Calendar.DAY_OF_MONTH));
+            }
+        });
         //성별선택
         radio_sex.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override

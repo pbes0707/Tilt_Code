@@ -145,6 +145,7 @@
                         android:inputType="date"
                         android:layout_width="match_parent"
                         android:padding="5dp"
+                        android:editable="false"
                         android:background="@drawable/text"
                         android:layout_height="wrap_content"
                         android:id="@+id/edt_signup_birthday" />

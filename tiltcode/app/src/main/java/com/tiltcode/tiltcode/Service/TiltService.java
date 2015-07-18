@@ -199,7 +199,7 @@ public class TiltService extends Service implements SensorEventListener {
 
     void showNotification(){
         NotificationManager nm = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-        Notification notification = new Notification(R.mipmap.ic_launcher, "틸트 감지됨", System.currentTimeMillis());
+        Notification notification = new Notification(R.drawable.ic_tilt, "틸트 감지됨", System.currentTimeMillis());
         notification.flags = Notification.FLAG_AUTO_CANCEL;
 //        notification.defaults = Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE ;
         notification.number = 1;

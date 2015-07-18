@@ -35,6 +35,7 @@ public class ReceiveListAdapter extends BaseAdapter {
     LayoutInflater inflater;
 
 
+
     public ReceiveListAdapter(Context context, ArrayList<Coupon> arrayList){
         this.arrayList = arrayList;
         this.context = context;
@@ -74,8 +75,13 @@ public class ReceiveListAdapter extends BaseAdapter {
 
         ((TextView)view.findViewById(R.id.tv_couponreceive_row)).setText(arrayList.get(i).title);
             ImageView imv = (ImageView)view.findViewById(R.id.img_couponreceive_row);
+
+
+        Log.d(TAG,"url : "+context.getResources().getText(R.string.API_SERVER)+":40002/couponGetImage?id="
+                +arrayList.get(i).id+"."+arrayList.get(i).imageEx);
+
             Picasso.with(context).load(context.getResources().getText(R.string.API_SERVER)+":40002/couponGetImage?id="
-                    +arrayList.get(i).id+"."+arrayList.get(i).imageEx).into(imv);
+                    +arrayList.get(i).id+"."+arrayList.get(i).imageEx).resize(400,400).centerCrop().into(imv);
 //            imageLoader.displayImage(context.getResources().getText(R.string.API_SERVER)+":40002/couponGetImage?id="
  //                   +arrayList.get(i).id+"."+arrayList.get(i).imageEx,imv,options);
   //          if(checkList.size()<=i){

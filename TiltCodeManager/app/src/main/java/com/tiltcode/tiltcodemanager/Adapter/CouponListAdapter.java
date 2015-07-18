@@ -92,6 +92,8 @@ public class CouponListAdapter extends BaseAdapter {
 
 
         //이미지를 불러옴 Picasso
+        Log.d(TAG,"url : "+context.getResources().getText(R.string.API_SERVER)+":40002/couponGetImage?id="
+                +arrayList.get(i).id+"."+arrayList.get(i).imageEx);
         Picasso.with(context).load(context.getResources().getText(R.string.API_SERVER)+":40002/couponGetImage?id="
                 +arrayList.get(i).id+"."+arrayList.get(i).imageEx).resize(400,400).centerCrop().into(imv);
         //        imageLoader.displayImage(context.getResources().getText(R.string.API_SERVER)+":40002/couponGetImage?id="

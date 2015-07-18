@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="디미고 입시자료"
+            android:text=""
             android:id="@+id/tv_coupondetail_title" />
 
         <LinearLayout
@@ -36,11 +36,32 @@
             android:text="수익금 : 100원"
             android:id="@+id/tv_coupondetail_earn" />
 
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/chart_coupondetail_sex"
+                android:layout_width="match_parent"
+                android:layout_height="150dp" />
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/chart_coupondetail_age"
+                android:layout_marginTop="50dp"
+                android:layout_width="match_parent"
+                android:layout_height="150dp" />
+
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/chart_coupondetail_device"
+                android:layout_marginTop="50dp"
+                android:layout_width="match_parent"
+                android:layout_height="300dp" />
+            <!--
             <com.db.chart.view.BarChartView
                 xmlns:chart="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/chart_coupondetail_sex"
@@ -52,7 +73,9 @@
                 android:layout_marginTop="30dp"
                 android:id="@+id/chart_coupondetail_age"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"/>
+                android:layout_height="150dp"/>-->
         </LinearLayout>
+
+        </ScrollView>
     </LinearLayout>
 </LinearLayout>

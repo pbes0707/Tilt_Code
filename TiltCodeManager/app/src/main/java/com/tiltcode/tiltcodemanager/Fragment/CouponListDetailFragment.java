@@ -3,7 +3,6 @@ package com.tiltcode.tiltcodemanager.Fragment;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
-import com.db.chart.model.Point;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -13,18 +12,18 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.db.chart.model.Bar;
-import com.db.chart.model.BarSet;
-import com.db.chart.model.ChartSet;
-import com.db.chart.model.LineSet;
-import com.db.chart.view.AxisController;
-import com.db.chart.view.BarChartView;
-import com.db.chart.view.LineChartView;
-import com.db.chart.view.XController;
-import com.db.chart.view.YController;
-import com.db.chart.view.animation.Animation;
-import com.db.chart.view.animation.easing.cubic.CubicEaseOut;
-import com.db.chart.view.animation.easing.linear.LinearEase;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.tiltcode.tiltcodemanager.Activity.CouponListActivity;
 import com.tiltcode.tiltcodemanager.Activity.SignupActivity;
 import com.tiltcode.tiltcodemanager.Model.AnalyticResult;
@@ -34,6 +33,7 @@ import com.tiltcode.tiltcodemanager.R;
 import com.tiltcode.tiltcodemanager.Util;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -50,8 +50,9 @@ public class CouponListDetailFragment extends Fragment {
     int layoutid;
     Context context;
 
-    BarChartView sexChart;
-    LineChartView ageChart;
+    BarChart sexChart;
+    LineChart ageChart;
+    PieChart deviceChart;
 
     Coupon coupon;
 
@@ -73,8 +74,9 @@ public class CouponListDetailFragment extends Fragment {
         if (v == null) {
             v = inflater.inflate(layoutid, null);
 
-            sexChart = (BarChartView)v.findViewById(R.id.chart_coupondetail_sex);
-            ageChart = (LineChartView)v.findViewById(R.id.chart_coupondetail_age);
+            sexChart = (BarChart)v.findViewById(R.id.chart_coupondetail_sex);
+            ageChart = (LineChart)v.findViewById(R.id.chart_coupondetail_age);
+            deviceChart = (PieChart)v.findViewById(R.id.chart_coupondetail_device);
 
             tvTitle = ((TextView)v.findViewById(R.id.tv_coupondetail_title));
             tvDownload = ((TextView)v.findViewById(R.id.tv_coupondetail_download));
@@ -115,11 +117,14 @@ public class CouponListDetailFragment extends Fragment {
                     public void success(AnalyticResult analyticResult, Response response) {
 
 
-                        if(analyticResult.code.equals("1")){
+//                        if(analyticResult.code.equals("1")){
                             tvDownload.setText("다운로드수 : " +analyticResult.data.count);
 
                             Log.d(TAG,"size : "+analyticResult.data.age.length);
 
+
+
+                            /*
                             BarSet barSet = new BarSet();
 
                             Bar bar1 = new Bar("Man",analyticResult.data.sex[0]);
@@ -173,9 +178,9 @@ public class CouponListDetailFragment extends Fragment {
                             Animation ani2 = new Animation();
                             ani2.setDuration(500);
                             ani2.setEasing(new LinearEase());
-                            ageChart.show(ani2);
-                        }
-                        else if(analyticResult.code.equals("2")){
+                            ageChart.show(ani2);*/
+//                        }
+                        /*else*/ if(analyticResult.code.equals("2")){
                             tvDownload.setText("다운로드수 : 0");
                             Toast.makeText(context,"아무도 쿠폰을 다운받지 않았습니다.",Toast.LENGTH_LONG).show();
                         }
@@ -191,6 +196,106 @@ public class CouponListDetailFragment extends Fragment {
 
 
 
+        initChart();
     }
 
+    void initChart(){
+        initBarChart();
+        initLineChart();
+        initPieChart();
+    }
+
+
+    void initPieChart(){
+
+        ArrayList<String> xVals = new ArrayList<String>();
+
+        ArrayList<Entry> entries = new ArrayList<Entry>();
+
+        for (int i = 0; i < 5; i++) {
+            xVals.add(i+"");
+            Entry entry = new Entry(((int)(Math.random()*10+10)),i);
+            entries.add(entry);
+        }
+
+        PieDataSet set = new PieDataSet(entries, "");
+//        set.setLin(40f);
+        set.setColors(ColorTemplate.COLORFUL_COLORS);
+
+
+
+        PieData data = new PieData(xVals, set);
+        data.setValueTextSize(10f);
+        data.setDrawValues(true);
+
+        /*deviceChart.getXAxis().removeAllLimitLines();
+        deviceChart.getXAxis().setEnabled(false);
+        deviceChart.getAxisLeft().setTextColor(Color.WHITE);
+        deviceChart.getAxisRight().setEnabled(false);*/
+        deviceChart.setData(data);
+
+    }
+
+    void initLineChart(){
+
+        ArrayList<String> xVals = new ArrayList<String>();
+
+        ArrayList<Entry> entries = new ArrayList<Entry>();
+
+        for (int i = 0; i < 10; i++) {
+            xVals.add(i+"");
+            Entry entry = new Entry(((int)(Math.random()*10+10)),i);
+            entries.add(entry);
+        }
+
+        LineDataSet set = new LineDataSet(entries, "");
+//        set.setLin(40f);
+        set.setColors(ColorTemplate.COLORFUL_COLORS);
+
+
+        LineData data = new LineData(xVals, set);
+        data.setValueTextSize(10f);
+        data.setDrawValues(true);
+
+        ageChart.getXAxis().removeAllLimitLines();
+        ageChart.getXAxis().setEnabled(false);
+        ageChart.getAxisLeft().setTextColor(Color.WHITE);
+        ageChart.getAxisRight().setEnabled(false);
+        ageChart.setData(data);
+
+    }
+
+    void initBarChart(){
+        ArrayList<String> xVals = new ArrayList<String>();
+
+        ArrayList<BarEntry> entries = new ArrayList<BarEntry>();
+
+        for (int i = 0; i < 3; i++) {
+            xVals.add(i+"");
+            BarEntry entry = new BarEntry(((int)(Math.random()*10+10)),i);
+            entries.add(entry);
+        }
+
+        BarDataSet set = new BarDataSet(entries, "");
+        set.setBarSpacePercent(40f);
+        set.setColors(ColorTemplate.COLORFUL_COLORS);
+
+
+        BarData data = new BarData(xVals, set);
+        data.setValueTextSize(10f);
+        data.setDrawValues(true);
+
+        sexChart.getXAxis().removeAllLimitLines();
+        sexChart.getXAxis().setEnabled(false);
+        sexChart.getAxisLeft().setTextColor(Color.WHITE);
+        sexChart.getAxisRight().setEnabled(false);
+        sexChart.setData(data);
+
+
+
+
+
+
+        Log.d(TAG,"chart init");
+    }
 }

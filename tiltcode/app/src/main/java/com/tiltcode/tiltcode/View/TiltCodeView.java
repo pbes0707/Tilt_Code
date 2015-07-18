@@ -29,6 +29,7 @@ public class TiltCodeView extends View {
 
     Bitmap tiltImage;
     Bitmap tiltpImage;
+    Bitmap radorImage;
 
     Paint p;
 
@@ -55,6 +56,7 @@ public class TiltCodeView extends View {
         if(tiltImage==null) {
             tiltImage = BitmapFactory.decodeResource(getResources(), R.drawable.tilt);
             tiltpImage = BitmapFactory.decodeResource(getResources(), R.drawable.tiltp);
+            radorImage = BitmapFactory.decodeResource(getResources(), R.drawable.rador);
         }
 
         p = new Paint();
@@ -79,14 +81,20 @@ public class TiltCodeView extends View {
         float rTilt;
         rTilt = tiltX*(90f/10f);
         canvas.drawText(((int)tiltX*(90/10))+"°", width/2-100,400,p);
-        rTilt = ((int)(rTilt/6))*6;
+        rTilt = ((int)(rTilt/10))*10;
+
         canvas.rotate(rTilt,width/2,height/2);
+        canvas.drawBitmap(radorImage, null, new Rect(width / 2 - 450, height / 2 - 450, width / 2 + 450, height / 2 + 450), null);
+
+        canvas.rotate(-rTilt,width/2,height/2);
         if(Math.abs(rTilt)>=40 && Math.abs(rTilt)<=50){
-            canvas.drawBitmap(tiltpImage,null, new Rect(width/2-250,height/2-450,width/2+250,height/2+450),null);
+            canvas.drawBitmap(tiltpImage,null, new Rect(width/2-150,height/2-270,width/2+150,height/2+270),null);
         }
         else {
-            canvas.drawBitmap(tiltImage, null, new Rect(width / 2 - 250, height / 2 - 450, width / 2 + 250, height / 2 + 450), null);
+            canvas.drawBitmap(tiltImage, null, new Rect(width / 2 - 150, height / 2 - 270, width / 2 + 150, height / 2 + 270), null);
         }
+
+
         //super.onDraw(canvas);
         invalidate();
     }
