@@ -84,6 +84,7 @@
     <string name='message_diff_name'>이름이 일치하지 않습니다.</string>
     <string name='message_diff_passwd'>비밀번호가 일치하지 않습니다.</string>
     <string name='message_success_change_name'>이름 변경을 성공하였습니다.</string>
+    <string name='message_success_delete'>쿠폰을 성공적으로 삭제하였습니다.</string>
     <string name='message_success_change_passwd'>비밀번호 변경을 성공하였습니다.</string>
     <string name='message_diff_current_passwd'>현재 비밀번호가 올바르지 않습니다.</string>
     <string name='message_already_new_version'>이미 최신버전입니다.</string>

@@ -117,10 +117,10 @@ public class CouponListDetailFragment extends Fragment {
                     public void success(AnalyticResult analyticResult, Response response) {
 
 
-//                        if(analyticResult.code.equals("1")){
+                        if(analyticResult.code.equals("1")){
                             tvDownload.setText("다운로드수 : " +analyticResult.data.count);
 
-                            Log.d(TAG,"size : "+analyticResult.data.age.length);
+                            Log.d(TAG, "size : " + analyticResult.data.age.length);
 
 
 
@@ -179,8 +179,8 @@ public class CouponListDetailFragment extends Fragment {
                             ani2.setDuration(500);
                             ani2.setEasing(new LinearEase());
                             ageChart.show(ani2);*/
-//                        }
-                        /*else*/ if(analyticResult.code.equals("2")){
+                        }
+                        else if(analyticResult.code.equals("2")){
                             tvDownload.setText("다운로드수 : 0");
                             Toast.makeText(context,"아무도 쿠폰을 다운받지 않았습니다.",Toast.LENGTH_LONG).show();
                         }
@@ -190,6 +190,7 @@ public class CouponListDetailFragment extends Fragment {
                     @Override
                     public void failure(RetrofitError error) {
 
+                        Toast.makeText(context, getResources().getString(R.string.message_network_error),Toast.LENGTH_LONG).show();
                     }
                 });
 

@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.tiltcode.tiltcode.Adapter.MainPagerAdapter;
 import com.tiltcode.tiltcode.Model.AccelData;
@@ -57,7 +58,9 @@ public class TiltCodeFragment extends BackFragment implements SensorEventListene
         accelerometerSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
         mSensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
-        tiltView = (TiltCodeView)v.findViewById(R.id.tiltview_tiltcodefragment);
+
+        tiltView = new TiltCodeView(context);
+        ((LinearLayout)v.findViewById(R.id.tiltview_tiltcodefragment)).addView(tiltView);
 
         return v;
     }

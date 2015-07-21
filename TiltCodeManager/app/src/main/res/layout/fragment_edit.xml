@@ -71,6 +71,7 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/spinner_register_couponType"
                         android:entries="@array/couponType"
+                        android:background="@drawable/dropdown"
                         android:layout_gravity="center_horizontal" />
 
                     <TextView
@@ -86,6 +87,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="#ffffb3"
+                        android:background="@drawable/dropdown"
                         android:entries="@array/couponPickType"
                         android:id="@+id/spinner_register_couponPickType"
                         android:layout_gravity="center_horizontal" />

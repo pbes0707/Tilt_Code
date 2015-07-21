@@ -1,7 +1,9 @@
 package com.tiltcode.tiltcode.Adapter;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
@@ -17,6 +19,7 @@ import android.webkit.MimeTypeMap;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -24,6 +27,7 @@ import android.widget.Toast;
 
 import com.alexvasilkov.foldablelayout.UnfoldableView;
 import com.squareup.picasso.Picasso;
+import com.tiltcode.tiltcode.Fragment.CouponListFragment;
 import com.tiltcode.tiltcode.Model.Coupon;
 import com.tiltcode.tiltcode.Model.LoginResult;
 import com.tiltcode.tiltcode.R;
@@ -151,6 +155,50 @@ public class CouponListAdapter extends BaseAdapter {
                     ((TextView)mDetailsLayout.findViewById(R.id.tv_coupon_detail_file)).setText("");
                 }
 
+                ((ImageButton)mDetailsLayout.findViewById(R.id.btn_couponitem_delete)).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                        builder.setTitle("쿠폰삭제");
+                        builder.setMessage("쿠폰을 삭제하시겠습니까?");
+                        builder.setNegativeButton("취소", new DialogInterface.OnClickListener(){
+
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        });
+                        builder.setPositiveButton("삭제",new DialogInterface.OnClickListener(){
+
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int index) {
+                                Util.getEndPoint().setPort("40002");
+                                Util.getHttpSerivce().couponManageDelete(Util.getAccessToken().getToken(),
+                                        couponList.get(i).id,
+                                        new Callback<LoginResult>() {
+                                            @Override
+                                            public void success(LoginResult loginResult, Response response) {
+
+                                                if(loginResult.code.equals("1")){
+                                                    Toast.makeText(context,context.getResources().getText(R.string.message_success_delete),Toast.LENGTH_LONG).show();
+                                                    mUnfoldableView.foldBack();
+                                                    CouponListFragment.mListView.setRefreshing();
+                                                }
+                                                else{
+                                                    Toast.makeText(context,context.getResources().getText(R.string.message_network_error),Toast.LENGTH_LONG).show();
+                                                }
+                                            }
+
+                                            @Override
+                                            public void failure(RetrofitError error) {
+                                                Toast.makeText(context,context.getResources().getText(R.string.message_network_error),Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+                            }
+                        });
+                        builder.show();
+                    }
+                });
                 ((Button)mDetailsLayout.findViewById(R.id.btn_couponitem_proc)).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -159,8 +207,7 @@ public class CouponListAdapter extends BaseAdapter {
                             Intent i = new Intent(Intent.ACTION_VIEW);
                             i.setData(Uri.parse(url));
                             context.startActivity(i);
-                        }
-                        else if(((Button)view).getText().toString().equals("열기")){
+                        } else if (((Button) view).getText().toString().equals("열기")) {
                             File pdfFile = new File(Environment.getExternalStorageDirectory() + "/Download/" + setFilePath(couponList.get(i).title) + "." + couponList.get(i).fileEx);
 
                             try {
@@ -176,14 +223,13 @@ public class CouponListAdapter extends BaseAdapter {
 
                                 Intent intent = new Intent();
                                 intent.setAction(android.content.Intent.ACTION_VIEW);
-                                intent.setDataAndType(Uri.fromFile(pdfFile),getMimeType(pdfFile.getAbsolutePath()));
+                                intent.setDataAndType(Uri.fromFile(pdfFile), getMimeType(pdfFile.getAbsolutePath()));
                                 context.startActivity(intent);
 
                             } catch (Exception e) {
-                                Toast.makeText(context,"파일을 열수 없습니다. "+e.getMessage(),Toast.LENGTH_LONG).show();
+                                Toast.makeText(context, "파일을 열수 없습니다. " + e.getMessage(), Toast.LENGTH_LONG).show();
                             }
-                        }
-                        else {
+                        } else {
                             if (couponList.get(i).type.equals("file") | couponList.get(i).type.equals("image")) {
 
                                 new Thread(new Runnable() {
@@ -228,7 +274,7 @@ public class CouponListAdapter extends BaseAdapter {
 
                                                 Toast.makeText(context, context.getResources().getText(R.string.message_download_coupon_success), Toast.LENGTH_LONG).show();
 
-                                                ((Button)mDetailsLayout.findViewById(R.id.btn_couponitem_proc)).setText("열기");
+                                                ((Button) mDetailsLayout.findViewById(R.id.btn_couponitem_proc)).setText("열기");
                                             }
                                         });
                                     }

@@ -71,6 +71,12 @@ public interface HttpService {
                     Callback<LoginResult> ret);
 
     @FormUrlEncoded
+    @POST("/couponManageDelete")
+    void couponManageDelete(@Field("session") String session,
+                    @Field("id") String id,
+                    Callback<LoginResult> ret);
+
+    @FormUrlEncoded
     @POST("/changePasswd")
     void changePasswd(@Field("session") String session,
                       @Field("currP") String currP,

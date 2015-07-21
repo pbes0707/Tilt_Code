@@ -36,11 +36,16 @@ public class TiltCodeView extends View {
     public TiltCodeView(Context context) {
         super(context);
 
+        Log.d(TAG,"context");
+
         init();
     }
 
     public TiltCodeView(Context context, AttributeSet attrs) {
         super(context, attrs);
+
+        Log.d(TAG,"context attrs");
+
 
         init();
     }
@@ -48,15 +53,26 @@ public class TiltCodeView extends View {
     public TiltCodeView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
+        Log.d(TAG,"context attrs defStyle");
+
+
         init();
     }
 
     void init(){
 
         if(tiltImage==null) {
-            tiltImage = BitmapFactory.decodeResource(getResources(), R.drawable.tilt);
-            tiltpImage = BitmapFactory.decodeResource(getResources(), R.drawable.tiltp);
-            radorImage = BitmapFactory.decodeResource(getResources(), R.drawable.rador);
+
+            BitmapFactory.Options o=new BitmapFactory.Options();
+            o.inSampleSize = 1;
+            o.inPreferredConfig = Bitmap.Config.RGB_565;
+            o.inDither=false;                     //Disable Dithering mode
+            o.inPurgeable=true;
+
+            tiltImage = BitmapFactory.decodeResource(getResources(), R.drawable.tilt,o);
+            tiltpImage = BitmapFactory.decodeResource(getResources(), R.drawable.tiltp,o);
+            radorImage = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.rador,o),
+                    450, 450, true);
         }
 
         p = new Paint();

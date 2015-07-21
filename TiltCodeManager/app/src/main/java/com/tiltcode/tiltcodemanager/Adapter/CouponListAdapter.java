@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -139,7 +141,7 @@ public class CouponListAdapter extends BaseAdapter {
 
 
                 //수정과 통계 선택시 해당 페이지로 이동
-                ((Button)mDetailsLayout.findViewById(R.id.btn_couponitem_anaylize)).setOnClickListener(new View.OnClickListener() {
+                ((ImageButton)mDetailsLayout.findViewById(R.id.btn_couponitem_anaylize)).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         CouponListFragment.coupon = arrayList.get(i);
@@ -147,7 +149,7 @@ public class CouponListAdapter extends BaseAdapter {
                     }
                 });
 
-                ((Button)mDetailsLayout.findViewById(R.id.btn_couponitem_edit)).setOnClickListener(new View.OnClickListener() {
+                ((ImageButton)mDetailsLayout.findViewById(R.id.btn_couponitem_edit)).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         CouponListFragment.coupon = arrayList.get(i);
