@@ -202,6 +202,11 @@
                         android:id="@+id/btn_register_tilt" />
 
 
+                    <ImageView
+                        android:layout_width="100dp"
+                        android:src="@drawable/tilt_1"
+                        android:layout_height="100dp"
+                        android:id="@+id/img_coupon_detail_tilt" />
                     <Button
                         android:layout_marginBottom="50dp"
                         android:layout_marginTop="50dp"

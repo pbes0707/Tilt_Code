@@ -40,6 +40,10 @@ import java.util.Locale;
  */
 public class CouponListAdapter extends BaseAdapter {
 
+    //각도별 이미지 14개
+    int[] resources = {R.drawable.tilt_1,R.drawable.tilt_2,R.drawable.tilt_3,R.drawable.tilt_4,R.drawable.tilt_5,R.drawable.tilt_6,R.drawable.tilt_7,R.drawable.tilt_8,R.drawable.tilt_9,R.drawable.tilt_10,R.drawable.tilt_11,R.drawable.tilt_12,R.drawable.tilt_13,R.drawable.tilt_14};
+
+
     //로그에 쓰일 tag
     public static final String TAG = CouponListAdapter.class.getSimpleName();
 
@@ -138,6 +142,10 @@ public class CouponListAdapter extends BaseAdapter {
                     e.printStackTrace();
                     Log.e(TAG, "error : " + e.getMessage());
                 }
+                Log.d(TAG,"selected tilt : "+arrayList.get(i).tilt);
+                Log.d(TAG,"selected create : "+arrayList.get(i).create);
+                Log.d(TAG,"selected titlt : "+arrayList.get(i).title);
+                ((ImageView)mDetailsLayout.findViewById(R.id.img_coupon_detail_tilt)).setImageResource(resources[Integer.valueOf(arrayList.get(i).tilt)-1]);
 
 
                 //수정과 통계 선택시 해당 페이지로 이동

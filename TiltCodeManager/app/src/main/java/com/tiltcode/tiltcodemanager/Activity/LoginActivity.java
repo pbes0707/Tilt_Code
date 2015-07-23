@@ -107,6 +107,7 @@ public class LoginActivity extends Activity {
                         public void success(com.tiltcode.tiltcodemanager.Model.LoginResult loginResult, Response response) {
                             Log.d(TAG,"access success / code : "+loginResult.code);
                             if (loginResult.code.equals("1")) { //성공
+                                Log.d(TAG,"token : "+Util.getAccessToken().getToken());
 
                                 GCMRegister reg = new GCMRegister(LoginActivity.this.getApplicationContext(), LoginActivity.this);
                                 reg.execute();

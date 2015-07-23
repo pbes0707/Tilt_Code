@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
@@ -66,6 +67,8 @@ public class CouponListEditFragment extends Fragment {
     EditText descText;
     EditText titleText;
 
+    public static ImageView tiltImage;
+
     public static String tilt;
 
     Button registButton;
@@ -119,9 +122,11 @@ public class CouponListEditFragment extends Fragment {
                 public void onClick(View view) {
                     //tilt선택시 해당 activity로 result activity시작
                     Intent intent = new Intent(context, TiltSelectActivity.class);
-                    startActivityForResult(intent,1126);
+                    getActivity().startActivityForResult(intent, 1126);
                 }
             });
+
+            tiltImage = ((ImageView)v.findViewById(R.id.img_coupon_detail_tilt));
 
             init();
 
@@ -387,6 +392,7 @@ public class CouponListEditFragment extends Fragment {
         //시간형태의 쿠폰 수정
         Log.d(TAG,"beginT : "+beginT+" endT : "+endT);
         Log.d(TAG,"session : "+Util.getAccessToken().getToken()+" id : "+coupon.id);
+        Log.d(TAG,"tilt : "+tilt);
         Util.getEndPoint().setPort("40002");
         Util.getHttpSerivce().couponManageModifyTime(Util.getAccessToken().getToken(),
                 coupon.id,

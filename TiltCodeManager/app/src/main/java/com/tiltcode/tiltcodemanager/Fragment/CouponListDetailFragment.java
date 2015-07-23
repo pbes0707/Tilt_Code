@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,6 +54,7 @@ public class CouponListDetailFragment extends Fragment {
     BarChart sexChart;
     LineChart ageChart;
     PieChart deviceChart;
+
 
     Coupon coupon;
 
@@ -116,6 +118,7 @@ public class CouponListDetailFragment extends Fragment {
                     @Override
                     public void success(AnalyticResult analyticResult, Response response) {
 
+                        Log.d(TAG,"analytic code : "+analyticResult.code);
 
                         if(analyticResult.code.equals("1")){
                             tvDownload.setText("다운로드수 : " +analyticResult.data.count);
@@ -124,6 +127,7 @@ public class CouponListDetailFragment extends Fragment {
 
 
 
+                            initChart(analyticResult);
                             /*
                             BarSet barSet = new BarSet();
 
@@ -189,6 +193,7 @@ public class CouponListDetailFragment extends Fragment {
 
                     @Override
                     public void failure(RetrofitError error) {
+                        Log.d(TAG,"error : "+error.getMessage());
 
                         Toast.makeText(context, getResources().getString(R.string.message_network_error),Toast.LENGTH_LONG).show();
                     }
@@ -197,25 +202,29 @@ public class CouponListDetailFragment extends Fragment {
 
 
 
-        initChart();
     }
 
-    void initChart(){
-        initBarChart();
-        initLineChart();
-        initPieChart();
+    void initChart(AnalyticResult analyticResult){
+        initBarChart(analyticResult);
+        initLineChart(analyticResult);
+        initPieChart(analyticResult);
     }
 
 
-    void initPieChart(){
+    void initPieChart(AnalyticResult analyticResult){
+
+        Log.d(TAG,"device : "+analyticResult.data.model);
 
         ArrayList<String> xVals = new ArrayList<String>();
 
         ArrayList<Entry> entries = new ArrayList<Entry>();
 
-        for (int i = 0; i < 5; i++) {
-            xVals.add(i+"");
-            Entry entry = new Entry(((int)(Math.random()*10+10)),i);
+        int i=0;
+
+        for (String key : analyticResult.data.model.keySet()) {
+            i++;
+            xVals.add(key);
+            Entry entry = new Entry(Float.valueOf(analyticResult.data.model.get(key)),i);
             entries.add(entry);
         }
 
@@ -234,63 +243,91 @@ public class CouponListDetailFragment extends Fragment {
         deviceChart.getAxisLeft().setTextColor(Color.WHITE);
         deviceChart.getAxisRight().setEnabled(false);*/
         deviceChart.setData(data);
+        deviceChart.invalidate();
 
     }
 
-    void initLineChart(){
+    void initLineChart(AnalyticResult analyticResult){
 
         ArrayList<String> xVals = new ArrayList<String>();
 
         ArrayList<Entry> entries = new ArrayList<Entry>();
+        LineData data = null;
 
-        for (int i = 0; i < 10; i++) {
-            xVals.add(i+"");
-            Entry entry = new Entry(((int)(Math.random()*10+10)),i);
+        for (int i = 0; i < analyticResult.data.age.length; i++) {
+            if(analyticResult.data.age[i]==0) continue;
+            xVals.add(i*10+"~"+(i+1)*10);
+            Entry entry = new Entry((int)analyticResult.data.age[i],i);
             entries.add(entry);
+
+            LineDataSet set = new LineDataSet(entries, xVals.get(i));
+//        set.setLin(40f);
+            if(i<5) {
+                set.setColor(ColorTemplate.LIBERTY_COLORS[i]);
+            }
+            else{
+                set.setColor(ColorTemplate.COLORFUL_COLORS[i%5]);
+            }
+            if(i==0){
+
+                data = new LineData(xVals, set);
+                data.setValueTextSize(10f);
+                data.setDrawValues(true);
+            }
+            else{
+                data.addDataSet(set);
+            }
         }
 
-        LineDataSet set = new LineDataSet(entries, "");
-//        set.setLin(40f);
-        set.setColors(ColorTemplate.COLORFUL_COLORS);
 
 
-        LineData data = new LineData(xVals, set);
-        data.setValueTextSize(10f);
-        data.setDrawValues(true);
 
         ageChart.getXAxis().removeAllLimitLines();
-        ageChart.getXAxis().setEnabled(false);
+//        ageChart.getXAxis().setEnabled(false);
         ageChart.getAxisLeft().setTextColor(Color.WHITE);
         ageChart.getAxisRight().setEnabled(false);
         ageChart.setData(data);
+        ageChart.invalidate();
 
     }
 
-    void initBarChart(){
+    void initBarChart(AnalyticResult analyticResult){
         ArrayList<String> xVals = new ArrayList<String>();
 
-        ArrayList<BarEntry> entries = new ArrayList<BarEntry>();
+        xVals.add("남성");
+        xVals.add("여성");
+        xVals.add("알수없음");
 
-        for (int i = 0; i < 3; i++) {
-            xVals.add(i+"");
-            BarEntry entry = new BarEntry(((int)(Math.random()*10+10)),i);
+        BarData data = null;
+
+        for (int i = 0; i < analyticResult.data.sex.length; i++) {
+            ArrayList<BarEntry> entries = new ArrayList<BarEntry>();
+            BarEntry entry = new BarEntry(analyticResult.data.sex[i],i);
             entries.add(entry);
+
+            BarDataSet set = new BarDataSet(entries, xVals.get(i));
+            set.setBarSpacePercent(40f);
+
+            set.setColor(ColorTemplate.COLORFUL_COLORS[i]);
+
+            if(i==0){
+                data = new BarData(xVals, set);
+            }
+            else{
+                data.addDataSet(set);
+            }
         }
 
-        BarDataSet set = new BarDataSet(entries, "");
-        set.setBarSpacePercent(40f);
-        set.setColors(ColorTemplate.COLORFUL_COLORS);
-
-
-        BarData data = new BarData(xVals, set);
         data.setValueTextSize(10f);
         data.setDrawValues(true);
 
         sexChart.getXAxis().removeAllLimitLines();
-        sexChart.getXAxis().setEnabled(false);
+//        sexChart.getXAxis().setEnabled(false);
+
         sexChart.getAxisLeft().setTextColor(Color.WHITE);
         sexChart.getAxisRight().setEnabled(false);
         sexChart.setData(data);
+        sexChart.invalidate();
 
 
 

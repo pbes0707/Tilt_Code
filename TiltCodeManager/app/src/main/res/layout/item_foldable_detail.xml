@@ -69,7 +69,6 @@
                     android:textColor="#ffffff"
                     android:id="@+id/tv_coupon_detail_location" />
 
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:textColor="#ffffff"
@@ -77,6 +76,20 @@
                     android:textSize="40dp"
                     android:text=""
                     android:id="@+id/tv_coupon_detail_desc" />
+
+                <TextView
+                    android:layout_marginTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:textSize="20dp"
+                    android:layout_height="wrap_content"
+                    android:text="Tilt 각도"
+                    android:textColor="#b3ffff"
+                    />
+                <ImageView
+                    android:layout_width="100dp"
+                    android:src="@drawable/tilt_1"
+                    android:layout_height="100dp"
+                    android:id="@+id/img_coupon_detail_tilt" />
 
                 <LinearLayout
                     android:layout_marginTop="0dp"

@@ -24,6 +24,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -56,6 +57,9 @@ public class RegisterActivity extends ActionActivity {
 
     //로그에 쓰일 tag
     public static final String TAG = RegisterActivity.class.getSimpleName();
+
+    //각도별 이미지 14개
+    int[] resources = {R.drawable.tilt_1,R.drawable.tilt_2,R.drawable.tilt_3,R.drawable.tilt_4,R.drawable.tilt_5,R.drawable.tilt_6,R.drawable.tilt_7,R.drawable.tilt_8,R.drawable.tilt_9,R.drawable.tilt_10,R.drawable.tilt_11,R.drawable.tilt_12,R.drawable.tilt_13,R.drawable.tilt_14};
 
     ImageButton btnFile;
     ImageButton btnImage;
@@ -518,6 +522,8 @@ public class RegisterActivity extends ActionActivity {
             case 1126:
 
                 tiltValue = String.valueOf(data.getIntExtra("tiltValue",1));
+
+                ((ImageView)findViewById(R.id.img_coupon_detail_tilt)).setImageResource(resources[Integer.valueOf(tiltValue)-1]);
                 Log.d(TAG, "tiltValue : "+tiltValue);
 
                 break;

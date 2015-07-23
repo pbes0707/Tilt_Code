@@ -16,6 +16,7 @@ package com.tiltcode.tiltcodemanager.Activity;
         import android.util.Log;
         import android.view.View;
         import android.widget.Button;
+        import android.widget.ImageView;
         import android.widget.LinearLayout;
         import android.widget.TextView;
         import android.widget.Toast;
@@ -57,6 +58,12 @@ public class CouponListActivity extends ActionFragmentActivity{
     Fragment fragment1; //couponlist fragment
     Fragment fragment2; //couponlistdetail fragment
     Fragment fragment3; //couponlistedit fragment
+
+
+    //각도별 이미지 14개
+    int[] resources = {R.drawable.tilt_1,R.drawable.tilt_2,R.drawable.tilt_3,R.drawable.tilt_4,R.drawable.tilt_5,R.drawable.tilt_6,R.drawable.tilt_7,R.drawable.tilt_8,R.drawable.tilt_9,R.drawable.tilt_10,R.drawable.tilt_11,R.drawable.tilt_12,R.drawable.tilt_13,R.drawable.tilt_14};
+
+
 
     int nowPage;
 
@@ -220,8 +227,10 @@ public class CouponListActivity extends ActionFragmentActivity{
 
                 break;
             case 1126:
-
+                Log.d(TAG,"tilt : "+String.valueOf(data.getIntExtra("tiltValue",1)));
                 CouponListEditFragment.tilt = String.valueOf(data.getIntExtra("tiltValue",1));
+
+                CouponListEditFragment.tiltImage.setImageResource(resources[Integer.valueOf(CouponListEditFragment.tilt)-1]);
 //                Log.d(TAG, "tiltValue : "+tiltValue);
 
                 break;

@@ -210,6 +210,7 @@ public class LoginActivity extends Activity {
                             dialog.dismiss();
                             Log.d(TAG,"access success / code : "+loginResult.code);
                             if (loginResult.code.equals("1")) { //성공
+                                Log.d(TAG,"token : "+Util.getAccessToken().getToken());
 
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
@@ -245,8 +246,10 @@ public class LoginActivity extends Activity {
                 TelephonyManager tManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
                 String uuid = tManager.getDeviceId();
 
+                String model = Build.BRAND + " " + Build.DEVICE;
+
                 Util.getEndPoint().setPort("40001");
-                Util.getHttpSerivce().signFacebook(uuid, "null", "null", "null", "null", "null",        //비회원 로그인시에는 uuid를 통해 페이스북 로그인인것처럼 로그인한다.
+                Util.getHttpSerivce().signFacebook(uuid, "null", "null", "null", uuid, model,        //비회원 로그인시에는 uuid를 통해 페이스북 로그인인것처럼 로그인한다.
                         new Callback<com.tiltcode.tiltcode.Model.LoginResult>() {
                             @Override
                             public void success(com.tiltcode.tiltcode.Model.LoginResult loginResult, Response response) {
@@ -366,7 +369,6 @@ public class LoginActivity extends Activity {
                 dialog.dismiss();
             }
         });
-
     }
 
     @Override
