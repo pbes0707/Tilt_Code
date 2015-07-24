@@ -26,12 +26,46 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right">
 
-                <ImageView
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="350dp"
-                    android:id="@+id/img_coupon_detail"
-                    android:scaleType="centerCrop"
-                    android:layout_gravity="center_horizontal" />
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="350dp"
+                        android:id="@+id/img_coupon_detail"
+                        android:scaleType="centerCrop"
+                        android:layout_gravity="center_horizontal" />
+                    <LinearLayout
+                        android:layout_marginTop="0dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="right|bottom"
+                        android:orientation="horizontal">
+
+                        <ImageButton
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginTop="50dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_width="71dp"
+                            android:layout_height="28dp"
+                            android:textColor="#ababab"
+                            android:scaleType="center"
+                            android:background="@drawable/btn_edit"
+                            android:id="@+id/btn_couponitem_edit" />
+                        <ImageButton
+                            android:layout_marginRight="20dp"
+                            android:layout_marginTop="50dp"
+                            android:scaleType="center"
+                            android:layout_marginBottom="10dp"
+                            android:layout_width="71dp"
+                            android:layout_height="28dp"
+                            android:textColor="#ababab"
+                            android:background="@drawable/btn_analytic"
+                            android:id="@+id/btn_couponitem_anaylize" />
+                    </LinearLayout>
+                </FrameLayout>
 
             </LinearLayout>
 
@@ -91,35 +125,6 @@
                     android:layout_height="100dp"
                     android:id="@+id/img_coupon_detail_tilt" />
 
-                <LinearLayout
-                    android:layout_marginTop="0dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:orientation="horizontal">
-
-                    <ImageButton
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
-                        android:layout_marginTop="50dp"
-                        android:layout_marginBottom="30dp"
-                        android:layout_width="71dp"
-                        android:layout_height="28dp"
-                        android:textColor="#ababab"
-                        android:scaleType="center"
-                        android:background="@drawable/btn_edit"
-                        android:id="@+id/btn_couponitem_edit" />
-                    <ImageButton
-                        android:layout_marginRight="20dp"
-                        android:layout_marginTop="50dp"
-                        android:scaleType="center"
-                        android:layout_marginBottom="30dp"
-                        android:layout_width="71dp"
-                        android:layout_height="28dp"
-                        android:textColor="#ababab"
-                        android:background="@drawable/btn_analytic"
-                        android:id="@+id/btn_couponitem_anaylize" />
-                </LinearLayout>
 
             </LinearLayout>
 
