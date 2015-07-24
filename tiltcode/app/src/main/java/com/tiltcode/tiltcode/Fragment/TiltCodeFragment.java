@@ -33,6 +33,13 @@ public class TiltCodeFragment extends BackFragment implements SensorEventListene
     private ActivityManager mActivityManager;
     private SensorManager mSensorManager;
     private Sensor accelerometerSensor;
+    private Sensor magnetometer;
+    private float[] mGravity = null;
+    private float[] mGeomagnetic= null;
+    private float sR[] = new float[9];
+    private float sI[] = new float[9];
+    private float[] mMagnetic;
+
     //로그에 쓰일 tag
     public static final String TAG = TiltCodeFragment.class.getSimpleName();
 
@@ -47,6 +54,34 @@ public class TiltCodeFragment extends BackFragment implements SensorEventListene
         this.context = MainPagerAdapter.context;
     }
 
+    private float getDirection()
+    {
+
+        float[] temp = new float[9];
+        float[] R = new float[9];
+        //Load rotation matrix into R
+        SensorManager.getRotationMatrix(temp, null,
+                mGravity, mMagnetic);
+
+        //Remap to camera's point-of-view
+        SensorManager.remapCoordinateSystem(temp,
+                SensorManager.AXIS_X,
+                SensorManager.AXIS_Z, R);
+
+        //Return the orientation values
+        float[] values = new float[3];
+        SensorManager.getOrientation(R, values);
+
+        //Convert to degrees
+        for (int i=0; i < values.length; i++) {
+            Double degrees = (values[i] * 180) / Math.PI;
+            values[i] = degrees.floatValue();
+        }
+
+        return values[2];
+
+    }
+
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
@@ -56,8 +91,10 @@ public class TiltCodeFragment extends BackFragment implements SensorEventListene
         mActivityManager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
         mSensorManager = (SensorManager)getActivity().getSystemService(getActivity().SENSOR_SERVICE);
         accelerometerSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        magnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
         mSensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_UI);
 
         tiltView = new TiltCodeView(context);
         ((LinearLayout)v.findViewById(R.id.tiltview_tiltcodefragment)).addView(tiltView);
@@ -78,6 +115,7 @@ public class TiltCodeFragment extends BackFragment implements SensorEventListene
     {
         accelerometerSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mSensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_UI);
         super.onResume();
     }
 
@@ -89,21 +127,20 @@ public class TiltCodeFragment extends BackFragment implements SensorEventListene
     @Override
     public void onSensorChanged(SensorEvent event)
     {
-        switch(event.sensor.getType())
-        {
-            // 가속도 센서일때
-            case Sensor.TYPE_ACCELEROMETER:
-            {
-                float[] values = event.values;
-                accelData = new AccelData(
-                        Math.round(values[0] * 100d) / 100d,
-                        Math.round(values[1] * 100d) / 100d,
-                        Math.round(values[2] * 100d) / 100d);
+        switch(event.sensor.getType()) {
 
-//                Log.d(TAG,"x : "+accelData.x+" y : "+accelData.y+" z :"+accelData.z);
-                tiltView.tiltX = (float)accelData.x;
+            case Sensor.TYPE_ACCELEROMETER:
+                mGravity = event.values.clone();
                 break;
-            }
+            case Sensor.TYPE_MAGNETIC_FIELD:
+                mMagnetic = event.values.clone();
+                break;
+            default:
+                return;
+        }
+        if(mGravity != null && mMagnetic != null) {
+            tiltView.tiltX = getDirection();
+            Log.d("s", "tilt X : " + getDirection());
         }
     }
 

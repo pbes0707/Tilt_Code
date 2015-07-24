@@ -95,7 +95,7 @@ public class ReceiveListAdapter extends BaseAdapter {
                     CouponReceiveActivity.selectedIndex = i;
                     Log.d(TAG, "selectedIndex : " + i);
                     for (int j = 0; j < checkList.size(); j++) {
-                        if (checkList.get(j).getTag()==i) continue;
+                        if ((int)checkList.get(j).getTag()==i) continue;
                         Log.d(TAG, "unchecked id : " + j);
                         checkList.get(j).setChecked(false);
 
