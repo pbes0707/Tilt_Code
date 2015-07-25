@@ -96,11 +96,11 @@ public class TiltCodeView extends View {
 //        canvas.rotate(0,0,0,0);
         canvas.drawText((int)tiltX+"°", width/2-100,400,p);
 
-        canvas.rotate(tiltX,width/2,height/2);
+        canvas.rotate(-tiltX,width/2,height/2);
         canvas.drawBitmap(radorImage, null, new Rect(width / 2 - 450, height / 2 - 450, width / 2 + 450, height / 2 + 450), null);
 
-        //canvas.rotate(tiltX,width/2,height/2);
-        if(Math.abs(tiltX)>=40 && Math.abs(tiltX)<=50){
+        canvas.rotate(tiltX,width/2,height/2);
+        if((Math.abs(tiltX)>=40 && Math.abs(tiltX)<=50)||(Math.abs(tiltX)>=130 && Math.abs(tiltX)<=140)){
             canvas.drawBitmap(tiltpImage,null, new Rect(width/2-150,height/2-270,width/2+150,height/2+270),null);
         }
         else {
