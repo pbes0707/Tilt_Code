@@ -184,6 +184,7 @@ public class TiltService extends Service implements SensorEventListener {
 
     @Override
     public void onDestroy() {
+        Log.d(LOG_NAME,"onDestroy");
         serviceRunning = false;
         mSensorManager.unregisterListener(this);
         register();

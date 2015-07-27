@@ -108,7 +108,7 @@ public class SignupFragment  extends Fragment {
             @Override
             public void onClick(View view) {
                 Calendar cal = Calendar.getInstance();
-                new DatePickerDialog(context,dateSetListener,cal.get(Calendar.YEAR), cal.get(Calendar.MONTH)+1, cal.get(Calendar.DAY_OF_MONTH));
+                new DatePickerDialog(context,dateSetListener,cal.get(Calendar.YEAR), cal.get(Calendar.MONTH)+1, cal.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
         //성별선택

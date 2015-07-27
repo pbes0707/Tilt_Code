@@ -118,6 +118,7 @@ public class Util {
     public static LoginToken getAccessToken(){
         if(accessToken==null){
             accessToken = new LoginToken();
+            accessToken.loadToken();
         }
         return accessToken;
     }
