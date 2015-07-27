@@ -43,9 +43,26 @@
                         android:gravity="right|bottom"
                         android:orientation="horizontal">
 
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:src="@drawable/tilt_5"
+                            android:layout_height="40dp"
+                            android:id="@+id/img_coupon_detail_tilt" />
+
                         <ImageButton
                             android:layout_marginLeft="20dp"
-                            android:layout_marginRight="20dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginTop="50dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_width="71dp"
+                            android:layout_height="28dp"
+                            android:textColor="#ababab"
+                            android:scaleType="center"
+                            android:background="@drawable/btn_delete"
+                            android:id="@+id/btn_couponitem_delete" />
+                        <ImageButton
+                            android:layout_marginRight="10dp"
                             android:layout_marginTop="50dp"
                             android:layout_marginBottom="10dp"
                             android:layout_width="71dp"
@@ -119,11 +136,6 @@
                     android:text="Tilt 각도"
                     android:textColor="#b3ffff"
                     />
-                <ImageView
-                    android:layout_width="100dp"
-                    android:src="@drawable/tilt_1"
-                    android:layout_height="100dp"
-                    android:id="@+id/img_coupon_detail_tilt" />
 
 
             </LinearLayout>

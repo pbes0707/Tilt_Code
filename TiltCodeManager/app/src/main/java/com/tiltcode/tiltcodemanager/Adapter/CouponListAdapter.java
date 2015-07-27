@@ -1,6 +1,7 @@
 package com.tiltcode.tiltcodemanager.Adapter;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
@@ -23,8 +24,14 @@ import android.widget.Toast;
 import com.alexvasilkov.foldablelayout.UnfoldableView;
 import com.squareup.picasso.Picasso;
 import com.tiltcode.tiltcodemanager.Activity.CouponListActivity;
+import com.tiltcode.tiltcodemanager.Activity.MainActivity;
+import com.tiltcode.tiltcodemanager.Fragment.CouponListDetailFragment;
+import com.tiltcode.tiltcodemanager.Fragment.CouponListEditFragment;
 import com.tiltcode.tiltcodemanager.Fragment.CouponListFragment;
 import com.tiltcode.tiltcodemanager.Model.Coupon;
+import com.tiltcode.tiltcodemanager.Model.GCMRegister;
+import com.tiltcode.tiltcodemanager.Model.LoginResult;
+import com.tiltcode.tiltcodemanager.Model.LoginToken;
 import com.tiltcode.tiltcodemanager.R;
 import com.tiltcode.tiltcodemanager.Util;
 
@@ -35,6 +42,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+
 /**
  * Created by JSpiner on 2015. 6. 27..
  */
@@ -43,6 +54,7 @@ public class CouponListAdapter extends BaseAdapter {
     //각도별 이미지 14개
     int[] resources = {R.drawable.tilt_1,R.drawable.tilt_2,R.drawable.tilt_3,R.drawable.tilt_4,R.drawable.tilt_5,R.drawable.tilt_6,R.drawable.tilt_7,R.drawable.tilt_8,R.drawable.tilt_9,R.drawable.tilt_10,R.drawable.tilt_11,R.drawable.tilt_12,R.drawable.tilt_13,R.drawable.tilt_14};
 
+    ProgressDialog dialog;
 
     //로그에 쓰일 tag
     public static final String TAG = CouponListAdapter.class.getSimpleName();
@@ -153,6 +165,7 @@ public class CouponListAdapter extends BaseAdapter {
                     @Override
                     public void onClick(View view) {
                         CouponListFragment.coupon = arrayList.get(i);
+                        CouponListEditFragment.coupon = CouponListFragment.coupon;
                         ((CouponListActivity) CouponListActivity.context).setPage(2);
                     }
                 });
@@ -161,7 +174,45 @@ public class CouponListAdapter extends BaseAdapter {
                     @Override
                     public void onClick(View view) {
                         CouponListFragment.coupon = arrayList.get(i);
+                        CouponListDetailFragment.coupon = CouponListFragment.coupon;
                         ((CouponListActivity) CouponListActivity.context).setPage(3);
+                    }
+                });
+                ((ImageButton)mDetailsLayout.findViewById(R.id.btn_couponitem_delete)).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        dialog = new ProgressDialog(context);
+                        dialog.setTitle("로드중");
+                        dialog.setMessage("데이터를 불러오는중입니다..");
+                        dialog.show();
+
+                        Util.getEndPoint().setPort("40002");
+                        Util.getHttpSerivce().couponDelete(Util.getAccessToken().getToken(), arrayList.get(i).id
+                                , new Callback<LoginResult>() {
+                            @Override
+                            public void success(com.tiltcode.tiltcodemanager.Model.LoginResult loginResult, Response response) {
+                                Log.d(TAG, "login success / code : " + loginResult.code);
+                                if (loginResult.code.equals("1")) {
+                                    Toast.makeText(context, context.getResources().getText(R.string.message_success_delete), Toast.LENGTH_LONG).show();
+
+                                    ((CouponListActivity) CouponListActivity.context).setPage(1);
+                                } else if (loginResult.code.equals("-1")) { //누락된게있음
+                                    //     Toast.makeText(getBaseContext(),getResources().getText(R.string.message_not_enough_data),Toast.LENGTH_LONG).show();
+                                } else if (loginResult.code.equals("-2")) { //아이디비번일치하지않음
+                                    //     Toast.makeText(getBaseContext(),getResources().getText(R.string.message_not_match_account),Toast.LENGTH_LONG).show();
+                                }
+                                dialog.dismiss();
+                            }
+
+                            @Override
+                            public void failure(RetrofitError error) {
+                                Log.e(TAG, "login failure : " + error.getMessage());
+                                Toast.makeText(context, context.getResources().getText(R.string.message_network_error), Toast.LENGTH_LONG).show();
+
+                                dialog.dismiss();
+                            }
+                        });
                     }
                 });
 

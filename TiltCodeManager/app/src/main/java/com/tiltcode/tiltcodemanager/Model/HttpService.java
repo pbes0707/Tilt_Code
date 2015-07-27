@@ -140,11 +140,21 @@ public interface HttpService {
                     Callback<LoginResult> ret);
 
     @FormUrlEncoded
+    @POST("/couponManageDelete")
+    void couponDelete(@Field("session") String session,
+                           @Field("id") String id,
+                           Callback<LoginResult> ret);
+
+    @Multipart
     @POST("/couponImageModify")
     void couponImageModify(@Part("session") String session,
-                  @Part("id") String id,
-                  @Part("image") TypedFile image,
-                  Callback<LoginResult> ret);
+                           @Part("id") String id,
+                           @Part("image") TypedFile image,
+                           Callback<LoginResult> ret);
+
+    @GET("/couponGetFile")
+    retrofit.client.Response getFile(@Query("session") String session,
+                                     @Query("id") String id);
 
     @Multipart
     @POST("/couponFileModify")

@@ -1,6 +1,7 @@
 package com.tiltcode.tiltcodemanager.Adapter;
 
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -36,7 +37,7 @@ public class TiltSelectPagerAdapter extends PagerAdapter {
         //각도별 이미지를 viewpager에 설정
         v = mInflater.inflate(R.layout.item_tiltselect_row, null);
         ImageView imv = ((ImageView)v.findViewById(R.id.imv_tiltselect_row));
-
+//        ((BitmapDrawable)imv.getDrawable()).getBitmap().recycle();
         imv.setImageResource(resources[position]);
 
         ((ViewPager) pager).addView(v, 0);

@@ -56,7 +56,7 @@ public class CouponListDetailFragment extends Fragment {
     PieChart deviceChart;
 
 
-    Coupon coupon;
+    public static Coupon coupon;
 
     TextView tvTitle;
     TextView tvDownload;

@@ -119,14 +119,29 @@
                         android:textColor="#ffffff"
                         android:id="@+id/tv_register_file_uri" />
 
-                    <ImageButton
-                        android:scaleType="centerInside"
-                        android:src="@drawable/ic_file"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:maxHeight="150dp"
-                        android:maxWidth="150dp"
-                        android:id="@+id/imv_register_file" />
+                        android:orientation="horizontal">
+
+                        <ImageButton
+                            android:scaleType="centerInside"
+                            android:src="@drawable/down"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:id="@+id/imv_register_file_down" />
+
+
+                        <ImageButton
+                            android:scaleType="centerInside"
+                            android:src="@drawable/ic_file"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:maxHeight="150dp"
+                            android:maxWidth="150dp"
+                            android:id="@+id/imv_register_file" />
+                    </LinearLayout>
+
 
                     <TextView
                         android:layout_marginTop="10dp"

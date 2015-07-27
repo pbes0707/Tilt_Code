@@ -111,7 +111,7 @@ public class CouponListActivity extends ActionFragmentActivity{
         Fragment fr = null;
 
         if(nowPage==1){
-            fr = fragment1;
+            fr = new CouponListFragment(); //fragment1;
         }
         else if(nowPage==2){
             fr = fragment2;

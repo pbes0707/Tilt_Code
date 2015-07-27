@@ -1,11 +1,15 @@
 package com.tiltcode.tiltcodemanager.Fragment;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
@@ -13,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -38,8 +43,15 @@ import com.tiltcode.tiltcodemanager.Model.PointResult;
 import com.tiltcode.tiltcodemanager.R;
 import com.tiltcode.tiltcodemanager.Util;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -50,12 +62,17 @@ import retrofit.mime.TypedFile;
  */
 public class CouponListEditFragment extends Fragment {
 
+
+    //각도별 이미지 14개
+    int[] resources = {R.drawable.tilt_1,R.drawable.tilt_2,R.drawable.tilt_3,R.drawable.tilt_4,R.drawable.tilt_5,R.drawable.tilt_6,R.drawable.tilt_7,R.drawable.tilt_8,R.drawable.tilt_9,R.drawable.tilt_10,R.drawable.tilt_11,R.drawable.tilt_12,R.drawable.tilt_13,R.drawable.tilt_14};
+
+
     //로그에 쓰일 tag
     public static final String TAG = CouponListEditFragment.class.getSimpleName();
 
     int layoutid;
     Context context;
-    Coupon coupon;
+    public static Coupon coupon;
 
     public static TextView fileUrl;
 
@@ -74,8 +91,11 @@ public class CouponListEditFragment extends Fragment {
     Button registButton;
     public static ImageButton btnImage;
     ImageButton btnFile;
+    ImageButton btnFileDown;
 
     public static TextView gpsText;
+
+    TextView gpsLocale;
 
     ProgressDialog dialog;
 
@@ -114,6 +134,7 @@ public class CouponListEditFragment extends Fragment {
             registButton = ((Button)v.findViewById(R.id.btn_register_proc));
             btnImage = ((ImageButton)v.findViewById(R.id.imv_register_image));
             btnFile = ((ImageButton)v.findViewById(R.id.imv_register_file));
+            btnFileDown = ((ImageButton)v.findViewById(R.id.imv_register_file_down));
             fileUrl = ((TextView)v.findViewById(R.id.tv_register_file_uri));
             gpsText = ((TextView)v.findViewById(R.id.tv_register_gps_locale));
 
@@ -172,6 +193,34 @@ public class CouponListEditFragment extends Fragment {
 
     };
 
+
+    private String getMimeType(String url)
+    {
+        String parts[]=url.split("\\.");
+        String extension=parts[parts.length-1];
+        String type = null;
+        if (extension != null) {
+            MimeTypeMap mime = MimeTypeMap.getSingleton();
+            type = mime.getMimeTypeFromExtension(extension);
+        }
+        return type;
+    }
+    public String setFilePath(String title){
+        return title.replace(' ','_');
+    }
+
+    byte[] streamToBytes(InputStream stream) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        if (stream != null) {
+            byte[] buf = new byte[1024];
+            int r;
+            while ((r = stream.read(buf)) != -1) {
+                baos.write(buf, 0, r);
+            }
+        }
+        return baos.toByteArray();
+    }
+
     void init() {
 
         /*
@@ -189,15 +238,124 @@ public class CouponListEditFragment extends Fragment {
                 break;
         }
 
+
         if(coupon.beginT==null){
             //gps
             couponPickType.setSelection(1);
+
+            //gps 좌표를 기준으로 주소값을 가져옴
+            Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+            Address address;
+            String result = null;
+            List<Address> list = null;
+            try {
+                Log.d(TAG, "lat : " + coupon.lat+" lng : "+coupon.lng);
+                list = geocoder.getFromLocation(Double.valueOf(coupon.lat),Double.valueOf(coupon.lng), 1);
+                address = list.get(0);
+                result = address.getAddressLine(0) + ", " + address.getLocality();
+
+                gpsText.setText(result);
+                Log.d(TAG, "location : " + result);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e(TAG, "error : " + e.getMessage());
+            }
+            gpsText.setVisibility(View.VISIBLE);
         }
         else{
             //time
             couponPickType.setSelection(2);
+            gpsText.setText(coupon.beginT+"~"+coupon.endT);
+            gpsText.setVisibility(View.VISIBLE);
         }
 
+        tiltImage.setImageResource(resources[Integer.valueOf(coupon.tilt)]);
+        File pdfFile = new File(Environment.getExternalStorageDirectory() + "/Download/" + setFilePath(coupon.title) + "." + coupon.fileEx);
+
+        if(pdfFile.exists()){
+            fileUrl.setText(pdfFile.getPath());
+            fileUrl.setVisibility(View.VISIBLE);
+        }
+
+        btnFileDown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                File pdfFile = new File(Environment.getExternalStorageDirectory() + "/Download/" + setFilePath(coupon.title) + "." + coupon.fileEx);
+                if(pdfFile.exists()){
+
+                    try {
+/*                                Intent myIntent = new Intent(Intent.ACTION_VIEW);
+                                myIntent.setData(Uri.fromFile(pdfFile));
+                                Intent j = Intent.createChooser(myIntent, "이 파일을 열 어플리케이션을 선택해주세요.");
+                                context.startActivity(j);
+                                /**/
+                                /*
+                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.fromFile(pdfFile));
+                                intent.addCategory(Intent.CATEGORY_BROWSABLE);
+                                context.startActivity(intent);*/
+
+                        Intent intent = new Intent();
+                        intent.setAction(android.content.Intent.ACTION_VIEW);
+                        intent.setDataAndType(Uri.fromFile(pdfFile), getMimeType(pdfFile.getAbsolutePath()));
+                        context.startActivity(intent);
+
+                    } catch (Exception e) {
+                        Toast.makeText(context, "파일을 열수 없습니다. " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }
+                else {
+
+                    dialog = new ProgressDialog(context);
+                    dialog.setTitle("로드중");
+                    dialog.setMessage("데이터를 불러오는중입니다..");
+                    dialog.show();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Util.getEndPoint().setPort("40002");
+                            retrofit.client.Response response = Util.getHttpSerivce().getFile(Util.getAccessToken().getToken(), coupon.id + "." + coupon.fileEx);
+//                                        byte[] bytes = FileHelper.getBytesFromStream(response.getBody().in());
+                            try {
+
+                                InputStream stream = (response.getBody().in());
+
+                                byte[] fileBytes = streamToBytes(stream);
+
+                                File pdfFile = new File(Environment.getExternalStorageDirectory() + "/Download/" + setFilePath(coupon.title) + "." + coupon.fileEx);
+                                File filePath = new File(Environment.getExternalStorageDirectory() + "/Download/");
+                                filePath.mkdir();
+                                Log.d(TAG, "file : " + pdfFile.getAbsolutePath() + " name : " + pdfFile.getName() + " size : " + fileBytes.length);
+
+                                FileOutputStream output = null;
+                                output = new FileOutputStream(pdfFile);
+                                output.write(fileBytes);
+                                output.flush();
+                                output.close();
+//                                            org.apache.commons.io.IOUtils.write(fileBytes, output);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                Log.e(TAG, "file error : " + e.getMessage());
+                                ((Activity) context).runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(context, context.getResources().getText(R.string.message_download_coupon_fail), Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                                return;
+                            }
+                            ((Activity) context).runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    Toast.makeText(context, context.getResources().getText(R.string.message_download_coupon_success), Toast.LENGTH_LONG).show();
+                                dialog.dismiss();
+                                }
+                            });
+                        }
+                    }).start();
+                }
+            }
+        });
 
         //type 선택 리스너
         couponPickType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
