@@ -269,7 +269,7 @@ public class CouponListEditFragment extends Fragment {
             gpsText.setVisibility(View.VISIBLE);
         }
 
-        tiltImage.setImageResource(resources[Integer.valueOf(coupon.tilt)]);
+        tiltImage.setImageResource(resources[Integer.valueOf(coupon.tilt)-1]);
         File pdfFile = new File(Environment.getExternalStorageDirectory() + "/Download/" + setFilePath(coupon.title) + "." + coupon.fileEx);
 
         if(pdfFile.exists()){
