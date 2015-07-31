@@ -21,6 +21,10 @@ public class LoginToken {
     String model; // 기기 모델명
     int point; // 관리자 포인트(관리자용 앱에만 있음)
 
+    public LoginToken(){
+        loadToken();
+    }
+
 
     public LoginType getLoginType() {
         return loginType;

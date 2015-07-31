@@ -20,6 +20,10 @@ public class LoginToken {
     String uuid; //기기 고유값
     String model; // 기기 모델명
 
+    public LoginToken(){
+        loadToken();
+    }
+
 
     public LoginType getLoginType() {
         return loginType;
