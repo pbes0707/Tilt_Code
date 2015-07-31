@@ -46,6 +46,11 @@
             android:windowSoftInputMode="stateHidden|adjustResize"
             android:label="loginactivity">
         </activity>
+        <activity android:name=".Activity.LoginSelectActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:label="loginselectactivity">
+        </activity>
         <activity android:name=".Activity.SignupActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize"

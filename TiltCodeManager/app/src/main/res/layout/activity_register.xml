@@ -179,6 +179,7 @@
                         android:layout_width="wrap_content"
                         android:textSize="18dp"
                         android:layout_height="wrap_content"
+                        android:id="@+id/tv_register_desc"
                         android:text="설명"
                         android:textColor="#b3ffff"
                         />
@@ -193,6 +194,29 @@
                         android:hint="description"
                         android:minLines="3"
                         android:id="@+id/edt_register_desc" />
+
+                    <TextView
+                        android:layout_marginTop="10dp"
+                        android:layout_width="wrap_content"
+                        android:textSize="18dp"
+                        android:visibility="gone"
+                        android:id="@+id/tv_register_link"
+                        android:layout_height="wrap_content"
+                        android:text="링크"
+                        android:textColor="#b3ffff"
+                        />
+
+                    <EditText
+                        android:background="@drawable/text"
+                        android:padding="5dp"
+                        android:gravity="top"
+                        android:layout_margin="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="description"
+                        android:minLines="3"
+                        android:visibility="gone"
+                        android:id="@+id/edt_register_link" />
 
                     <TextView
                         android:layout_marginTop="10dp"

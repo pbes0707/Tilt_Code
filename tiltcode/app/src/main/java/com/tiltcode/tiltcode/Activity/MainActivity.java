@@ -29,7 +29,7 @@ public class MainActivity extends ActionFragmentActivity{
     //로그에 쓰일 tag
     public static final String TAG = MainActivity.class.getSimpleName();
 
-    Context context;
+    public static Context context;
 
     public static ViewPager mPager;
     MainPagerAdapter adapter;

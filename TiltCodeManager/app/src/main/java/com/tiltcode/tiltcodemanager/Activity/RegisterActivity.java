@@ -105,27 +105,36 @@ public class RegisterActivity extends ActionActivity {
         btnFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(RegisterActivity.this, FilePickerActivity.class);
-                // This works if you defined the intent filter
-                // Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+                if(couponTypeIndex==3){
 
-                // Set these depending on your use case. These are the defaults.
-                i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
-                i.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, false);
-                i.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_FILE);
+                    Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    intent.setType("image/*");
+                    startActivityForResult(intent, 1127);
+                }
+                else {
+                    Intent i = new Intent(RegisterActivity.this, FilePickerActivity.class);
+                    // This works if you defined the intent filter
+                    // Intent i = new Intent(Intent.ACTION_GET_CONTENT);
 
-                // Configure initial directory by specifying a String.
-                // You could specify a String like "/storage/emulated/0/", but that can
-                // dangerous. Always use Android's API calls to get paths to the SD-card or
-                // internal memory.
-                i.putExtra(FilePickerActivity.EXTRA_START_PATH, Environment.getExternalStorageDirectory().getPath());
+                    // Set these depending on your use case. These are the defaults.
+                    i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
+                    i.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, false);
+                    i.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_FILE);
 
-                startActivityForResult(i, 1123);
+                    // Configure initial directory by specifying a String.
+                    // You could specify a String like "/storage/emulated/0/", but that can
+                    // dangerous. Always use Android's API calls to get paths to the SD-card or
+                    // internal memory.
+                    Log.d(TAG,"download path : "+Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS));
+                    i.putExtra(FilePickerActivity.EXTRA_START_PATH, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/");
+
+                    startActivityForResult(i, 1123);
                 /*
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("*");
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
                 startActivityForResult(intent, 1123);*/
+                }
             }
         });
 
@@ -143,6 +152,19 @@ public class RegisterActivity extends ActionActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
                 couponTypeIndex = i;
+
+                if(i==1){
+                    ((TextView)findViewById(R.id.tv_register_link)).setVisibility(View.VISIBLE);
+                    ((EditText)findViewById(R.id.edt_register_link)).setVisibility(View.VISIBLE);
+//                    ((TextView)findViewById(R.id.tv_register_desc)).setText("링크");
+                }
+                else{
+ //                   ((TextView)findViewById(R.id.tv_register_desc)).setText("설명");
+
+                    ((TextView)findViewById(R.id.tv_register_link)).setVisibility(View.GONE);
+                    ((EditText)findViewById(R.id.edt_register_link)).setVisibility(View.GONE);
+                }
+
 
                 switch (i){
                     case 1:
@@ -222,11 +244,17 @@ public class RegisterActivity extends ActionActivity {
         ((Button)findViewById(R.id.btn_register_proc)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(couponPickIndex==1) {
-                    procRegisterGPS();
-                }
-                else{
-                    procRegisterTime();
+                try {
+                    if (couponPickIndex == 1) {
+                        procRegisterGPS();
+                    } else {
+                        procRegisterTime();
+                    }
+                }catch (Exception e){
+                    Toast.makeText(getBaseContext(),"항목을 모두 채워주세요.",Toast.LENGTH_LONG).show();
+                    Log.d(TAG,e.getMessage());
+                    e.printStackTrace();
+                    dialog.dismiss();
                 }
             }
         });
@@ -288,7 +316,7 @@ public class RegisterActivity extends ActionActivity {
                 getResources().getStringArray(R.array.couponTypeKey)[couponTypeIndex],
                 ((EditText)findViewById(R.id.edt_register_title)).getText().toString(),
                 ((EditText)findViewById(R.id.edt_register_desc)).getText().toString(),
-                "link",                                     //TODO : 링크
+                ((EditText)findViewById(R.id.edt_register_link)).getText().toString(),
                 String.valueOf(gpsLat),
                 String.valueOf(gpsLng),
                 tiltValue,
@@ -361,7 +389,7 @@ public class RegisterActivity extends ActionActivity {
                 getResources().getStringArray(R.array.couponTypeKey)[couponTypeIndex],
                 ((EditText) findViewById(R.id.edt_register_title)).getText().toString(),
                 ((EditText) findViewById(R.id.edt_register_desc)).getText().toString(),
-                "link",                                     //TODO : 링크
+                ((EditText)findViewById(R.id.edt_register_link)).getText().toString(),
                 beginT,
                 endT,
                 dateTime,
@@ -426,7 +454,9 @@ public class RegisterActivity extends ActionActivity {
             1124 : 이미지선택
             1125 : gps 선택
             1126 : tilt 선택
+            1127 : 파일선택(이미지타입)
              */
+           ///storage/emula항ted/0/DCIM/Camera/asdf.jpg
             case 1123:
                 if (data.getBooleanExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false)) {
                     // For JellyBean and above
@@ -525,6 +555,15 @@ public class RegisterActivity extends ActionActivity {
 
                 ((ImageView)findViewById(R.id.img_coupon_detail_tilt)).setImageResource(resources[Integer.valueOf(tiltValue)-1]);
                 Log.d(TAG, "tiltValue : "+tiltValue);
+
+                break;
+            case 1127:
+
+                Toast.makeText(RegisterActivity.this, "data : "+Util.getRealPathFromURI(getContentResolver(), data.getData()),Toast.LENGTH_LONG).show();
+
+                ((TextView) findViewById(R.id.tv_register_file_uri)).setText(Util.getRealPathFromURI(getContentResolver(), data.getData()));
+                ((TextView)findViewById(R.id.tv_register_file_uri)).setVisibility(View.VISIBLE);
+                fileType = new TypedFile("multipart/form-data", new File(Util.getRealPathFromURI(getContentResolver(), data.getData())));
 
                 break;
 

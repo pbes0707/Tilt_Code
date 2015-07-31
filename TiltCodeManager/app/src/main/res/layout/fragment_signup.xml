@@ -92,7 +92,7 @@
 
                     <EditText
                         android:layout_width="match_parent"
-                        android:hint="PW Retype"
+                        android:hint="PW 재입력"
                         android:inputType="textPassword"
                         android:padding="5dp"
                         android:background="#b3ffff"
@@ -140,7 +140,7 @@
 
                     <EditText
                         android:padding="5dp"
-                        android:hint="전화번호"
+                        android:hint="전화번호('-' 없이 입력해주세요)"
                         android:inputType="number"
                         android:background="#b3ffff"
                         android:layout_width="match_parent"

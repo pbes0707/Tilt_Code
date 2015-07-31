@@ -92,6 +92,7 @@ public class CouponReceiveActivity extends Activity {
                                         CouponListFragment.mListView.setRefreshing();
                                     }
                                     finish();
+                                    startActivity(new Intent(CouponReceiveActivity.this, SplashActivity.class));
                                 } else if (loginResult.code.equals("-1")) { //누락된게있음
                                     Toast.makeText(getBaseContext(),getResources().getText(R.string.message_not_enough_data),Toast.LENGTH_LONG).show();
                                 } else if (loginResult.code.equals("-2")) { //알수없는 쿠폰 id

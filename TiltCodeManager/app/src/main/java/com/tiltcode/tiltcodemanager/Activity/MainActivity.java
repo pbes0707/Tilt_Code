@@ -39,6 +39,7 @@ import retrofit.client.Response;
  */
 public class MainActivity extends Activity {
 
+    public static Context context;
 
     //로그에 쓰일 tag
     public static final String TAG = MainActivity.class.getSimpleName();
@@ -54,7 +55,9 @@ public class MainActivity extends Activity {
 
     void init(){
 
-        ((TextView)findViewById(R.id.tv_main_name)).setText(Util.getAccessToken().getName()+"님");
+        this.context = MainActivity.this;
+
+        ((TextView) findViewById(R.id.tv_main_name)).setText(Util.getAccessToken().getName() + "님");
         ((TextView)findViewById(R.id.tv_main_name)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

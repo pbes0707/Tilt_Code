@@ -33,7 +33,7 @@ public class SplashActivity extends Activity {
 
                 SplashActivity.this.finish();
 
-                Intent intent = new Intent(SplashActivity.this,LoginActivity.class);
+                Intent intent = new Intent(SplashActivity.this,LoginSelectActivity.class);
                 startActivity(intent);
             }
         };

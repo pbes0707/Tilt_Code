@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">tiltcode</string>
+    <string name="app_name">TiltCodeManager</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="app_id">928478853864979</string>
@@ -113,7 +113,7 @@
         <item></item>
         <item>link</item>
         <item>file</item>
-        <item>file</item>
+        <item>barcode</item>
     </string-array>
 
     <string-array name="couponPickType">

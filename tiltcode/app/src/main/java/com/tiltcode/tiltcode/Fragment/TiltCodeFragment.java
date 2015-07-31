@@ -96,6 +96,7 @@ public class TiltCodeFragment extends BackFragment implements SensorEventListene
         mSensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
         mSensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_UI);
 
+        if(context == null) context = getActivity();
         tiltView = new TiltCodeView(context);
         ((LinearLayout)v.findViewById(R.id.tiltview_tiltcodefragment)).addView(tiltView);
 
@@ -140,7 +141,7 @@ public class TiltCodeFragment extends BackFragment implements SensorEventListene
         }
         if(mGravity != null && mMagnetic != null) {
             tiltView.tiltX = getDirection();
-            Log.d("s", "tilt X : " + getDirection());
+//            Log.d("s", "tilt X : " + getDirection());
         }
     }
 

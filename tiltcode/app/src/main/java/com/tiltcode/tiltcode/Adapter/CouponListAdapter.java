@@ -126,6 +126,20 @@ public class CouponListAdapter extends BaseAdapter {
                 couponTitle.setText(couponList.get(i).title);
                 couponDesc.setText(couponList.get(i).desc);
 
+                Log.d(TAG,"coupon type : "+couponList.get(i).type);
+                if(couponList.get(i).type.equals("barcode")){
+                    Log.d(TAG,"image url : "+":40002/couponGetFile?id="
+                            +couponList.get(i).id+"."+couponList.get(i).fileEx);
+                    Picasso.with(context).load(context.getResources().getText(R.string.API_SERVER)+":40002/couponGetFile?id="
+                            +couponList.get(i).id+"."+couponList.get(i).fileEx+"&session="+Util.getAccessToken().getToken()).resize(400,400).centerCrop().into(((ImageView)mDetailsLayout.findViewById(R.id.img_coupon_image)));
+                    ((ImageView)mDetailsLayout.findViewById(R.id.img_coupon_image)).setVisibility(View.VISIBLE);
+                }
+                else{
+                    ((ImageView)mDetailsLayout.findViewById(R.id.img_coupon_image)).setVisibility(View.GONE);
+                }
+
+
+
                 Geocoder geocoder = new Geocoder(context, Locale.getDefault());
                 Address address;
                 String result = null;
@@ -173,25 +187,24 @@ public class CouponListAdapter extends BaseAdapter {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int index) {
                                 Util.getEndPoint().setPort("40002");
-                                Util.getHttpSerivce().couponManageDelete(Util.getAccessToken().getToken(),
+                                Util.getHttpSerivce().couponDelete(Util.getAccessToken().getToken(),
                                         couponList.get(i).id,
                                         new Callback<LoginResult>() {
                                             @Override
                                             public void success(LoginResult loginResult, Response response) {
 
-                                                if(loginResult.code.equals("1")){
-                                                    Toast.makeText(context,context.getResources().getText(R.string.message_success_delete),Toast.LENGTH_LONG).show();
+                                                if (loginResult.code.equals("1")) {
+                                                    Toast.makeText(context, context.getResources().getText(R.string.message_success_delete), Toast.LENGTH_LONG).show();
                                                     mUnfoldableView.foldBack();
                                                     CouponListFragment.mListView.setRefreshing();
-                                                }
-                                                else{
-                                                    Toast.makeText(context,context.getResources().getText(R.string.message_network_error),Toast.LENGTH_LONG).show();
+                                                } else {
+                                                    Toast.makeText(context, context.getResources().getText(R.string.message_network_error), Toast.LENGTH_LONG).show();
                                                 }
                                             }
 
                                             @Override
                                             public void failure(RetrofitError error) {
-                                                Toast.makeText(context,context.getResources().getText(R.string.message_network_error),Toast.LENGTH_LONG).show();
+                                                Toast.makeText(context, context.getResources().getText(R.string.message_network_error), Toast.LENGTH_LONG).show();
                                             }
                                         });
                             }
@@ -203,7 +216,7 @@ public class CouponListAdapter extends BaseAdapter {
                     @Override
                     public void onClick(View view) {
                         if (couponList.get(i).type.equals("link")) {
-                            String url = couponList.get(i).desc;
+                            String url = couponList.get(i).link;
                             Intent i = new Intent(Intent.ACTION_VIEW);
                             i.setData(Uri.parse(url));
                             context.startActivity(i);
