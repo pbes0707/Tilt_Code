@@ -311,6 +311,26 @@ public class RegisterActivity extends ActionActivity {
         dialog.setMessage("데이터를 불러오는중입니다..");
         dialog.show();
 
+
+        if(couponTypeIndex==0 || couponPickIndex==0){
+            Toast.makeText(RegisterActivity.this, "쿠폰의 형식을 선택해주세요.", Toast.LENGTH_SHORT).show();
+        }
+        else if(((EditText)findViewById(R.id.edt_register_title)).getText().toString().length()<1){
+            Toast.makeText(RegisterActivity.this, "제목을 입력해주세요", Toast.LENGTH_SHORT).show();
+        }
+        else if(((EditText)findViewById(R.id.edt_register_desc)).getText().toString().length()<1){
+            Toast.makeText(RegisterActivity.this, "설명을 입력해주세요", Toast.LENGTH_SHORT).show();
+        }
+        else if(((EditText)findViewById(R.id.edt_register_link)).getText().toString().length()<1 && couponTypeIndex==1){
+            Toast.makeText(RegisterActivity.this, "링크를 입력해주세요", Toast.LENGTH_SHORT).show();
+        }
+        else if(fileType==null){
+            Toast.makeText(RegisterActivity.this, "파일은 선택해주세요.", Toast.LENGTH_SHORT).show();
+        }
+        else if(imgType==null){
+            Toast.makeText(RegisterActivity.this, "파일은 선택해주세요.", Toast.LENGTH_SHORT).show();
+        }
+
         Util.getEndPoint().setPort("40002");
         Util.getHttpSerivce().couponRegisterGPS(Util.getAccessToken().getToken(),
                 getResources().getStringArray(R.array.couponTypeKey)[couponTypeIndex],
@@ -380,6 +400,27 @@ public class RegisterActivity extends ActionActivity {
         String beginT = format1.format(calendar.getTime());
         calendar.add(Calendar.MINUTE,30);
         String endT = format1.format(calendar.getTime());
+
+        if(couponTypeIndex==0 || couponPickIndex==0){
+            Toast.makeText(RegisterActivity.this, "쿠폰의 형식을 선택해주세요.", Toast.LENGTH_SHORT).show();
+        }
+        else if(((EditText)findViewById(R.id.edt_register_title)).getText().toString().length()<1){
+            Toast.makeText(RegisterActivity.this, "제목을 입력해주세요", Toast.LENGTH_SHORT).show();
+        }
+        else if(((EditText)findViewById(R.id.edt_register_desc)).getText().toString().length()<1){
+            Toast.makeText(RegisterActivity.this, "설명을 입력해주세요", Toast.LENGTH_SHORT).show();
+        }
+        else if(((EditText)findViewById(R.id.edt_register_link)).getText().toString().length()<1 && couponTypeIndex==1){
+            Toast.makeText(RegisterActivity.this, "링크를 입력해주세요", Toast.LENGTH_SHORT).show();
+        }
+        else if(fileType==null){
+            Toast.makeText(RegisterActivity.this, "파일은 선택해주세요.", Toast.LENGTH_SHORT).show();
+        }
+        else if(imgType==null){
+            Toast.makeText(RegisterActivity.this, "파일은 선택해주세요.", Toast.LENGTH_SHORT).show();
+        }
+
+
 
 //        ((TextView)findViewById(R.id.tv_register_gps_locale)).setText(beginT+"~"+endT);
 //        ((TextView)findViewById(R.id.tv_register_gps_locale)).setVisibility(View.VISIBLE);

@@ -19,15 +19,15 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal">
 
-
-            <TextView
+            <com.tiltcode.tiltcodemanager.View.TypedTextView
                 android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="Settings"
                 android:textColor="#efefef"
-                android:textSize="25dp"
+                android:textSize="20dp"
+                tilt:fonttype="yoon310"
                 android:id="@+id/tv_setting_row" />
 
             <TextView

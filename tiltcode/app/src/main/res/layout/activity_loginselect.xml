@@ -18,7 +18,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:orientation="vertical"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="70dp"
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
                 android:layout_height="match_parent">
@@ -64,9 +64,12 @@
                         android:id="@+id/btn_loginselect_nologin" />
                 </LinearLayout>
                 <com.facebook.login.widget.LoginButton
-                    android:layout_width="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_width="match_parent"
                     android:id="@+id/btn_login_proc_fb"
-                    android:layout_height="70dp" />
+                    android:layout_height="150dp" />
 
 
             </LinearLayout>
