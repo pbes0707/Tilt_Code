@@ -49,6 +49,7 @@ public class TiltSelectActivity extends Activity {
         pager = (ViewPager)findViewById(R.id.pager_tiltselect);
         TiltSelectPagerAdapter adapter = new TiltSelectPagerAdapter(TiltSelectActivity.this);
         pager.setAdapter(adapter);
+        pager.setOffscreenPageLimit(3);
 
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
