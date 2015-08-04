@@ -41,6 +41,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -72,6 +73,14 @@ public class CouponListAdapter extends BaseAdapter {
         this.mUnfoldableView = mUnfoldableView;
         this.mDetailsLayout = mDetailsLayout;
     }
+
+    //http://givenjazz.tistory.com/48
+    /*
+    public void recycle() {
+        for (WeakReference<View> ref : mRecycleList) {
+            Util.recursiveRecycle(ref.get());
+        }
+    }*/
 
     @Override
     public int getCount() {

@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import com.tiltcode.tiltcodemanager.R;
+import com.tiltcode.tiltcodemanager.Util;
 
 /**
  * Created by JSpiner on 2015. 6. 27..
@@ -50,5 +51,16 @@ public class ActionFragmentActivity extends FragmentActivity {
         else{
             backButton.setVisibility(View.GONE);
         }
+    }
+
+
+    @Override
+    protected void onDestroy() {
+
+        Util.recursiveRecycle(getWindow().getDecorView());
+        System.gc();
+
+        super.onDestroy();
+
     }
 }
